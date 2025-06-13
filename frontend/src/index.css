@@ -117,10 +117,14 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+
+    
   }
 }
 @theme{
   --font-inter:"Inter", sans-serif;
   --font-lato:"Lato", sans-serif;
   --font-lusitana:"Lusitana",sans-serif;
+  --color-blue-primary:#01589A;
 }
