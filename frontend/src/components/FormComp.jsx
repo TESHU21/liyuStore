@@ -100,7 +100,7 @@ const FormComp = forwardRef(
     };
 
     // Helper component for validation icons, now generalized
-    const ValidationIcons = ({ hasSuccess, error, isPassword = false, isFile = false }) => {
+    const ValidationIcons = ({  error, isPassword = false, isFile = false }) => {
       if (isLoading) return null; // Don't show icons if loading
 
       let rightPositionClass = "right-3"; // Default for text inputs, textareas
@@ -110,13 +110,7 @@ const FormComp = forwardRef(
         rightPositionClass = "right-10"; // Space for close button on file preview
       }
 
-      if (hasSuccess) {
-        return (
-          <span className={`absolute ${rightPositionClass} top-1/2 transform -translate-y-1/2 text-green-500`}>
-            <Check size={18} />
-          </span>
-        );
-      }
+    
       if (error) {
         return (
           <span className={`absolute ${rightPositionClass} top-1/2 transform -translate-y-1/2 text-red-500`}>
@@ -154,7 +148,7 @@ const FormComp = forwardRef(
                       const hasValue = type === "file"
                         ? field.value !== null && field.value !== undefined && field.value !== ""
                         : field.value !== "" && field.value != null;
-                      const hasSuccess = !error && hasValue;
+                
 
                       return (
                         <FormItem className={`${className || ""} w-full`}>
@@ -167,7 +161,6 @@ const FormComp = forwardRef(
                                   field={field}
                                   options={options}
                                   placeholder={placeholder}
-                                  hasSuccess={hasSuccess} // Pass these props to CustomSelect
                                   error={error} // CustomSelect will handle its own icon display
                                 />
                               ) : type === "textarea" ? (
@@ -181,9 +174,7 @@ const FormComp = forwardRef(
                                     trigger(name);
                                   }}
                                   onBlur={() => trigger(name)}
-                                  className={`h-auto  w-full  pr-8 break-all bg-gray-200 text-black border-b-[#999999] ${
-                                    hasSuccess ? "bg-input-sucess" : ""
-                                  } ${error ? "bg-red-200 border-red-500" : ""}`}
+                                  className={`h-auto  w-full  pr-8 break-all bg-[#E6EFF5] text-black border-b-[#999999]  ${error ? "bg-red-200 border-red-500" : ""}`}
                                 />
                               ) : type === "file" ? (
                                 <div> {/* Fragment because Label and Input are siblings */}
@@ -197,9 +188,7 @@ const FormComp = forwardRef(
                                   />
                                   <Label
                                     htmlFor={name} // Link label to hidden input
-                                    className={`bg-gray-200 px-y py-2 w-full border rounded-t-sm dark:bg-input/30 flex items-center px-6 cursor-pointer min-h-[48px] ${
-                                      hasSuccess ? "bg-input-sucess border-b-[#999999]" : "border-[#E6E6E6] bg-gray-200"
-                                    } ${error ? "bg-red-200 border-red-500" : ""}`}
+                                    className={`bg-[#E6EFF5] px-y py-2 w-full border rounded-t-sm dark:bg-input/30 flex items-center px-6 cursor-pointer min-h-[48px] ${error ? "bg-red-200 border-red-500" : ""}`}
                                   >
                                     {filePreviews[name] ? (
                                       <div className="relative w-fit">
@@ -270,11 +259,7 @@ const FormComp = forwardRef(
                                       field.onChange(e);
                                       trigger(name);
                                     }}
-                                    className={`px-10 py-2 h-[48px] w-full border rounded-t-sm text-input-text focus:outline-none focus:ring-1 focus:ring-indigo-200 focus:border-indigo-500 ${
-                                      hasSuccess
-                                        ? "bg-input-sucess border-b-[#999999]"
-                                        : "border-[#E6E6E6] bg-gray-200"
-                                    } ${error ? "bg-red-200 border-red-500" : ""}`}
+                                    className={`px-10 py-2 h-[48px] bg-[#E6EFF5] w-full border rounded-t-sm text-input-text focus:outline-none focus:ring-1 focus:ring-indigo-200 focus:border-indigo-500  ${error ? "bg-red-200 border-red-500" : ""}`}
                                   />
                                   {type === "password" && ( // Password visibility toggle
                                     <span
@@ -290,7 +275,6 @@ const FormComp = forwardRef(
                             {/* Render ValidationIcons ONLY for Input, Textarea, and File (NOT Select) */}
                             {type !== "select" && (
                               <ValidationIcons
-                                hasSuccess={hasSuccess}
                                 error={error}
                                 isPassword={type === "password"}
                                 isFile={type === "file"}
@@ -326,9 +310,7 @@ const FormComp = forwardRef(
                 <Button
                   disabled={isLoading}
                   type="submit"
-                  className={`w-full h-[48px] cursor-pointer px-6 ${
-                    isValid ? "bg-sidebar" : "bg-muted-foreground"
-                  } hover:bg-sidebar text-white py-3 flex items-center justify-center gap-2`}
+                  className={`w-full h-[48px] cursor-pointer px-6 bg-blue-primary hover:bg-blue-900 text-white py-3 flex items-center justify-center gap-2`}
                 >
                   {isLoading ? <Loader /> : <>
                     {submitBtnText}

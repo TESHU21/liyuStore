@@ -7,6 +7,7 @@ import Cart from '@/pages/cart/Cart'
 import Favourite from '@/pages/favourite/Favourite'
 import ShopDetail from '@/pages/shop/detail/ShopDetail'
 import Login from '@/pages/auth/login/Login'
+import Checkout from '@/pages/checkout/Checkout'
 const AppRoutes = () => {
   return (
     <Routes >
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route path='cart' element={<Cart/>}/>
         <Route path ="favourite" element={<Favourite/>}/>
         <Route path='detail' element={<ShopDetail/>}/>
+        <Route path="checkout" element={<Checkout/>}/>
         </Route>
         <Route path='login' element={<Login/>}/>
         

@@ -11,9 +11,11 @@ const Login = () => {
         console.log("Enter your passwords")
     }
   return (
-    <div>
+    <div className='flex justify-center'>
+    <div className='w-[700px]'>
      <FormComp schema={SignUpSchema} fields={fields} initialValues={initialValues} submitBtnText={"Login"}
               showForgotPassword={true} onSubmit={handleLogin} isLoading={isLoading}  errorMessage={errorMessage} />
+    </div>
     </div>
   )
 }
