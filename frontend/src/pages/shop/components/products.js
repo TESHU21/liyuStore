@@ -1,4 +1,9 @@
 // data/products.js
+export const headers={
+title:"New Arrival",
+currentPage:"Shop",
+description:"Shop through our latest selection of Products",
+}
 export const products = [
   {
     id: 1,

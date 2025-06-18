@@ -1,8 +1,12 @@
 import React from 'react'
-
+import PageHeader from '@/components/PageHeader'
+import { headers } from './components/data'
 const Cart = () => {
   return (
-    <div>Cart</div>
+    <div>
+      <PageHeader header={headers}/>
+
+    </div>
   )
 }
 

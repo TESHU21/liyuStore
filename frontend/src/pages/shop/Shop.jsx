@@ -8,7 +8,8 @@ import {
 import { Separator } from '@/components/ui/separator'
 import ShopHeader from './components/ShopHeader'
 import ProductCard from './components/ProductCard'
-import { products } from './components/products'
+import { products ,headers} from './components/products'
+import PageHeader from '@/components/PageHeader'
 
 const Shop = () => {
   const [selectedBrands, setSelectedBrands] = useState([])
@@ -31,7 +32,7 @@ const Shop = () => {
 
   return (
     <div>
-      <ShopHeader />
+      <PageHeader header={headers} />
       <div className=' flex'>
         {/* Left Secton */}
         <div className="pt-[55px] md:px-[42px]">
@@ -100,7 +101,7 @@ const Shop = () => {
           </div>
         </div>
       </div>
-      <div className="flex-grow grid grid-cols-1  lg:grid-cols-3 xl:grid-cols-4 px-[39px] mt-[110px] gap-6 justify-items-center">
+      <div className="flex-grow grid grid-cols-1  lg:grid-cols-3 xl:grid-cols-3 px-[39px] mt-[110px] gap-6 justify-items-center">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
