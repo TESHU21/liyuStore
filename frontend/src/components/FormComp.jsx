@@ -188,7 +188,7 @@ const FormComp = forwardRef(
                                   />
                                   <Label
                                     htmlFor={name} // Link label to hidden input
-                                    className={`bg-[#E6EFF5] px-y py-2 w-full border rounded-t-sm dark:bg-input/30 flex items-center px-6 cursor-pointer min-h-[48px] ${error ? "bg-red-200 border-red-500" : ""}`}
+                                    className={`bg-[#E6EFF5]   w-full border rounded-t-sm dark:bg-input/30 flex items-center justify-center px-6 cursor-pointer min-h-[120px] ${error ? "bg-red-200 border-red-500" : ""}`}
                                   >
                                     {filePreviews[name] ? (
                                       <div className="relative w-fit">
@@ -216,8 +216,8 @@ const FormComp = forwardRef(
                                         </button>
                                       </div>
                                     ) : (
-                                      <div className="text-gray-600 flex items-center gap-2">
-                                        <ImageIcon size={24} /> Upload your image here!
+                                      <div className="text-white h-[60px] bg-[#009CDE] w-[270px] py-[14px] flex items-center gap-2 justify-center rounded-sm">
+                                        Choose file
                                       </div>
                                     )}
                                   </Label>

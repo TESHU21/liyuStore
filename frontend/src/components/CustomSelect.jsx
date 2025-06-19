@@ -46,7 +46,7 @@ const CustomSelect = ({ field, options, placeholder, hasSuccess, error }) => {
           <SelectItem key={option.value} value={option.value}
           className="hover:bg-gray-200"
           >
-            {option.name}
+            {option.label}
           </SelectItem>
         ))}
       </SelectContent>

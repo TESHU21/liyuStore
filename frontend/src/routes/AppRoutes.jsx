@@ -5,9 +5,10 @@ import Home from '@/pages/home/Home'
 import Shop from '@/pages/shop/Shop'
 import Cart from '@/pages/cart/Cart'
 import Favourite from '@/pages/favourite/Favourite'
-import ShopDetail from '@/pages/shop/detail/ShopDetail'
+import ShopDetail from '@/pages/shop/user/detail/ShopDetail'
 import Login from '@/pages/auth/login/Login'
 import Checkout from '@/pages/checkout/Checkout'
+import CreateProduct from '@/pages/shop/admin/CreateProduct'
 const AppRoutes = () => {
   return (
     <Routes >
@@ -18,6 +19,8 @@ const AppRoutes = () => {
         <Route path ="favourite" element={<Favourite/>}/>
         <Route path='detail' element={<ShopDetail/>}/>
         <Route path="checkout" element={<Checkout/>}/>
+        <Route path="product" element={<CreateProduct/>}/>
+
         </Route>
         <Route path='login' element={<Login/>}/>
         

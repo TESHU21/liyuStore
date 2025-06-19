@@ -48,7 +48,7 @@ const NavBar = () => {
     ${isActive ? "after:w-full" : "group-hover:after:w-full after:w-0"}
     `;
   return (
-    <div className='relative' ref={menuRef}>
+    <div className='relative  shadow-[0_8px_32px_rgba(0,0,0,0.05)]' ref={menuRef} >
         {/* Desktop Menu */}
         <div className=" hidden md:flex  justify-between md:px-10  h-[80px] items-center bg-white ">
         <div className=' flex items-center gap-8   '>

@@ -6,12 +6,12 @@ import { ShoppingCart, Heart, Eye } from 'lucide-react'; // Import icons
 const ProductCard = ({ product }) => {
   return (
     <Card className="w-[300px] sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px] flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
-      <CardHeader className="p-4 pb-2 text-right">
+      <CardHeader className=" text-right">
         <span className="text-xs font-semibold text-blue-primary leading-6">{product.brand}</span>
       </CardHeader>
 
-      <CardContent className="flex flex-col items-center p-4 pt-0">
-        <div className="relative w-full h-40 flex items-center justify-center mb-4">
+      <CardContent className="flex flex-col items-center  ">
+        <div className="relative w-full h-[159px] flex items-center justify-center mb-4">
        
           <img src={product.image} alt={product.name} />
         </div>
@@ -21,7 +21,7 @@ const ProductCard = ({ product }) => {
         </p>
       </CardContent>
 
-      <CardFooter className="p-4 pt-2 flex flex-col items-center">
+      <CardFooter className=" flex flex-col items-center">
         <Separator className="w-full mb-3" />
         <div className="flex justify-between items-center w-full">
           <span className="text-lg font-bold text-gray-800">${product.price.toFixed(2)}</span>
