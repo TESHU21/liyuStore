@@ -2,7 +2,7 @@ import { z } from "zod";
 import { Mail, LockKeyhole, Phone } from "lucide-react";
 import { CiUser } from "react-icons/ci";
 
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
 export const SignUpSchema = z
   .object({

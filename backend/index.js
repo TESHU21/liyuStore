@@ -3,6 +3,7 @@ import path from "path";
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors"
 
 // Utiles
 import connectDB from "./config/db.js";
@@ -19,6 +20,26 @@ const port = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
+// ✅ Set up CORS
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://your-netlify-site.netlify.app"  // Replace with your actual Netlify URL
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // Allow non-browser clients
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Needed if you send cookies or Authorization headers
+  })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
