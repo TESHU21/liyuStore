@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
 
 // ✅ Async Thunk for login
-export const loginUser = createAsyncThunk(
+ const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, thunkAPI) => {
     try {
@@ -11,10 +11,7 @@ export const loginUser = createAsyncThunk(
 
       return response.data; // Expected to return { user, token }
     } catch (err) {
-              console.log("❌ Login error:", err); // <-- Log the full error object
-                    console.log("❌ Login error:", err); // <-- Log the full error object
-      console.log("❌ Response data:", err.response?.data); // <-- Log API error response (if any)
-      console.log("❌ Response status:", err.response?.status); // <-- Status code if present
+             
 
 
       // Return a clean error message for rejected case
@@ -24,6 +21,19 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+// Async Thunk for register
+ const registerUser=createAsyncThunk('auth/registerUser',
+  async(formData,thunkAPI)=>{
+    try{
+      const response= await axiosInstance.post('/api/users',formData)
+      return response.data
+    }
+    catch(error){
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Sign Up Failed,Please try again.")
+
+    }
+  }
+)
 
 // ✅ The auth slice
 const authSlice = createSlice({
@@ -42,7 +52,9 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+   
     builder
+     // login case
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
         state.error = null; // Clear previous error
@@ -56,10 +68,29 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload; // Show custom error from rejectWithValue
-      });
+      })
+      // register user case
+      .addCase(registerUser.pending,(state)=>{
+         state.isLoading = true;
+        state.error = null; // Clear previous error
+
+      })
+      .addCase(registerUser.fulfilled,(state,action)=>{
+         state.isLoading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        localStorage.setItem('token', action.payload.token); // Persist token
+
+      })
+      .addCase(registerUser.rejected,(state,action)=>{
+         state.isLoading = false;
+        state.error = action.payload; // set error message from rejected action
+
+      })
   },
 });
 
 // ✅ Export actions and reducer
 export const { logout } = authSlice.actions;
+export {loginUser,registerUser}
 export default authSlice.reducer;

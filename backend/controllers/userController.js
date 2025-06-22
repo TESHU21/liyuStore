@@ -12,9 +12,9 @@ const createToken = (userId) => {
 
 // Create new user and return token + user data
 const createUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { fullName, email, password } = req.body;
 
-  if (!username || !email || !password) {
+  if (!fullName || !email || !password) {
     res.status(400);
     throw new Error("Please fill all the inputs.");
   }
@@ -29,7 +29,7 @@ const createUser = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const newUser = new User({
-    username,
+    fullName,
     email,
     password: hashedPassword,
   });
@@ -41,7 +41,7 @@ const createUser = asyncHandler(async (req, res) => {
   res.status(201).json({
     user: {
       _id: savedUser._id,
-      username: savedUser.username,
+      fullName: savedUser.fullName,
       email: savedUser.email,
       isAdmin: savedUser.isAdmin,
     },
@@ -70,7 +70,7 @@ const loginUser = asyncHandler(async (req, res) => {
   res.status(200).json({
     user: {
       _id: existingUser._id,
-      username: existingUser.username,
+      fullName: existingUser.fullName,
       email: existingUser.email,
       isAdmin: existingUser.isAdmin,
     },
@@ -105,7 +105,7 @@ const getCurrentUserProfile = asyncHandler(async (req, res) => {
 
   res.json({
     _id: user._id,
-    username: user.username,
+    fullName: user.fullName,
     email: user.email,
   });
 });
@@ -119,7 +119,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  user.username = req.body.username || user.username;
+  user.fullName = req.body.fullName || user.fullName;
   user.email = req.body.email || user.email;
 
   if (req.body.password) {
@@ -131,7 +131,7 @@ const updateCurrentUserProfile = asyncHandler(async (req, res) => {
 
   res.json({
     _id: updatedUser._id,
-    username: updatedUser.username,
+    fullName: updatedUser.fullName,
     email: updatedUser.email,
     isAdmin: updatedUser.isAdmin,
   });
@@ -176,7 +176,7 @@ const updateUserById = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 
-  user.username = req.body.username || user.username;
+  user.fullName = req.body.fullName || user.fullName;
   user.email = req.body.email || user.email;
   user.isAdmin = Boolean(req.body.isAdmin);
 
@@ -184,7 +184,7 @@ const updateUserById = asyncHandler(async (req, res) => {
 
   res.json({
     _id: updatedUser._id,
-    username: updatedUser.username,
+    fullName: updatedUser.fullName,
     email: updatedUser.email,
     isAdmin: updatedUser.isAdmin,
   });

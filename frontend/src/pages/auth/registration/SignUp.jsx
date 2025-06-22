@@ -9,28 +9,28 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import FormComp from '@/components/FormComp';
-import { SignInSchema, fields, initialValues } from "./component/data";
+import { SignUpSchema, fields, initialValues} from "./components/data";
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '@/store/authSlice';
-import { closeLogin,openSignup } from '@/store/uiSlice';
+import {registerUser } from '@/store/authSlice';
+import { closeSignup ,openLogin } from '@/store/uiSlice';
 
-const Login = () => {
+const SignUp = () => {
   const dispatch = useDispatch();
-  const { isLoginOpen } = useSelector((state) => state.ui);
+  const {   isSignupOpen } = useSelector((state) => state.ui);
   const { isLoading, error, user } = useSelector((state) => state.auth);
 
-  const handleLogin = (data) => {
-    dispatch(loginUser(data));
+  const handleSignUp = (data) => {
+    dispatch(registerUser(data));
   };
 
   useEffect(() => {
     if (user) {
-      dispatch(closeLogin());  // Auto-close on success
+      dispatch(closeSignup());  // Auto-close on success
     }
   }, [user, dispatch]);
 
   return (
-    <Dialog open={isLoginOpen} onOpenChange={(open) => !open && dispatch(closeLogin())}>
+    <Dialog open={isSignupOpen} onOpenChange={(open) => !open && dispatch(closeSignup())}>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle className="text-[24px]  font-normal  ">Login</DialogTitle>
@@ -38,25 +38,28 @@ const Login = () => {
         </DialogHeader>
 
         <FormComp
-          schema={SignInSchema}
+          schema={SignUpSchema}
           fields={fields}
           initialValues={initialValues}
-          submitBtnText="Login"
-          showForgotPassword={true}
-          onSubmit={handleLogin}
+          submitBtnText="Register"
+          showForgotPassword={false}
           isLoading={isLoading}
           errorMessage={error}
+          onSubmit={handleSignUp}
         />
 
         <DialogFooter className=" flex justify-center">
-          <p className='underline cursor-pointer text-center mt-[44px] mb-4' onClick={()=>{
-          dispatch(closeLogin())
-          dispatch(openSignup())
-          }}>New customer? Create your account</p>
+          <p className='underline cursor-pointer text-center mt-[44px] mb-4' onClick={()=>
+
+          {
+            dispatch(closeSignup())
+            dispatch(openLogin())
+
+          }}>Already have an account? login in here</p>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default Login;
+export default SignUp;
