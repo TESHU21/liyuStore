@@ -3,8 +3,9 @@ import { Button } from '../../components/ui/button'
 import{LogIn,AlignJustify,X, Home} from "lucide-react"
 import { House,ShoppingBag,ShoppingCart,Heart,User } from 'lucide-react';
 import { useNavigate,NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { openLogin,openSignup } from "@/store/uiSlice";
+import ProfileMenu from '@/pages/profile/ProfileMenu';
 
 
 
@@ -13,7 +14,7 @@ const NavBar = () => {
     const dispatch = useDispatch();
 
   const [menuVisiblity,setMenuVisibility]=useState(false)
-  const token=sessionStorage.getItem("Token")
+  const user=useSelector((state)=>state.auth.user)
   const menuRef = useRef(null);
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -69,9 +70,11 @@ const NavBar = () => {
        </div>
         </div>
         {
-          token?(
-            <div></div>
-            // <ProfileMenu/>
+          user?(
+            <div>
+              <ProfileMenu/>
+            </div>
+            
           ):(
 
           <div className=" flex ">

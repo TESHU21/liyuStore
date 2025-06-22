@@ -6,12 +6,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Separator } from '@/components/ui/separator'
-import ShopHeader from './components/ShopHeader'
-import ProductCard from './components/ProductCard'
-import { products ,headers} from './components/products'
+import ShopHeader from '../components/ShopHeader'
+import ProductCard from '../components/ProductCard'
+import { products ,headers} from '../components/products'
 import PageHeader from '@/components/PageHeader'
 
-const Shop = () => {
+const ShopUser = () => {
   const [selectedBrands, setSelectedBrands] = useState([])
   const [price, setPrice] = useState("")
 
@@ -114,4 +114,4 @@ const Shop = () => {
   )
 }
 
-export default Shop
+export default ShopUser

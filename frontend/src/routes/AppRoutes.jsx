@@ -2,13 +2,14 @@ import React from 'react'
 import { Routes,Route } from 'react-router-dom'
 import Layout from '@/layout/Layout'
 import Home from '@/pages/home/Home'
-import Shop from '@/pages/shop/Shop'
+import Shop from '@/pages/shop/user/ShopUser'
 import Cart from '@/pages/cart/Cart'
 import Favourite from '@/pages/favourite/Favourite'
 import ShopDetail from '@/pages/shop/user/detail/ShopDetail'
 import Login from '@/pages/auth/login/Login'
 import Checkout from '@/pages/checkout/Checkout'
 import CreateProduct from '@/pages/shop/admin/CreateProduct'
+import Profile from '@/pages/profile/Profile'
 const AppRoutes = () => {
   return (
     <Routes >
@@ -20,6 +21,7 @@ const AppRoutes = () => {
         <Route path='detail' element={<ShopDetail/>}/>
         <Route path="checkout" element={<Checkout/>}/>
         <Route path="product" element={<CreateProduct/>}/>
+        <Route path="profile" element={<Profile/>}/>
 
         </Route>
         <Route path='login' element={<Login/>}/>

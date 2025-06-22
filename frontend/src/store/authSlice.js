@@ -49,6 +49,7 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       localStorage.removeItem('token'); // Remove token from storage on logout
+      localStorage.removeItem('user'); // Remove token from storage on logout
     },
   },
   extraReducers: (builder) => {
@@ -64,6 +65,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem('token', action.payload.token); // Persist token
+        localStorage.setItem('user', JSON.stringify(action.payload.user)); // Persist token
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
@@ -80,6 +82,8 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem('token', action.payload.token); // Persist token
+        localStorage.setItem('user', JSON.stringify(action.payload.user)); // Persist token
+
 
       })
       .addCase(registerUser.rejected,(state,action)=>{
