@@ -3,11 +3,15 @@ import { Button } from '../../components/ui/button'
 import{LogIn,AlignJustify,X, Home} from "lucide-react"
 import { House,ShoppingBag,ShoppingCart,Heart,User } from 'lucide-react';
 import { useNavigate,NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { openLogin } from "@/store/uiSlice";
 
 
 
 const NavBar = () => {
   const navigate=useNavigate();
+    const dispatch = useDispatch();
+
   const [menuVisiblity,setMenuVisibility]=useState(false)
   const token=sessionStorage.getItem("Token")
   const menuRef = useRef(null);
@@ -71,7 +75,7 @@ const NavBar = () => {
           ):(
 
           <div className=" flex ">
-          <Button className="py-3 px-2  bg-white  hover:bg-white text-base leading-6 font-semibold text-black border-0 md:shadow-none rounded-md  cursor-pointer" onClick={()=>navigate("/login")}>  <span className='ml-3'><LogIn size={24}/></span>Login</Button>
+          <Button className="py-3 px-2  bg-white  hover:bg-white text-base leading-6 font-semibold text-black border-0 md:shadow-none rounded-md  cursor-pointer"  onClick={() => dispatch(openLogin())}>  <span className='ml-3'><LogIn size={24}/></span>Login</Button>
           <Button
   className="py-3 px-2 bg-white text-black text-base leading-6 font-semibold rounded-md border-0 cursor-pointer shadow-none hover:bg-white"
   onClick={() => navigate("/signup")}

@@ -1,23 +1,22 @@
 import React, { useEffect } from 'react';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
 import FormComp from '@/components/FormComp';
 import { SignUpSchema, fields, initialValues } from "./component/data";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '@/store/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { closeLogin } from '@/store/uiSlice';
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { isLoginOpen } = useSelector((state) => state.ui);
   const { isLoading, error, user } = useSelector((state) => state.auth);
 
   const handleLogin = (data) => {
@@ -25,27 +24,35 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (user?.isAdmin) {
-      console.log("✅ Login successful:", user);
-      navigate('/');  // Redirect to home page
+    if (user) {
+      dispatch(closeLogin());  // Auto-close on success
     }
-  }, [user, navigate]);
+  }, [user, dispatch]);
 
   return (
-    <div className='flex justify-center'>
-      <div className='w-[700px]'>
+    <Dialog open={isLoginOpen} onOpenChange={(open) => !open && dispatch(closeLogin())}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-[24px]  font-normal  ">Login</DialogTitle>
+          <DialogDescription className="sr-only">Please enter your credentials.</DialogDescription>
+        </DialogHeader>
+
         <FormComp
           schema={SignUpSchema}
           fields={fields}
           initialValues={initialValues}
-          submitBtnText={"Login"}
+          submitBtnText="Login"
           showForgotPassword={true}
           onSubmit={handleLogin}
           isLoading={isLoading}
           errorMessage={error}
         />
-      </div>
-    </div>
+
+        <DialogFooter className=" flex justify-center">
+          <p className='underline cursor-pointer text-center mt-[44px] mb-4'>New customer? Create your account</p>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
