@@ -11,7 +11,7 @@ import {
 
 const Shop = () => {
     const user=useSelector((state)=>state?.auth.user)
-console.log("user",user)
+
 
 
   return (

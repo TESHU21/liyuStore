@@ -1,9 +1,12 @@
 // components/ProductCard.jsx
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator"; // Assuming you have Separator
-import { ShoppingCart, Heart, Eye } from 'lucide-react'; // Import icons
+import { ShoppingCart, Heart, Eye ,Pencil} from 'lucide-react'; // Import icons
+import { useSelector } from "react-redux";
 
 const ProductCard = ({ product }) => {
+      const user=useSelector((state)=>state?.auth.user)
+  
   return (
     <Card className="w-[300px] sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px] flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
       <CardHeader className=" text-right">
@@ -23,7 +26,18 @@ const ProductCard = ({ product }) => {
 
       <CardFooter className=" flex flex-col items-center">
         <Separator className="w-full mb-3" />
-        <div className="flex justify-between items-center w-full">
+        {
+          user?.isAdmin?(
+               <div className="flex justify-between items-center w-full">
+          <span className="text-lg font-bold text-gray-800"><Pencil/></span>
+          <div className="flex space-x-3 text-gray-500">
+           5/22/17
+    
+          </div>
+        </div>
+          ):
+        (
+               <div className="flex justify-between items-center w-full">
           <span className="text-lg font-bold text-gray-800">${product.price.toFixed(2)}</span>
           <div className="flex space-x-3 text-gray-500">
             <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
@@ -31,6 +45,9 @@ const ProductCard = ({ product }) => {
             <Eye className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-colors" />
           </div>
         </div>
+          )
+        }
+       
       </CardFooter>
     </Card>
   );
