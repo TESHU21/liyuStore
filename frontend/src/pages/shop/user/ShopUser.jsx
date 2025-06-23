@@ -6,9 +6,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Separator } from '@/components/ui/separator'
-import ShopHeader from '../components/ShopHeader'
-import ProductCard from '../components/ProductCard'
-import { products ,headers} from '../components/products'
+import ShopHeader from '../admin/components/ShopHeader'
+import ProductCard from '../admin/components/ProductCard'
+import { products ,headers} from '../admin/components/products'
 import PageHeader from '@/components/PageHeader'
 
 const ShopUser = () => {
