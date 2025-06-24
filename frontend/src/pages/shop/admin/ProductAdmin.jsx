@@ -37,6 +37,7 @@ const Product = () => {
           data-[state=active]:border-none 
           data-[state=active]:shadow-none 
           border-none shadow-none
+          cursor-pointer
         "
       >
         Products
@@ -49,6 +50,7 @@ const Product = () => {
           data-[state=active]:border-none 
           data-[state=active]:shadow-none 
           border-none shadow-none
+          cursor-pointer
         "
       >
         Create Products

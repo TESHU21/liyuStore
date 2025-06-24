@@ -118,11 +118,7 @@ const categorySlice = createSlice({
         // action.payload is the categoryId string returned by the thunk (e.g., "685aac12015a21eb7a3a3e4d")
         const idToDelete = action.payload;
         
-        console.log(">>> In deleteCategory.fulfilled reducer:");
-        console.log("   ID to delete (action.payload):", idToDelete, "Type:", typeof idToDelete);
-        console.log("   Current categories before filter:", state.categories.map(c => c._id));
-
-        // Filter out the deleted category by its ID
+       
         state.categories = state.categories.filter(
           (category) => {
             const keep = category._id !== idToDelete;
