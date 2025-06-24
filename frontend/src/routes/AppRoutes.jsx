@@ -10,6 +10,7 @@ import Login from '@/pages/auth/login/Login'
 import Checkout from '@/pages/checkout/Checkout'
 import CreateProduct from '@/pages/shop/admin/CreateProduct'
 import Profile from '@/pages/profile/Profile'
+import CategoryManager from "../pages/catagory/CategoryManager"
 const AppRoutes = () => {
   return (
     <Routes >
@@ -22,6 +23,7 @@ const AppRoutes = () => {
         <Route path="checkout" element={<Checkout/>}/>
         <Route path="product" element={<CreateProduct/>}/>
         <Route path="profile" element={<Profile/>}/>
+        <Route path="category" element={<CategoryManager/>}/>
 
         </Route>
         <Route path='login' element={<Login/>}/>

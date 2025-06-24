@@ -39,12 +39,13 @@ import axiosInstance from "@/lib/axiosInstance";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
-    token: null,
+     user: JSON.parse(localStorage.getItem("user")) || null,
+    token: localStorage.getItem("token") || null,
     isLoading: false,
     error: null,
   },
   reducers: {
+      
     logout: (state) => {
       state.user = null;
       state.token = null;
@@ -95,6 +96,6 @@ const authSlice = createSlice({
 });
 
 // ✅ Export actions and reducer
-export const { logout } = authSlice.actions;
+export const { logout} = authSlice.actions;
 export {loginUser,registerUser}
 export default authSlice.reducer;
