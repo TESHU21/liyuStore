@@ -7,6 +7,7 @@ export const fetchCategories = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await axiosInstance.get('/api/category/');
+      console.log("fetch res",response)
       return response.data; // Expected: array of categories
     } catch (err) {
       return thunkAPI.rejectWithValue(

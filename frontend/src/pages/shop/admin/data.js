@@ -51,14 +51,8 @@ export const schema=z.object({
   ),
 
   // 7. Category
-  category: z.enum(["Laptop", "Phone", "Camera", "watch", "Tablet", "Electronics", "Accessories"], {
-    errorMap: (issue, ctx) => {
-      if (issue.code === z.ZodIssueCode.invalid_enum_value) {
-        return { message: "Please select a valid category." };
-      }
-      return { message: ctx.defaultError };
-    }
-  }),
+ category: z.string().min(1, { message: "Please select a valid category." }),
+
 
 
   description: z.string()
@@ -119,16 +113,7 @@ export const fields=[
         name: "category",
         placeholder: "Category ",
         type: "select",
-        options: [
-      { value: 'Laptop', label: 'Laptop' },
-      { value: 'Phone', label: 'Phone' },
-      { value: 'Camera', label: 'Camera' },
-      { value: 'watch', label: 'Watch' },
-      { value: 'Tablet', label: 'Tablet' },
-      { value: 'Electronics', label: 'Electronics' },
-      { value: 'Accessories', label: 'Accessories' },
-      // ... add more categories as per your actual data
-    ],
+        options: [],
         className: "col-span-1 "
       },
     
