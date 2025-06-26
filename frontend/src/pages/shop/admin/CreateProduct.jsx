@@ -2,13 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createProduct } from '@/store/productSlice';
 import { fetchCategories } from '@/store/categorySlice';
-import { uploadImage } from '../../../lib/uploadImage'; // Assuming this path is correct
-import FormComp from '@/components/FormComp'; // Your generic form component
+import { uploadImage } from '../../../lib/uploadImage'; 
+import FormComp from '@/components/FormComp'; 
 import { schema ,fields as staticFields,initialValues } from "./data"
 
-// It's assumed 'schema', 'fields', and 'initialValues' are correctly defined in './data'
-// For example:
-// import { schema, fields as staticFields, initialValues } from './data';
 
 const CreateProduct = () => {
     // State to hold form fields, potentially updated with dynamic options (like categories)
@@ -16,7 +13,6 @@ const CreateProduct = () => {
 
     const dispatch = useDispatch();
 
-    // Effect to fetch categories and update the form fields with options
     useEffect(() => {
         const loadCategories = async () => {
             try {
@@ -47,20 +43,13 @@ const CreateProduct = () => {
         loadCategories(); // Call the async function
     }, [dispatch]); // Dependency array includes dispatch to avoid lint warnings, though it's stable
 
-    /**
-     * Handles the product creation process after form submission.
-     * This function receives the form data from `FormComp`.
-     * @param {Object} formData - The data submitted from the form.
-     * Expected to be a flat object like:
-     * { name: string, description: string, ..., image: File | FileList }
-     */
+  
     const handleCreateProducts = async (formData) => {
         console.log("--- Frontend: handleCreateProducts function started ---");
         console.log("Frontend: Data received from FormComp (before image upload):", formData);
 
         let imageUrl = '';
 
-        // Check if an image file was provided and needs uploading
         if (formData.image) {
             // Ensure we get a single File object, regardless if it's FileList or a single File
             const file = formData.image instanceof FileList ? formData.image[0] : formData.image;
@@ -81,8 +70,7 @@ const CreateProduct = () => {
             }
         }
 
-        // Construct the final payload to be sent to the backend
-        // This ensures the image field in the payload is the URL, not the File object
+      
         const productPayload = {
             ...formData, // Spread all other form fields (name, description, price, etc.)
             image: imageUrl, // Override the image field with the URL
@@ -99,8 +87,7 @@ const CreateProduct = () => {
             // navigate to product list or clear form
         } catch (error) {
             console.error('Frontend Error: Product creation failed at Redux dispatch:', error);
-            // Error handling from backend (e.g., validation errors) will be in 'error' here
-            // Display specific error message if available
+            
             const errorMessage = error?.error?.message || error?.message || "An unknown error occurred during product creation.";
             alert(`Product creation failed: ${errorMessage}`); // Using alert for demo
         }
@@ -109,7 +96,6 @@ const CreateProduct = () => {
 
     return (
         <div className="px-20 pt-10">
-            {/* FormComp is responsible for rendering the form and providing data to onSubmit */}
             <FormComp
                 schema={schema}
                 fields={fields} // Pass the dynamically updated fields

@@ -8,7 +8,7 @@ const ProductCard = ({ product }) => {
       const user=useSelector((state)=>state?.auth.user)
   
   return (
-    <Card className="w-[300px] sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px] flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
+    <Card className="w-[300px] sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px]  flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
       <CardHeader className=" text-right">
         <span className="text-xs font-semibold text-blue-primary leading-6">{product.brand}</span>
       </CardHeader>
@@ -18,10 +18,14 @@ const ProductCard = ({ product }) => {
        
           <img src={product.image} alt={product.name} />
         </div>
+        <div className="flex flex-col gap-2 justify-center items-center">
         <h3 className="text-base font-semibold text-center leading-tight mb-1">{product.name}</h3>
         <p className="text-xs text-gray-600 text-center whitespace-pre-line leading-snug">
           {product.description}
         </p>
+         <p className="text-base font-bold text-blue-primary">${product.price.toFixed(2)}</p>
+         </div>
+
       </CardContent>
 
       <CardFooter className=" flex flex-col items-center">
@@ -38,7 +42,6 @@ const ProductCard = ({ product }) => {
           ):
         (
                <div className="flex justify-between items-center w-full">
-          <span className="text-lg font-bold text-gray-800">${product.price.toFixed(2)}</span>
           <div className="flex space-x-3 text-gray-500">
             <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
             <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" />
