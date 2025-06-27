@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
 
-const MONGO_URI = 'mongodb+srv://teshu2124:admin1234@cluster0.dgv2r2r.mongodb.net/liyustoredb?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_URI = 'mongodb://localhost:27017';
 
 const seedAdmin = async () => {
   try {
@@ -18,7 +18,7 @@ const seedAdmin = async () => {
     const hashedPassword = await bcrypt.hash("Admin123", 10);
 
     await User.create({
-      username: 'superadmin',
+      fullName: 'superadmin',
       email: 'teshome.mosneh@gmail.com',
       password: hashedPassword,
       isAdmin: true

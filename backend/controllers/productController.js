@@ -1,27 +1,10 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import Product from "../models/productModel.js";
 
-/**
- * @desc Add new product
- * @route POST /api/products
- * @access Private/Admin (assuming an auth middleware sets req.user)
- */
-const addProduct = asyncHandler(async (req, res) => {
-    // --- START DEBUGGING addProduct ---
-    console.log("--- addProduct Controller Hit ---");
-    console.log("Timestamp:", new Date().toISOString());
-    console.log("Request Method:", req.method);
-    console.log("Request URL:", req.originalUrl);
-    console.log("Request Headers (partial for debugging):", {
-        'Content-Type': req.headers['content-type'],
-        'Authorization': req.headers['authorization'] ? 'Bearer (token present)' : 'No token',
-        'User-Agent': req.headers['user-agent'],
-        'Referer': req.headers['referer']
-    });
-    console.log("Request User (from auth middleware, if any):", req.user ? `ID: ${req.user._id}, Username: ${req.user.username}` : 'No user object');
-    console.log("Request Body received:", JSON.stringify(req.body, null, 2)); // Stringify for better logging of nested objects
-    // --- END DEBUGGING addProduct ---
 
+ 
+const addProduct = asyncHandler(async (req, res) => {
+ 
     // Destructure the required fields from req.body
     const { name, description, price, category, quantity, brand, countInStock, image } = req.body;
 
@@ -109,15 +92,9 @@ const addProduct = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * @desc Update product details
- * @route PUT /api/products/:id
- * @access Private/Admin
- */
-const updateProductDetails = asyncHandler(async (req, res) => {
-    console.log(`--- updateProductDetails Controller Hit for ID: ${req.params.id} ---`);
-    console.log("Request Body for update:", JSON.stringify(req.body, null, 2));
 
+const updateProductDetails = asyncHandler(async (req, res) => {
+    
     const updates = req.body;
 
     // Basic check to ensure there's something to update
@@ -127,14 +104,17 @@ const updateProductDetails = asyncHandler(async (req, res) => {
     }
 
     try {
-        // findByIdAndUpdate will find the product by ID and apply the updates
-        // { new: true } returns the updated document
-        // { runValidators: true } ensures schema validators run on updates
+        
         const product = await Product.findByIdAndUpdate(
             req.params.id,
             { $set: updates }, // Use $set to only update the provided fields, prevents overwriting entire document
             { new: true, runValidators: true }
         );
+        console.log("🛠️ updateProductDetails called");
+console.log("req.params.id:", req.params.id);
+console.log("req.body (updates):", JSON.stringify(req.body, null, 2));
+console.log("req.user.id:", req.user._id);
+
 
         if (!product) {
             console.warn(`Product not found for update with ID: ${req.params.id}`);
@@ -146,7 +126,8 @@ const updateProductDetails = asyncHandler(async (req, res) => {
         console.log("Response sent: 200 OK for updateProductDetails.");
 
     } catch (error) {
-        console.error("Update Product Error:", error);
+        console.error("Update Product Error:", error.message);
+        console.error("Update Product Error:", error.stack);
         let errorMessage = "Failed to update product.";
         let statusCode = 500;
 
@@ -166,11 +147,6 @@ const updateProductDetails = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * @desc Remove product
- * @route DELETE /api/products/:id
- * @access Private/Admin
- */
 const removeProduct = asyncHandler(async (req, res) => {
     console.log(`--- removeProduct Controller Hit for ID: ${req.params.id} ---`);
     try {
@@ -200,11 +176,7 @@ const removeProduct = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * @desc Fetch paginated products (for shop page)
- * @route GET /api/products?pageNumber=:pageNumber&keyword=:keyword
- * @access Public
- */
+
 const fetchProducts = asyncHandler(async (req, res) => {
     console.log("--- fetchProducts Controller Hit ---");
     const pageSize = 6; // Number of products per page
@@ -281,7 +253,7 @@ const fetchAllProducts = asyncHandler(async (req, res) => {
     console.log("--- fetchAllProducts Controller Hit ---");
     try {
         const products = await Product.find({})
-            .populate("category") // Get category details
+            .populate("category","name") // Get category details
             .sort({ createdAt: -1 }) // Sort by newest first
             .limit(12); // Limit to a reasonable number for display
 
