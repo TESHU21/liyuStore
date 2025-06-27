@@ -8,7 +8,7 @@ import Favourite from '@/pages/favourite/Favourite'
 import ShopDetail from '@/pages/shop/user/detail/ShopDetail'
 import Login from '@/pages/auth/login/Login'
 import Checkout from '@/pages/checkout/Checkout'
-import CreateProduct from '@/pages/shop/admin/CreateProduct'
+import CreateProduct from '@/pages/shop/admin/ProductFormPage'
 import Profile from '@/pages/profile/Profile'
 import CategoryManager from "../pages/catagory/CategoryManager"
 const AppRoutes = () => {

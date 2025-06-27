@@ -3,20 +3,21 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"; // Assuming you have Separator
 import { ShoppingCart, Heart, Eye ,Pencil} from 'lucide-react'; // Import icons
 import { useSelector } from "react-redux";
+import { Button } from "@/components/ui/button";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({  product, onEdit }) => {
       const user=useSelector((state)=>state?.auth.user)
   
   return (
-    <Card className="w-[300px] sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px]  flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
+    <Card className="w-[300px] py-1 rounded-sm sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px]  flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
       <CardHeader className=" text-right">
         <span className="text-xs font-semibold text-blue-primary leading-6">{product.brand}</span>
       </CardHeader>
 
-      <CardContent className="flex flex-col items-center  ">
-        <div className="relative w-full h-[159px] flex items-center justify-center mb-4">
+      <CardContent className="flex flex-col gap-0 py-1 items-center  ">
+        <div className="relative flex items-center justify-center mb-4">
        
-          <img src={product.image} alt={product.name} />
+          <img src={product.image} alt={product.name} className=" w-full h-[159px] object-cover"/>
         </div>
         <div className="flex flex-col gap-2 justify-center items-center">
         <h3 className="text-base font-semibold text-center leading-tight mb-1">{product.name}</h3>
@@ -28,20 +29,22 @@ const ProductCard = ({ product }) => {
 
       </CardContent>
 
-      <CardFooter className=" flex flex-col items-center">
-        <Separator className="w-full mb-3" />
+      <CardFooter className=" flex flex-col items-center pb-6">
         {
           user?.isAdmin?(
                <div className="flex justify-between items-center w-full">
-          <span className="text-lg font-bold text-gray-800"><Pencil/></span>
+                        <Separator className="w-full mb-3" />
+
+          <Button className="text-lg font-bold  cursor-pointer bg-inherit text-blue-primary shadow-none border-0 hover:bg-inherit " onClick={() => onEdit(product)}><Pencil /></Button>
           <div className="flex space-x-3 text-gray-500">
-           5/22/17
+     <p>{new Date(product.createdAt).toISOString().slice(2, 10)}</p>
+
     
           </div>
         </div>
           ):
         (
-               <div className="flex justify-between items-center w-full">
+               <div className="flex  justify-center items-center w-full">
           <div className="flex space-x-3 text-gray-500">
             <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
             <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" />

@@ -16,6 +16,21 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+// ✅ Fetch aLL pRODUCTS
+export const fetchAllProducts = createAsyncThunk(
+  'products/fetchAllProducts',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get("/api/products");
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to fetch products"
+      );
+    }
+  }
+);
+
 // ✅ Fetch product by ID
 export const fetchProductById = createAsyncThunk(
   'products/fetchProductById',
@@ -104,6 +119,19 @@ const productSlice = createSlice({
         state.products = action.payload.products || action.payload;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // fetch all Products
+      .addCase(fetchAllProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllProducts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.products = action.payload.products || action.payload;
+      })
+      .addCase(fetchAllProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })

@@ -1,110 +1,110 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
 import ProductCard from './components/ProductCard';
-import CreateProduct from './CreateProduct';
+import CreateProduct from './ProductFormPage';
 import { fetchProducts } from '@/store/productSlice';
-import { products } from './components/products';
-
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs"
-import { useDispatch ,useSelector} from 'react-redux';
-
-
+} from "@/components/ui/tabs";
+import { useDispatch, useSelector } from 'react-redux';
 
 const Product = () => {
-  const dispatch=useDispatch()
-  // 
-  useEffect(()=>{
-    const fetchProductsFun=async()=>{
+  const [isEditingProducts, setIsEditingProducts] = useState(null);
+  const [activeTab, setActiveTab] = useState("products");
+  const dispatch = useDispatch();
+  const prod = useSelector((state) => state.products);
 
-      try{
-        const res= await dispatch(fetchProducts()).unwrap()
-      }
-      catch(err){
-        console.log(err)
-
-      }
+  const fetchProductsFun = async () => {
+    try {
+      await dispatch(fetchProducts()).unwrap();
+    } catch (err) {
+      console.error("Failed to fetch products:", err);
     }
-    fetchProductsFun()
+  };
 
-  },[])
-  const prod=useSelector((state)=>state.products)
-  console.log(prod)
-  const [activeTab,setActiveTab]=useState("products")
+  useEffect(() => {
+    fetchProductsFun();
+  }, [dispatch]);
+
   return (
     <div className='flex flex-col'>
-        <div className='flex md:pl-[148px] gap-2 md:my-[40px]'><ChevronLeft/> <span>Back </span></div>
-        <div className=' flex-grow mx-[43px] bg-[#F9FBFC] md:pb-20 px-[170px] '>
-        
-               <Tabs defaultValue="products" className="pt-10"
-               value={activeTab}
-               onValueChange={setActiveTab}
+      <div className='flex md:pl-[148px] gap-2 md:my-[40px]'>
+        <ChevronLeft onClick={() => setIsEditingProducts(null)} className="cursor-pointer" />
+        <span>Back</span>
+      </div>
 
-               >
-  <div className="flex justify-between items-center">
-    <TabsList className="bg-transparent flex gap-12 border-none shadow-none"
-    
-    
-    >
-      <TabsTrigger
-        value="products"
-        className="
-          data-[state=active]:text-blue-primary 
-          data-[state=active]:bg-transparent 
-          data-[state=active]:border-none 
-          data-[state=active]:shadow-none 
-          border-none shadow-none
-          cursor-pointer
-        "
-      >
-        Products
-      </TabsTrigger>
-      <TabsTrigger
-        value="createProducts"
-        className="
-          data-[state=active]:text-blue-primary 
-          data-[state=active]:bg-transparent 
-          data-[state=active]:border-none 
-          data-[state=active]:shadow-none 
-          border-none shadow-none
-          cursor-pointer
-        "
-      >
-        Create Products
-      </TabsTrigger>
-    </TabsList>
-    {activeTab === "products" && (
-  <p className="text-end">Total: {products.length}</p>
-)}
+      <div className='flex-grow mx-[43px] bg-[#F9FBFC] md:pb-20 px-[170px]'>
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          defaultValue="products"
+          className="pt-10"
+        >
+          <div className="flex justify-between items-center">
+            <TabsList className="bg-transparent flex gap-12 border-none shadow-none">
+              <TabsTrigger
+                value="products"
+                className="
+                  data-[state=active]:text-blue-primary 
+                  data-[state=active]:bg-transparent 
+                  data-[state=active]:border-none 
+                  data-[state=active]:shadow-none 
+                  border-none shadow-none
+                  cursor-pointer
+                "
+              >
+                Products
+              </TabsTrigger>
+              <TabsTrigger
+                value="createProducts"
+                className="
+                  data-[state=active]:text-blue-primary 
+                  data-[state=active]:bg-transparent 
+                  data-[state=active]:border-none 
+                  data-[state=active]:shadow-none 
+                  border-none shadow-none
+                  cursor-pointer
+                "
+              >
+                {isEditingProducts ? "Update Products" : "Create Products"}
+              </TabsTrigger>
+            </TabsList>
 
-  </div>
+            {activeTab === "products" && (
+              <p className="text-end">Total: {prod.products.length}</p>
+            )}
+          </div>
 
-  <TabsContent value="products">
-    <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 mt-[67px] gap-6 justify-items-center">
-      {prod.products.map((product) => (
-        <ProductCard key={product._id} product={product} />
-      ))}
+          <TabsContent value="products">
+            <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 mt-[67px] gap-6 justify-items-center">
+              {prod.products.map((product) => (
+                <ProductCard
+                  key={product._id}
+                  product={product}
+                  onEdit={(p) => {
+                    setIsEditingProducts(p);
+                    setActiveTab("createProducts");
+                  }}
+                />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="createProducts">
+            <CreateProduct
+              productToEdit={isEditingProducts}
+              setActiveTab={setActiveTab}
+              setIsEditingProducts={setIsEditingProducts}
+              refreshProducts={fetchProductsFun}
+            />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
-  </TabsContent>
+  );
+};
 
-  <TabsContent value="createProducts">
-    <CreateProduct />
-  </TabsContent>
-</Tabs>
-
-         
-      
-          
-         
-
-
-        </div>
-    </div>
-  )
-}
-
-export default Product
+export default Product;
