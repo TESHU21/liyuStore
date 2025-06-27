@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft } from 'lucide-react';
-import ProductCard from './components/ProductCard';
+import ProductCard from '../user/ProductCard';
 import CreateProduct from './ProductFormPage';
 import { fetchProducts } from '@/store/productSlice';
 import {

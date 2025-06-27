@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/accordion";
 import { Separator } from '@/components/ui/separator';
 import ShopHeader from '../admin/components/ShopHeader';
-import ProductCard from '../admin/components/ProductCard';
+import ProductCard from './ProductCard';
 import { headers } from '../admin/components/products';
 import PageHeader from '@/components/PageHeader';
 import { useDispatch, useSelector } from 'react-redux';

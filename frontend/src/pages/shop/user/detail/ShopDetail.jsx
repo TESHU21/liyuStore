@@ -12,19 +12,23 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
 import ProductDetailsTabs from "./ProductDetailsTabs";
+import { useLocation } from "react-router-dom";
 const ShopDetail = () => {
     const maxNumber = 1000; // Change this to any number (e.g., 1000000 for unlimited feel)
   const options = Array.from({ length: maxNumber }, (_, i) => i + 1);
   const productImage = 'https://placehold.co/400x300/e0e0e0/ffffff?text=Product+Image'; // Using a placeholder for demonstration
+  const location=useLocation()
+    const { product} = location.state || {}; // fallback if no state
+
 
   return (
     <div className="  flex flex-col  justify-center  font-inter px-[40px]">
       <div className="bg-white rounded-xl  flex flex-col lg:flex-row w-full overflow-hidden gap-10">
         <div className="lg:w-1/2  flex items-center justify-center bg-gray-50 rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none">
           <img
-            src="image_842774.png" 
-            alt="Apple MacBook Air"
-            className="max-w-full h-auto rounded-lg shadow-md"
+            src={product?.image}
+            alt={product?.name}
+            className="max-w-full max-h-[332px] rounded-lg shadow-md"
             // Fallback for image loading errors
             onError={(e) => {
               e.target.onerror = null; // Prevent infinite loop
@@ -37,7 +41,7 @@ const ShopDetail = () => {
         <div className="lg:w-1/2  flex flex-col ">
           {/* Brand and Rating Section */}
           <div className="flex items-center mb-2 text-sm text-gray-600">
-            <span className="mr-4 text-base">Brand: Apple</span>
+            <span className="mr-4 text-base">{product?.brand}</span>
             <div className="flex items-center text-yellow-500">
               {/* Star icons for rating */}
               {[...Array(4)].map((_, i) => (
@@ -55,20 +59,18 @@ const ShopDetail = () => {
 
           {/* Product Title */}
           <h3 className=" font-lato text-3xl sm:text-4xl font-semiboldmb-4 leading-tight">
-            Apple MacBook Pro 2019 | 16"
+            {product?.name}
           </h3>
 
           {/* Product Specifications */}
           <p className="text-gray-700 mt-7  text-base ">
-            RAM 16.0 GB | Memory 512 GB
+           {product?.description}
           </p>
-          <p className="text-gray-700 text-base ">
-            Keyboard layout Eng (English)
-          </p>
+          
 
           {/* Product Price */}
           <p className="text-blue-primary text-3xl leading-6 my-7">
-            $749.99
+           ${product?.price}
           </p>
 
           {/* Stock Status */}

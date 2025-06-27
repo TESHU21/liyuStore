@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch ,useSelector} from 'react-redux';
 import { createProduct, updateProduct, deleteProduct } from '@/store/productSlice';
 import { fetchCategories } from '@/store/categorySlice';
 import { uploadImage } from '../../../lib/uploadImage';
@@ -20,6 +20,7 @@ const ProductFormPage = ({
   const [fields, setFields] = useState(staticFields);
   const [initialValues, setInitialValues] = useState(baseInitialValues);
   const [formKey, setFormKey] = useState(0); // used to reset form after create
+  const { loading,error,success}=useSelector((state)=>state.products.products)
 
   // 🔁 Fetch categories for the category select field
   useEffect(() => {
@@ -131,6 +132,11 @@ const ProductFormPage = ({
         initialValues={productToEdit ? initialValues : baseInitialValues}
         submitBtnText={productToEdit ? 'Update' : 'Create'}
         onSubmit={handleSubmit}
+        errorMessage={error}
+        isLoading={loading}
+        successMessage={success}
+        
+        
       />
     </div>
   );

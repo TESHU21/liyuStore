@@ -4,9 +4,14 @@ import { Separator } from "@/components/ui/separator"; // Assuming you have Sepa
 import { ShoppingCart, Heart, Eye ,Pencil} from 'lucide-react'; // Import icons
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({  product, onEdit }) => {
+  const navigate=useNavigate()
       const user=useSelector((state)=>state?.auth.user)
+      const handleDetail=(product)=>{
+        navigate(`/shop/${product._id}`,{state:{product}})
+      }
   
   return (
     <Card className="w-[300px] py-1 rounded-sm sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px]  flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
@@ -32,12 +37,16 @@ const ProductCard = ({  product, onEdit }) => {
       <CardFooter className=" flex flex-col items-center pb-6">
         {
           user?.isAdmin?(
-               <div className="flex justify-between items-center w-full">
+               <div className="w-full">
                         <Separator className="w-full mb-3" />
-
+                        
+                        <div className=" flex justify-between">
+                          
           <Button className="text-lg font-bold  cursor-pointer bg-inherit text-blue-primary shadow-none border-0 hover:bg-inherit " onClick={() => onEdit(product)}><Pencil /></Button>
           <div className="flex space-x-3 text-gray-500">
      <p>{new Date(product.createdAt).toISOString().slice(2, 10)}</p>
+
+                        </div>
 
     
           </div>
@@ -46,9 +55,13 @@ const ProductCard = ({  product, onEdit }) => {
         (
                <div className="flex  justify-center items-center w-full">
           <div className="flex space-x-3 text-gray-500">
-            <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
-            <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" />
-            <Eye className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-colors" />
+            <button className="py-0">      <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors"  />
+             </button>
+             <button type="button"> <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" /></button>
+
+           
+            <button onClick={()=>handleDetail(product)} ><Eye className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-colors" /></button>
+            
           </div>
         </div>
           )
