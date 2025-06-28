@@ -9,6 +9,8 @@ import { useNavigate,useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
 import { addProductToFavorite,removeProductFromFavorite } from "@/store/favoriteSlice";
+import {addProductToCart} from "../../../store/cartSlice"
+
 
 
 const ProductCard = ({  product, onEdit }) => {
@@ -32,6 +34,20 @@ const ProductCard = ({  product, onEdit }) => {
 
 
       }
+      const handleAddToCart = () => {
+          if (!product) return;
+      
+          dispatch(
+            addProductToCart({
+              id: product._id,
+              name: product.name,
+              image:product.image,
+              brand:product.brand,
+              price: product.price,
+              quantity: parseInt(1, 10),
+            })
+          );
+        };
       const handleRemoveProduct=(product)=>{
         console.log("Id",product._id)
         dispatch(removeProductFromFavorite(product._id))
@@ -79,7 +95,7 @@ const ProductCard = ({  product, onEdit }) => {
         (
                <div className="flex  justify-center items-center w-full">
         <div className="flex space-x-3 text-gray-500">
-  <button className="py-0">
+  <button className="py-0" onClick={()=>handleAddToCart(product)}>
     <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
   </button>
   <button onClick={() => dispatch(addProductToFavorite(product))}>
