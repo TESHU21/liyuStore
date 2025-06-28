@@ -2,18 +2,24 @@
 import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator"; // Assuming you have Separator
-import { ShoppingCart, Heart, Eye ,Pencil} from 'lucide-react'; // Import icons
+import { ShoppingCart, Heart, Eye ,Pencil,Trash2} from 'lucide-react'; // Import icons
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
-import { addProductToFavorite } from "@/store/favoriteSlice";
+import { addProductToFavorite,removeProductFromFavorite } from "@/store/favoriteSlice";
+
 
 const ProductCard = ({  product, onEdit }) => {
   const navigate=useNavigate()
   const dispatch=useDispatch()
       const user=useSelector((state)=>state?.auth.user)
+      const location = useLocation();
+    const isFavouritePage = location.pathname === '/favourite';
+
+
+
       const handleDetail=(product)=>{
        
         dispatch(setSelectedProduct(product))
@@ -22,8 +28,13 @@ const ProductCard = ({  product, onEdit }) => {
       }
       const handleAddToFavourite=(product)=>{
          console.log(product)
-        dispatch(addProductToFavorite(product))
+        dispatch(addProductToFavorite(product._id))
 
+
+      }
+      const handleRemoveProduct=(product)=>{
+        console.log("Id",product._id)
+        dispatch(removeProductFromFavorite(product._id))
       }
   
   return (
@@ -72,11 +83,18 @@ const ProductCard = ({  product, onEdit }) => {
     <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
   </button>
   <button onClick={() => dispatch(addProductToFavorite(product))}>
-    {/* <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" /> */}hh
+    <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" />
   </button>
   <button onClick={() => handleDetail(product)}>
     <Eye className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-colors" />
   </button>
+ 
+    {
+      isFavouritePage&&<button onClick={()=>handleRemoveProduct(product)}><Trash2 className="w-5 h-5 cursor-pointer fill-red-500 transition-colors text-red-500"/></button>
+    }
+  
+
+
 </div>
 
         </div>

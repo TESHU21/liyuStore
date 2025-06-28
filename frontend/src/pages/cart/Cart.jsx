@@ -8,6 +8,9 @@ const Cart = () => {
   return (
     <div>
       <PageHeader header={headers}/>
+      <div>
+        
+      </div>
 
     </div>
   )

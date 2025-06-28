@@ -6,12 +6,12 @@ import ProductCard from '../shop/user/ProductCard'
 
 const Favourite = () => {
   const favourite=useSelector((state)=>state.favourite.favorites)
-  console.log("favourite",favourite)
+
   return (
-    <div cla>
+    <div >
       <PageHeader header={headers}/>
       <div className=' flex  gap-10 md:mt-[100px] px-[60px] mb-[60px]  '>
-        {favourite.length>0?(favourite && favourite.map((item)=><ProductCard product={item}/>)
+        {favourite.length>0?(favourite && favourite.map((item)=><ProductCard key={item._id} product={item}/>)
         
       ):(
           <h1>No Selected Favourite Items</h1>
