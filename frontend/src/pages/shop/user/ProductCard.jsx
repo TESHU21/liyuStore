@@ -39,11 +39,8 @@ const ProductCard = ({  product, onEdit }) => {
       
           dispatch(
             addProductToCart({
-              id: product._id,
-              name: product.name,
-              image:product.image,
-              brand:product.brand,
-              price: product.price,
+             
+              ...product,
               quantity: parseInt(1, 10),
             })
           );
