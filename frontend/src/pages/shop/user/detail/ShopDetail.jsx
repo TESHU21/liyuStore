@@ -1,5 +1,5 @@
 
-import React from "react";
+import React,{useState} from "react";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -13,14 +13,27 @@ import {
 import { Button } from "@/components/ui/button";
 import ProductDetailsTabs from "./ProductDetailsTabs";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
+import {addProductToCart} from "../../../../store/cartSlice"
 const ShopDetail = () => {
+  const [quantity,setQuantity]=useState(null)
     const maxNumber = 1000; // Change this to any number (e.g., 1000000 for unlimited feel)
   const options = Array.from({ length: maxNumber }, (_, i) => i + 1);
-  const productImage = 'https://placehold.co/400x300/e0e0e0/ffffff?text=Product+Image'; // Using a placeholder for demonstration
   const location=useLocation()
     // const { product} = location.state || {}; // fallback if no state
     const product=useSelector((state)=>state.selectedProduct.product)
+const handleAddToCart = () => {
+    if (!product) return;
+
+    dispatch(
+      addProductToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: parseInt(quantity, 10),
+      })
+    );
+  };
 
 
   return (
@@ -32,10 +45,7 @@ const ShopDetail = () => {
             alt={product?.name}
             className="max-w-full max-h-[332px] rounded-lg shadow-md"
             // Fallback for image loading errors
-            onError={(e) => {
-              e.target.onerror = null; // Prevent infinite loop
-              e.target.src = "https://placehold.co/400x300/e0e0e0/ffffff?text=Image+Not+Found";
-            }}
+           
           />
         </div>
 
@@ -83,7 +93,7 @@ const ShopDetail = () => {
 
           {/* Quantity Selector */}
           <div className="md:mb-[57px] w-32">
-            <Select className="">
+            <Select className="" value={quantity} onValueChange={(value)=>setQuantity(value)}>
       <SelectTrigger className="w-[151px]  bg-[#E6EFF5]  !h-12 ">
         <SelectValue placeholder="quantity" />
       </SelectTrigger>
@@ -96,7 +106,7 @@ const ShopDetail = () => {
       </SelectContent>
     </Select>
           </div>
-          <Button className="bg-[#01589A] h-15 cursor-pointer hover:bg-blue-600">Add to cart</Button>
+          <Button className="bg-[#01589A] h-15 cursor-pointer hover:bg-blue-600"  onClick={handleAddToCart}>Add to cart</Button>
 
         </div>
       </div>
