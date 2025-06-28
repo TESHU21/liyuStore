@@ -5,6 +5,8 @@ import categoryReducer from "./categorySlice"
 import productReducer from "./productSlice"
 import selectedProductReducer from "./selectedProductSlice"
 import cartReducer from "./cartSlice"
+import favouriteReducer from "./favoriteSlice"
+import Favourite from '@/pages/favourite/Favourite';
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -13,6 +15,7 @@ const store = configureStore({
     products:productReducer,
     selectedProduct:selectedProductReducer,
     cart:cartReducer,
+    favourite:favouriteReducer,
     // add other slices here (e.g., product, cart, order)
   },
 });

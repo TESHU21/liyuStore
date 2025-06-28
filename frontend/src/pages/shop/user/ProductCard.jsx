@@ -1,4 +1,5 @@
 // components/ProductCard.jsx
+import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator"; // Assuming you have Separator
 import { ShoppingCart, Heart, Eye ,Pencil} from 'lucide-react'; // Import icons
@@ -7,15 +8,22 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
+import { addProductToFavorite } from "@/store/favoriteSlice";
 
 const ProductCard = ({  product, onEdit }) => {
   const navigate=useNavigate()
   const dispatch=useDispatch()
       const user=useSelector((state)=>state?.auth.user)
       const handleDetail=(product)=>{
+       
         dispatch(setSelectedProduct(product))
 
         navigate(`/shop/${product._id}`)
+      }
+      const handleAddToFavourite=(product)=>{
+         console.log(product)
+        dispatch(addProductToFavorite(product))
+
       }
   
   return (
@@ -59,15 +67,18 @@ const ProductCard = ({  product, onEdit }) => {
           ):
         (
                <div className="flex  justify-center items-center w-full">
-          <div className="flex space-x-3 text-gray-500">
-            <button className="py-0">      <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors"  />
-             </button>
-             <button type="button"> <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" /></button>
+        <div className="flex space-x-3 text-gray-500">
+  <button className="py-0">
+    <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
+  </button>
+  <button onClick={() => dispatch(addProductToFavorite(product))}>
+    {/* <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" /> */}hh
+  </button>
+  <button onClick={() => handleDetail(product)}>
+    <Eye className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-colors" />
+  </button>
+</div>
 
-           
-            <button onClick={()=>handleDetail(product)} ><Eye className="w-5 h-5 cursor-pointer hover:text-gray-800 transition-colors" /></button>
-            
-          </div>
         </div>
           )
         }

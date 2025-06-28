@@ -21,6 +21,7 @@ const ShopDetail = () => {
   const options = Array.from({ length: maxNumber }, (_, i) => i + 1);
   const location=useLocation()
     // const { product} = location.state || {}; // fallback if no state
+    const dispatch=useDispatch()
     const product=useSelector((state)=>state.selectedProduct.product)
 const handleAddToCart = () => {
     if (!product) return;
