@@ -209,11 +209,7 @@ const fetchProducts = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * @desc Fetch product by ID
- * @route GET /api/products/:id
- * @access Public
- */
+
 const fetchProductById = asyncHandler(async (req, res) => {
     console.log(`--- fetchProductById Controller Hit for ID: ${req.params.id} ---`);
     try {
@@ -244,11 +240,7 @@ const fetchProductById = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * @desc Fetch all products (e.g., for home page display, admin list)
- * @route GET /api/products/all
- * @access Public (can be restricted if needed)
- */
+
 const fetchAllProducts = asyncHandler(async (req, res) => {
     console.log("--- fetchAllProducts Controller Hit ---");
     try {
@@ -268,11 +260,6 @@ const fetchAllProducts = asyncHandler(async (req, res) => {
     }
 });
 
-/**
- * @desc Add product review
- * @route POST /api/products/:id/reviews
- * @access Private (User must be logged in, assuming req.user from auth middleware)
- */
 const addProductReview = asyncHandler(async (req, res) => {
     console.log(`--- addProductReview Controller Hit for product ID: ${req.params.id} ---`);
     // Assuming req.user is populated by an authentication middleware
@@ -311,7 +298,7 @@ const addProductReview = asyncHandler(async (req, res) => {
 
         // Create the new review object
         const review = {
-            name: req.user.username, // Use username from authenticated user
+            name: req.user.fullName, // Use username from authenticated user
             rating: Number(rating),
             comment,
             user: req.user._id, // Use user ID from authenticated user
@@ -346,6 +333,46 @@ const addProductReview = asyncHandler(async (req, res) => {
         console.error(`Response sent: ${statusCode} for addProductReview due to error.`);
     }
 });
+
+/**
+ * @desc Fetch reviews for a specific product by product ID
+ * @route GET /api/products/:id/reviews
+ * @access Public
+ */
+const fetchProductReviews = asyncHandler(async (req, res) => {
+  console.log(`--- fetchProductReviews Controller Hit for product ID: ${req.params.id} ---`);
+
+  try {
+    // Find product and select only the reviews field
+    const product = await Product.findById(req.params.id).select("reviews");
+
+    if (!product) {
+      console.warn(`Product not found while fetching reviews. ID: ${req.params.id}`);
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    console.log(`✅ Reviews fetched: ${product.reviews.length} for product ID: ${req.params.id}`);
+    res.status(200).json(product.reviews);
+  } catch (error) {
+    console.error("Error fetching product reviews:", error);
+
+    const statusCode = error.name === "CastError" ? 400 : 500;
+    const errorMessage =
+      error.name === "CastError"
+        ? "Invalid product ID format."
+        : "Failed to fetch product reviews.";
+
+    res.status(statusCode).json({
+      error: errorMessage,
+      details: error.message,
+    });
+
+    console.error(`Response sent: ${statusCode} for fetchProductReviews due to error.`);
+  }
+});
+
+
+
 
 /**
  * @desc Fetch top rated products
@@ -451,6 +478,7 @@ export {
     fetchProductById,
     fetchAllProducts,
     addProductReview,
+    fetchProductReviews,
     fetchTopProducts,
     fetchNewProducts,
     filterProducts,

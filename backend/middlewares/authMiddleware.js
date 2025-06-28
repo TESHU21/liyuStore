@@ -8,6 +8,8 @@ const asyncHandler = (fn) => (req, res, next) => {
 
 const authenticate = asyncHandler(async (req, res, next) => {
   let token;
+    console.log("🔐 authenticate middleware hit");
+
 
   if (
     req.headers.authorization &&
