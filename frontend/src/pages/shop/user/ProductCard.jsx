@@ -5,12 +5,17 @@ import { ShoppingCart, Heart, Eye ,Pencil} from 'lucide-react'; // Import icons
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setSelectedProduct } from "@/store/selectedProductSlice";
 
 const ProductCard = ({  product, onEdit }) => {
   const navigate=useNavigate()
+  const dispatch=useDispatch()
       const user=useSelector((state)=>state?.auth.user)
       const handleDetail=(product)=>{
-        navigate(`/shop/${product._id}`,{state:{product}})
+        dispatch(setSelectedProduct(product))
+
+        navigate(`/shop/${product._id}`)
       }
   
   return (

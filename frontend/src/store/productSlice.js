@@ -90,6 +90,24 @@ export const deleteProduct = createAsyncThunk(
     }
   }
 );
+// Add Review
+export const createReview=createAsyncThunk("products/createReview",async({id,formData},thunkAPI)=>{
+  try{
+    const response=await axiosInstance.post(`/api/products/${id}/reviews`,formData);
+    return response.data;
+  }catch(error){
+    return thunkAPI.rejectWithValue(error.response?.data?.message||"Fail To Post Review")
+  }
+})
+// Fetch Review
+export const fetchProductReview=createAsyncThunk("products/fetchProductReview",async(id,thunkAPI)=>{
+  try{
+    const response=await axiosInstance.get(`/api/products/${id}/reviews`);
+    return response.data;
+  }catch(error){
+    return thunkAPI.rejectWithValue(error.response?.data?.message||"Fail To Fetch Review")
+  }
+})
 
 // ✅ Product Slice
 const productSlice = createSlice({
@@ -97,6 +115,7 @@ const productSlice = createSlice({
   initialState: {
     products: [],
     product: null,
+    reviews:null,
     loading: false,
     error: null,
     success: null
@@ -202,7 +221,48 @@ const productSlice = createSlice({
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+     // createReview
+    .addCase(createReview.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.success = null;
+    })
+    .addCase(createReview.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;              // Clear error on success
+      state.success = "Review posted successfully!";
+      // Optional: Update product reviews if you store them here
+      // For example, if state.product exists:
+      if (state.product) {
+        state.product.reviews.push(action.payload);
+        state.product.numReviews = state.product.reviews.length;
+      }
+    })
+    .addCase(createReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = null;
+    })
+
+    // fetchProductReview
+    .addCase(fetchProductReview.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.success = null;
+    })
+    .addCase(fetchProductReview.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;             // Clear error on success
+      state.success = null;
+      // Store fetched reviews if you have a state slice for it, e.g.:
+      state.reviews = action.payload;
+    })
+    .addCase(fetchProductReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = null;
+    })
   }
 });
 

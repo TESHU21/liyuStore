@@ -13,16 +13,18 @@ import {
 import { Button } from "@/components/ui/button";
 import ProductDetailsTabs from "./ProductDetailsTabs";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 const ShopDetail = () => {
     const maxNumber = 1000; // Change this to any number (e.g., 1000000 for unlimited feel)
   const options = Array.from({ length: maxNumber }, (_, i) => i + 1);
   const productImage = 'https://placehold.co/400x300/e0e0e0/ffffff?text=Product+Image'; // Using a placeholder for demonstration
   const location=useLocation()
-    const { product} = location.state || {}; // fallback if no state
+    // const { product} = location.state || {}; // fallback if no state
+    const product=useSelector((state)=>state.selectedProduct.product)
 
 
   return (
-    <div className="  flex flex-col  justify-center  font-inter px-[40px]">
+    <div className="  flex flex-col  justify-center  font-inter px-[40px] pb-16">
       <div className="bg-white rounded-xl  flex flex-col lg:flex-row w-full overflow-hidden gap-10">
         <div className="lg:w-1/2  flex items-center justify-center bg-gray-50 rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none">
           <img

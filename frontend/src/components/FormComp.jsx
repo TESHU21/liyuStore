@@ -168,7 +168,7 @@ const FormComp = forwardRef(
                                   {...field}
                                   placeholder={placeholder}
                                   value={field.value || ""}
-                                  rows={20}
+                                  rows={40}
                                   onChange={(e) => {
                                     field.onChange(e);
                                     trigger(name);

@@ -11,21 +11,45 @@ import AllReviews from './AllReviews'
 
 const ProductDetailsTabs = () => {
   return (
-    <div>
-      <Tabs defaultValue="relatedproducts" className="py-0">
-        <TabsList asChild>
-          <div className='flex'>
-            <TabsTrigger value="relatedproducts">
+    <div className='pt-[80px]' >
+     
+      <Tabs defaultValue="relatedproducts "  >
+         <div  className=' flex justify-center pb-[50px]'>
+        <TabsList asChild className="bg-transparent flex border-none shadow-none">
+          <div className='flex gap-[64px] '>
+            <TabsTrigger value="relatedproducts"    className="
+                  data-[state=active]:text-blue-primary 
+                  data-[state=active]:bg-transparent 
+                  data-[state=active]:border-none 
+                  data-[state=active]:shadow-none 
+                  border-none shadow-none
+                  cursor-pointer
+                ">
               Related Product
             </TabsTrigger>
-            <TabsTrigger value="reviewform">
+            <TabsTrigger value="reviewform"    className="
+                  data-[state=active]:text-blue-primary 
+                  data-[state=active]:bg-transparent 
+                  data-[state=active]:border-none 
+                  data-[state=active]:shadow-none 
+                  border-none shadow-none
+                  cursor-pointer
+                ">
               Write Your Review
             </TabsTrigger>
-            <TabsTrigger value="allreviews">
+            <TabsTrigger value="allreviews"    className="
+                  data-[state=active]:text-blue-primary 
+                  data-[state=active]:bg-transparent 
+                  data-[state=active]:border-none 
+                  data-[state=active]:shadow-none 
+                  border-none shadow-none
+                  cursor-pointer
+                ">
               All Reviews
             </TabsTrigger>
           </div>
         </TabsList>
+        </div>
 
         <TabsContent value="relatedproducts">
           <ReletedProducts />
