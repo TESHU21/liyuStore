@@ -4,6 +4,7 @@ import uiReducer from "./uiSlice"
 import categoryReducer from "./categorySlice"
 import productReducer from "./productSlice"
 import selectedProductReducer from "./selectedProductSlice"
+import cartReducer from "./cartSlice"
 const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -11,6 +12,7 @@ const store = configureStore({
     category:categoryReducer,
     products:productReducer,
     selectedProduct:selectedProductReducer,
+    cart:cartReducer,
     // add other slices here (e.g., product, cart, order)
   },
 });
