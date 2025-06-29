@@ -16,7 +16,7 @@ const CartItem = ({ cart }) => {
 
   return (
     <div className="mx-auto max-w-4xl border-b pb-4 mb-4">
-      <div className="grid grid-cols-5 font-semibold text-2xl leading-[23.1px] mb-2">
+      <div className="grid grid-cols-5 font-semibold text-lg leading-[23.1px] mb-2">
         <div>Product</div>
         <div></div>
         <div className="col-span-1">Price</div>
@@ -45,7 +45,7 @@ const CartItem = ({ cart }) => {
         </div>
 
         {/* Price */}
-        <div>${cart.price.toFixed(2)}</div>
+        <div>${cart.price.toLocaleString()}</div>
 
         {/* Quantity Selector */}
         <div>
