@@ -11,9 +11,9 @@ const Cart = () => {
 
   // const totalPrice=useSelector((state)=>state.cart.totalPrice)
   return (
-    <div className='pb-20'>
+    <div className=' pb-20'>
       <PageHeader header={headers}/>
-      <div>
+      <div className='md:pt-10'>
         {cart.length>0?( <div>
            {cart.map((item)=><CartItem key={item._id} cart={item}/>)}
            <div className='max-w-4xl mx-auto'>

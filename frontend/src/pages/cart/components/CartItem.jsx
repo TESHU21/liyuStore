@@ -16,7 +16,7 @@ const CartItem = ({ cart }) => {
 
   return (
     <div className="mx-auto max-w-4xl border-b pb-4 mb-4">
-      <div className="grid grid-cols-5 font-semibold text-lg mb-2">
+      <div className="grid grid-cols-5 font-semibold text-2xl leading-[23.1px] mb-2">
         <div>Product</div>
         <div></div>
         <div className="col-span-1">Price</div>
@@ -52,7 +52,7 @@ const CartItem = ({ cart }) => {
           <select
             value={cart.quantity}
             onChange={handleQuantityChange}
-            className="border rounded-md px-4 py-2 bg-gray-100"
+            className="border rounded-md px-4 py-2 bg-[#E6EFF5]"
           >
             {Array.from({ length: 1000 }, (_, i) => i + 1).map((num) => (
               <option key={num} value={num}>
