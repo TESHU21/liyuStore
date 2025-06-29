@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
 import { addProductToFavorite,removeProductFromFavorite } from "@/store/favoriteSlice";
 import {addProductToCart} from "../../../store/cartSlice"
+import { toast } from "sonner"
 
 
 
@@ -30,7 +31,9 @@ const ProductCard = ({  product, onEdit }) => {
       }
       const handleAddToFavourite=(product)=>{
          console.log(product)
-        dispatch(addProductToFavorite(product._id))
+        dispatch(addProductToFavorite(product))
+         toast.success("You Added Item to Favourite sucessfully! ")
+
 
 
       }
@@ -44,10 +47,13 @@ const ProductCard = ({  product, onEdit }) => {
               quantity: parseInt(1, 10),
             })
           );
+          toast.success("You Added Item to cart sucessfully! ")
         };
       const handleRemoveProduct=(product)=>{
         console.log("Id",product._id)
         dispatch(removeProductFromFavorite(product._id))
+                  toast.error("You removed Items from favourite sucessfully! ")
+
       }
   
   return (
@@ -95,7 +101,7 @@ const ProductCard = ({  product, onEdit }) => {
   <button className="py-0" onClick={()=>handleAddToCart(product)}>
     <ShoppingCart className="w-5 h-5 cursor-pointer hover:text-blue-600 transition-colors" />
   </button>
-  <button onClick={() => dispatch(addProductToFavorite(product))}>
+  <button onClick={() => handleAddToFavourite(product)}>
     <Heart className="w-5 h-5 cursor-pointer hover:text-red-500 transition-colors" />
   </button>
   <button onClick={() => handleDetail(product)}>

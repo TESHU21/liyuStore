@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
+import { useDispatch } from "react-redux";
+import { removeProductFromCart } from "@/store/cartSlice";
+import Product from "@/pages/shop/admin/ProductAdmin";
 const CartItem = ({cart}) => {
   const [quantity, setQuantity] = useState(1);
+  const dispatch=useDispatch()
   const price = 749.99;
   const total = (quantity * price).toFixed(2);
 
@@ -30,10 +33,9 @@ const CartItem = ({cart}) => {
             />
             <div>
               <p className="font-semibold">{cart?.name}</p>
-              <p className="text-gray-500 text-sm">{cart?.brand}</p>
-              <button className="text-red-600 text-sm mt-1 hover:underline">
-                Remove
-              </button>
+              <p className="text-gray-500 text-sm">brand:{cart?.brand}</p>
+              <p className="text-red-500 cursor-pointer" onClick={()=>dispatch(removeProductFromCart(cart._id))}>Remove</p>
+              
             </div>
           </div>
 
@@ -57,12 +59,7 @@ const CartItem = ({cart}) => {
         </div>
       </div>
 
-      <div className="text-lg font-medium mb-2">Items : {quantity}</div>
-      <div className="text-xl font-semibold mb-6">Total : ${total}</div>
-
-      <button className="bg-blue-700 text-white px-6 py-3 rounded-md hover:bg-blue-800">
-        Proceed to checkout
-      </button>
+      
     </div>
   );
 };

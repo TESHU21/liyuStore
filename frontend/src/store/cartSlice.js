@@ -26,7 +26,7 @@ const cartSlice = createSlice({
 
     removeProductFromCart(state, action) {
       const id = action.payload;
-      const index = state.items.findIndex(i => i.id === id);
+      const index = state.items.findIndex(i => i._id === id);
       if (index !== -1) {
         const product = state.items[index];
         state.totalQuantity -= product.quantity;
