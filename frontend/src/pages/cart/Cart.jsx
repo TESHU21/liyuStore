@@ -5,10 +5,11 @@ import { useSelector } from 'react-redux'
 import CartItem from './components/CartItem'
 const Cart = () => {
   const cart=useSelector((state)=>state.cart.items)
+  const totalPrice=useSelector((state)=>state.cart.totalAmount)
+  const totalQuantity=useSelector((state)=>state.cart.totalQuantity)
   console.log("Cart",cart)
-  const totalQuantity=cart.reduce((acc,item)=>acc+item.quantity,0)
 
-  const totalPrice=cart.reduce((acc,item)=>acc+item.price *item.quantity,0).toFixed(2)
+  // const totalPrice=useSelector((state)=>state.cart.totalPrice)
   return (
     <div className='pb-20'>
       <PageHeader header={headers}/>
