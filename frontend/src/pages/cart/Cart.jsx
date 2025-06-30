@@ -3,13 +3,13 @@ import PageHeader from '@/components/PageHeader'
 import { headers } from './components/data'
 import { useSelector } from 'react-redux'
 import CartItem from './components/CartItem'
+import { useNavigate } from 'react-router-dom'
 const Cart = () => {
+  const navigate=useNavigate()
   const cart=useSelector((state)=>state.cart.items)
   const totalPrice=useSelector((state)=>state.cart.totalAmount)
   const totalQuantity=useSelector((state)=>state.cart.totalQuantity)
-  console.log("Cart",cart)
-
-  // const totalPrice=useSelector((state)=>state.cart.totalPrice)
+  
   return (
     <div className=' pb-20'>
       <PageHeader header={headers}/>
@@ -20,7 +20,9 @@ const Cart = () => {
               <div className="text-lg font-medium mb-2">Items : {totalQuantity}</div>
       <div className="text-xl font-semibold mb-6">Total : ${totalPrice.toLocaleString()}</div>
 
-      <button className="bg-blue-primary w-1/2 text-white px-6 py-3 rounded-md hover:bg-blue-primary mx-auto">
+      <button className="bg-blue-primary w-1/2 text-white px-6 py-3 rounded-md hover:bg-blue-primary mx-auto"
+      onClick={()=>navigate("/checkout")}
+      >
         Proceed to checkout
       </button>
            </div>
