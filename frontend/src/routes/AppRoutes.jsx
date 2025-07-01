@@ -11,6 +11,7 @@ import Checkout from '@/pages/checkout/Checkout'
 import CreateProduct from '@/pages/shop/admin/ProductFormPage'
 import Profile from '@/pages/profile/Profile'
 import CategoryManager from "../pages/catagory/CategoryManager"
+import OrdersUser from '@/pages/orders/user/OrdersUser'
 const AppRoutes = () => {
   return (
     <Routes >
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         <Route path="product" element={<CreateProduct/>}/>
         <Route path="profile" element={<Profile/>}/>
         <Route path="category" element={<CategoryManager/>}/>
+        <Route path="orders" element={<OrdersUser/>}/>
 
         </Route>
         <Route path='login' element={<Login/>}/>

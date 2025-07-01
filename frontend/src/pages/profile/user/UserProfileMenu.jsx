@@ -37,7 +37,7 @@ const UserProfileMenu = () => {
         <DropdownMenuGroup className="flex py-[4px] flex-col gap-2">
        
           <DropdownMenuItem asChild>
-            <NavLink to="/portal" className="flex items-center justify-between w-full">
+            <NavLink to="/orders" className="flex items-center justify-between w-full">
               Orders
             </NavLink>
           </DropdownMenuItem>
