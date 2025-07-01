@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Eye ,Clock,Check} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const columns = ({ handleConfirm, handleEdit, handleDelete }) => [
+export const columns = ({ handleViewDetail }) => [
   {
     accessorKey: "firstName",
     header: () => <div className="text-left">Learners</div>,

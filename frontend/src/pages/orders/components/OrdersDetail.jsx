@@ -2,11 +2,16 @@ import React from 'react'
 import { columns } from "./colomns"
 import { dummyData } from './dummyData'
 import { DataTable } from '@/components/data-table'
+import OrderDetailSummery from './OrderDetailSummery'
+
 
 const OrdersDetail = () => {
   return (
-    <div>
-        <DataTable columns={columns} dummyData={dummyData}/>
+    <div className='flex gap-10 pt-10 mx-auto justify-center'>
+
+        <DataTable columns={columns()} data={dummyData}/>
+        <OrderDetailSummery/>
+
     </div>
   )
 }

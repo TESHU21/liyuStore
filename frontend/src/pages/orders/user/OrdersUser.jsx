@@ -1,8 +1,10 @@
 import React from 'react'
 import { DataTable } from '@/components/data-table'
 import {columns} from "./columns"
+import { useNavigate } from 'react-router-dom'
 
 const OrdersUser = () => {
+  const navigate=useNavigate()
 const userData = [
   {
     id: "L001",
@@ -10,7 +12,7 @@ const userData = [
     image: "https://randomuser.me/api/portraits/men/1.jpg",
     date: "2025-06-01",
     total: "500 ETB",
-    status: "Completed",
+    status: "Paid",
     delivered: "Paid",
   },
   {
@@ -28,7 +30,7 @@ const userData = [
     image: "https://randomuser.me/api/portraits/men/3.jpg",
     date: "2025-06-05",
     total: "750 ETB",
-    status: "Completed",
+    status: "Paid",
     delivered: "Paid",
   },
   {
@@ -49,10 +51,11 @@ const userData = [
     status: "Paid",
     delivered: "Paid",
   },
-]
+];
 
-const handleViewDetail=()=>{
-  
+const handleViewDetail=(data)=>{
+  navigate(`/orders/${data.id}`)
+  console.log(data.id)
 }
 
   return (
