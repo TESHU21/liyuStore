@@ -12,6 +12,10 @@ import ProfileMenu from '@/pages/profile/ProfileMenu';
 const NavBar = () => {
   const navigate=useNavigate();
     const dispatch = useDispatch();
+    const cart=useSelector((state)=>state.cart.items)
+    const favourite=useSelector((state)=>state.favourite.favorites)
+    const cartItemCount=cart.length;
+    const favouriteItemCount=favourite.length;
 
   const [menuVisiblity,setMenuVisibility]=useState(false)
   const user=useSelector((state)=>state.auth.user)
@@ -37,7 +41,7 @@ const NavBar = () => {
   }
   // Function for Desktop NavLink classes
   const getDesktopNavLinkClasses = ({ isActive }) =>
-    `relative flex gap-2 group pb-2 transition-colors duration-200 ease-in-out ${
+    `relative flex items-center justify-center  gap-2 group pb-2 transition-colors duration-200 ease-in-out ${
       isActive ? "text-blue-800" : "text-gray-700 hover:text-blue-primary"
     }
     after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-blue-600 after:transition-all after:duration-300 after:ease-in-out
@@ -62,11 +66,24 @@ const NavBar = () => {
             </div>
             <div className='flex gap-8 ml-[342px]'>
             <NavLink to="/" className={getDesktopNavLinkClasses}><span><Home size={24}/></span>Home</NavLink>
-            <NavLink to="/shop" className={getDesktopNavLinkClasses}> <ShoppingBag  size={24}/> <span>shop</span></NavLink>
+            <NavLink to="/shop" className={getDesktopNavLinkClasses}> <ShoppingBag  size={24}/> <span>Shop</span></NavLink>
 
 
-            <NavLink to="/cart" className={getDesktopNavLinkClasses}><span><ShoppingCart size={24 }/></span>cart</NavLink>
-            <NavLink to="/favourite" className={getDesktopNavLinkClasses}> <span><Heart size={24}/></span>Favourite</NavLink>
+            <NavLink to="/cart" className={getDesktopNavLinkClasses}><span><ShoppingCart size={24 }/></span>Cart
+                {cartItemCount > 0 && (
+          <span className="   flex  items-center justify-center  bg-blue-primary w-5 h-5 text-white text-xs font-bold px-1  rounded-full">
+            {cartItemCount}
+          </span>
+        )}
+            </NavLink>
+            <NavLink to="/favourite" className={getDesktopNavLinkClasses}> <span><Heart size={24}/></span>Favourite
+                {cartItemCount > 0 && (
+          <span className=" flex items-center justify-center  w-5 h-5  bg-blue-primary text-white text-xs font-bold px-1  rounded-full">
+            {favouriteItemCount}
+          </span>
+        )}
+            
+            </NavLink>
        </div>
         </div>
         {
