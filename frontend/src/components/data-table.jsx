@@ -52,7 +52,7 @@ export function DataTable({ columns, data, columnFilters,setColumnFilters,sortin
   
       <div className=" rounded-md border">
         <Table className=" w-full table-auto ">
-          <TableHeader>
+          <TableHeader className="bg-[#E6EFF5]">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

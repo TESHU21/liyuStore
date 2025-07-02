@@ -43,7 +43,7 @@ const UserProfileMenu = () => {
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
-            <NavLink to="/profile" className="flex items-center justify-between w-full">
+            <NavLink to="/update-profile" className="flex items-center justify-between w-full">
               Profile
             </NavLink>
           </DropdownMenuItem>

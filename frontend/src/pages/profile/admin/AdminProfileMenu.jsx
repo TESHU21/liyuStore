@@ -35,13 +35,9 @@ const AdminProfileMenu = () => {
       <DropdownMenuContent className="w-40 border-t-0 mt-0 rounded-t-none -ml-4">
      
         <DropdownMenuGroup className="flex py-[4px] flex-col gap-2">
+          
           <DropdownMenuItem asChild>
-            <NavLink to="/portal" className="flex items-center justify-between w-full">
-              Dashboard
-            </NavLink>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <NavLink to="/portal" className="flex items-center justify-between w-full">
+            <NavLink to="/shop" className="flex items-center justify-between w-full">
               Products
             </NavLink>
           </DropdownMenuItem>
@@ -51,12 +47,12 @@ const AdminProfileMenu = () => {
             </NavLink>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <NavLink to="/portal" className="flex items-center justify-between w-full">
+            <NavLink to="/orders" className="flex items-center justify-between w-full">
               Orders
             </NavLink>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <NavLink to="/portal" className="flex items-center justify-between w-full">
+            <NavLink to="/user" className="flex items-center justify-between w-full">
               Users
             </NavLink>
           </DropdownMenuItem>

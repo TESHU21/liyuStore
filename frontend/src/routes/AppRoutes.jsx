@@ -13,6 +13,8 @@ import Profile from '@/pages/profile/Profile'
 import CategoryManager from "../pages/catagory/CategoryManager"
 import OrdersUser from '@/pages/orders/user/OrdersUser'
 import OrdersDetail from '@/pages/orders/components/OrdersDetail'
+import UpdateUserProfile from '@/pages/profile/user/UpdateUserProfile'
+import User from '@/pages/users/User'
 const AppRoutes = () => {
   return (
     <Routes >
@@ -29,6 +31,8 @@ const AppRoutes = () => {
         <Route path="category" element={<CategoryManager/>}/>
         <Route path="orders" element={<OrdersUser/>}/>
         <Route path='orders/:id' element={<OrdersDetail/>}/>
+        <Route path='update-profile' element={<UpdateUserProfile/>}/>
+        <Route path='/user' element={<User/>}/>
 
         </Route>
         <Route path='login' element={<Login/>}/>
