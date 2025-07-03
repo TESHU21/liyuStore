@@ -34,6 +34,19 @@ import axiosInstance from "@/lib/axiosInstance";
     }
   }
 )
+// Async Thunk for Fetching User
+ const getUser=createAsyncThunk('auth/getUser',
+  async(_,thunkAPI)=>{
+    try{
+      const response= await axiosInstance.get('/api/users')
+      return response.data
+    }
+    catch(error){
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Fetching User Failed,Please try again.")
+
+    }
+  }
+)
 
 // ✅ The auth slice
 const authSlice = createSlice({
@@ -92,10 +105,28 @@ const authSlice = createSlice({
         state.error = action.payload; // set error message from rejected action
 
       })
+      // Fetch Users from backend
+      .addCase(getUser.pending,(state)=>{
+         state.isLoading = true;
+        state.error = null; // Clear previous error
+
+      })
+      .addCase(getUser.fulfilled,(state,action)=>{
+         state.isLoading = false;
+        // state.user = action.payload.user;
+        
+
+
+      })
+      .addCase(getUser.rejected,(state,action)=>{
+         state.isLoading = false;
+        state.error = action.payload; // set error message from rejected action
+
+      })
   },
 });
 
 // ✅ Export actions and reducer
 export const { logout} = authSlice.actions;
-export {loginUser,registerUser}
+export {loginUser,registerUser,getUser}
 export default authSlice.reducer;
