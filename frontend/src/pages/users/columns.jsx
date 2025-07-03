@@ -3,7 +3,7 @@ import { ArrowUpDown, Pencil, Trash2, Check, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export const columns = ({  handleEdit, handleDelete }) => [
+export const columns = ({  handleEdit, handleDelete,editingRowId, setEditingRowId, editedValues, setEditedValues }) => [
 
   {
     accessorKey: "id",
@@ -17,20 +17,43 @@ export const columns = ({  handleEdit, handleDelete }) => [
   {
     accessorKey: "fullName",
     header: () => <div className="text-left ">Full Name</div>,
-    cell: ({ row }) => (
+    cell: ({ row }) => {
+      const user = row.original;
+      const isEditing = editingRowId === user.id;
+      
+      return isEditing ? (
+        <input
+          value={editedValues.fullName || ""}
+          onChange={(e) => setEditedValues((prev) => ({ ...prev, fullName: e.target.value }))}
+          className="border p-1"
+        />
+      ) : (
+        user.fullName
+      );
+      
      
-      <div className="w-[150px] mr-10 text-left">{row.original.fullName}</div>
-    ),
+    },
     // Added size property to explicitly set column width to 800 units
     size: 200,
   },
   {
     accessorKey: "email",
     header: () => <div className="text-left ">Email</div>,
-    cell: ({ row }) => (
+    cell: ({ row }) => {
+      const user = row.original;
+      const isEditing = editingRowId === user.id;
+      return isEditing ? (
+        <input
+          value={editedValues.email || ""}
+          onChange={(e) => setEditedValues((prev) => ({ ...prev, email: e.target.value }))}
+          className="border p-1"
+        />
+      ) : (
+        user.email
+      );
      
-      <div className="w-[150px] mr-10 text-left">{row.original.email}</div>
-    ),
+      
+    },
     // Added size property to explicitly set column width to 800 units
     size: 200,
   },
@@ -57,19 +80,48 @@ export const columns = ({  handleEdit, handleDelete }) => [
       );
     },
   },
-  {
+   {
+    header: "Actions",
     id: "actions",
-    header: () => <div className="text-center"></div>,
-    cell: ({ row }) => (
-      <div className="flex justify-center gap-2 min-w-[120px]">
-        
-        <Button size="icon" className="cursor-pointer" variant="ghost" onClick={() => handleEdit(row.original)}>
-          <Pencil className="h-5 w-5 text-blue-primary cursor-pointer" />
-        </Button>
-        <Button size="icon" className="cursor-pointer" variant="ghost" onClick={() => handleDelete(row.original.id)}>
-          <Trash2 className="h-5 w-5 text-red-600 cursor-pointer" />
-        </Button>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const user = row.original;
+      const isEditing = editingRowId === user.id;
+
+      return isEditing ? (
+        <div className="flex gap-2">
+          <button
+            className="text-green-600"
+            onClick={() => handleEdit(user.id, editedValues)}
+          >
+            Save
+          </button>
+          <button
+            className="text-gray-500"
+            onClick={() => {
+              setEditingRowId(null);
+              setEditedValues({});
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <div className="flex gap-2">
+          <button
+            className="text-blue-600"
+            onClick={() => {
+              setEditingRowId(user.id);
+              setEditedValues({ fullName: user.fullName, email: user.email });
+            }}
+          >
+            Edit
+          </button>
+          <button className="text-red-600" onClick={() => handleDelete(user.id)}>
+            Delete
+          </button>
+        </div>
+      );
+    },
   },
+ 
 ];

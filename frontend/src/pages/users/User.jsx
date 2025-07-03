@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ChevronLeft } from 'lucide-react';
 import { DataTable } from '@/components/data-table';
@@ -6,6 +6,9 @@ import { columns } from './columns';
 import { getAllUsers, deleteUser } from '@/store/userSlice';
 
 const User = () => {
+const [editingRowId, setEditingRowId] = useState(null);
+const [editedValues, setEditedValues] = useState({});
+
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
 
@@ -36,7 +39,11 @@ const User = () => {
       </div>
       <h6 className='font-semibold leading-relaxed text-2xl text-blue-primary pb-4'>Users</h6>
       <div>
-        <DataTable columns={columns({ handleDelete, handleEdit })} data={formattedData} />
+        <DataTable columns={columns({ handleDelete, handleEdit ,
+    editingRowId,
+    setEditingRowId,
+    editedValues,
+    setEditedValues,})} data={formattedData} />
       </div>
     </div>
   );
