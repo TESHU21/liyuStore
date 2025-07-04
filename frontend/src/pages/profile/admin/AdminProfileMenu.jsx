@@ -56,11 +56,7 @@ const AdminProfileMenu = () => {
               Users
             </NavLink>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <NavLink to="/portal" className="flex items-center justify-between w-full">
-              Profile
-            </NavLink>
-          </DropdownMenuItem>
+          
          
         </DropdownMenuGroup>
 

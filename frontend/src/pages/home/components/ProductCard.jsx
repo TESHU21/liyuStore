@@ -3,7 +3,7 @@ import { ArrowUpRight } from 'lucide-react';
 
 export function ProductCard({ title, description, imageUrl, imageAlt, linkHref, backgroundColorClass = "" }) {
   return (
-    <Card className={`flex flex-col  justify-between p-4 ${backgroundColorClass}`}>
+    <Card className={`flex flex-col  justify-between h-[420px] p-4 ${backgroundColorClass}`}>
       <CardHeader className="text-start pb-2">
         <CardTitle className="  font-inter text-[22px] leading-8">{title}</CardTitle>
         <CardDescription className="font-inter text-base text-gray-600 leading-8">{description}</CardDescription>

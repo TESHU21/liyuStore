@@ -108,6 +108,15 @@ export const fetchProductReview=createAsyncThunk("products/fetchProductReview",a
     return thunkAPI.rejectWithValue(error.response?.data?.message||"Fail To Fetch Review")
   }
 })
+// Fetch Review
+export const fetchTopProducts=createAsyncThunk("products/fetchTopProducts",async(_,thunkAPI)=>{
+  try{
+    const response=await axiosInstance.get(`/api/products/top`);
+    return response.data;
+  }catch(error){
+    return thunkAPI.rejectWithValue(error.response?.data?.message||"Fail To Fetch Review")
+  }
+})
 
 // ✅ Product Slice
 const productSlice = createSlice({
@@ -116,6 +125,7 @@ const productSlice = createSlice({
     products: [],
     product: null,
     reviews:null,
+    top_products:null,
     loading: false,
     error: null,
     success: null
@@ -259,6 +269,24 @@ const productSlice = createSlice({
       state.reviews = action.payload;
     })
     .addCase(fetchProductReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+      state.success = null;
+    })
+    // fetchTopProducts
+    .addCase(fetchTopProducts.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.success = null;
+    })
+    .addCase(fetchTopProducts.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = null;             // Clear error on success
+      state.success = null;
+      // Store fetched reviews if you have a state slice for it, e.g.:
+      state.top_products = action.payload;
+    })
+    .addCase(fetchTopProducts.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
       state.success = null;

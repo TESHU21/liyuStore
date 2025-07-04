@@ -1,8 +1,25 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import { ProductCard } from './ProductCard';
 import { Truck,PackageCheck,Gem } from 'lucide-react';
+import {fetchTopProducts} from "../../../store/productSlice"
+import { useSelector,useDispatch } from 'react-redux';
 
 const TopTrending = () => {
+  const dispatch=useDispatch()
+    useEffect(() => {
+    const fetchData = async () => {
+      const res = await dispatch(fetchTopProducts()).unwrap();
+     
+    };
+
+    fetchData();
+  }, [dispatch]);
+    const top_products = useSelector((state) => state.products.top_products);
+    const formattedTop_products=top_products.map((item)=>({
+     ...item
+
+    }))
+  
     const products = [
     {
       id: 1,
@@ -67,15 +84,13 @@ const TopTrending = () => {
         </div>
         {/* Top Trending */}
          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:px-[38px]"> {/* Adjust padding and gap as needed */}
-      {products.map((product) => (
+      {top_products.map((product) => (
         <ProductCard
-          key={product.id} // Essential for list rendering in React
-          title={product.title}
-          description={product.description}
-          imageUrl={product.imageUrl}
-          imageAlt={product.imageAlt}
-          linkHref={product.linkHref}
-          backgroundColorClass={product.backgroundColorClass}
+          key={product._id} // Essential for list rendering in React
+          title={product.brand}
+          description={product.name}
+          imageUrl={product.image}
+          imageAlt={product.name}
         />
       ))}
     </div>

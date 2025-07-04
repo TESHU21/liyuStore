@@ -1,49 +1,61 @@
-import React, { useState,useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { ChevronLeft } from 'lucide-react';
-import { DataTable } from '@/components/data-table';
-import { columns } from './columns';
-import { getAllUsers, deleteUser } from '@/store/userSlice';
+import React, { useState, useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { ChevronLeft } from "lucide-react";
+import { DataTable } from "@/components/data-table";
+import { getAllUsers, deleteUser, editUser } from "@/store/userSlice";
+import { getColumns } from "./columns";
 
 const User = () => {
-const [editingRowId, setEditingRowId] = useState(null);
-const [editedValues, setEditedValues] = useState({});
-
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users.users);
-
-  const handleDelete = (id) => {
-    dispatch(deleteUser(id));
-  };
-
-  const handleEdit = () => {
-    console.log("handle Edit");
-  };
+  const [editingRowId, setEditingRowId] = useState(null);
 
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  const formattedData = users.map((item) => ({
-    id: item._id,
-    fullName: item.fullName,
-    email: item.email,
-    admin: item.isAdmin,
+  // Format users for the table
+  const formattedData = users.map((user) => ({
+    id: user._id,
+    fullName: user.fullName,
+    email: user.email,
+    admin: user.isAdmin,
   }));
 
+  // Handle delete
+  const handleDelete = (id) => {
+    dispatch(deleteUser(id));
+  };
+
+  // Handle edit — this receives userId and the edited user data from columns
+  const handleEdit = (id, userData) => {
+    dispatch(editUser({ id, userData }));
+    setEditingRowId(null);
+  };
+
+  // Memoize columns to avoid unnecessary re-renders
+  const columns = useMemo(
+    () =>
+      getColumns({
+        handleDelete,
+        handleEdit,
+        editingRowId,
+        setEditingRowId,
+      }),
+    [handleDelete, handleEdit, editingRowId]
+  );
+
   return (
-    <div className='mx-[250px]'>
-      <div className='flex py-15'>
+    <div className="mx-[250px]">
+      <div className="flex py-15">
         <ChevronLeft />
         <span>Back</span>
       </div>
-      <h6 className='font-semibold leading-relaxed text-2xl text-blue-primary pb-4'>Users</h6>
+      <h6 className="font-semibold leading-relaxed text-2xl text-blue-primary pb-4">
+        Users
+      </h6>
       <div>
-        <DataTable columns={columns({ handleDelete, handleEdit ,
-    editingRowId,
-    setEditingRowId,
-    editedValues,
-    setEditedValues,})} data={formattedData} />
+        <DataTable columns={columns} data={formattedData} />
       </div>
     </div>
   );

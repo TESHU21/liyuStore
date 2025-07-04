@@ -15,7 +15,7 @@ export const deleteUser = createAsyncThunk('users/delete', async (userId) => {
 
 //  Edit user
 export const editUser = createAsyncThunk('users/edit', async ({ id, userData }) => {
-  const response = await axios.put(`/api/users/${id}`, userData);
+  const response = await axiosInstance.put(`/api/users/${id}`, userData);
   return response.data; // return the updated user
 });
 

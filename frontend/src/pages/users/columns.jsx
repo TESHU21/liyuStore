@@ -1,127 +1,141 @@
-import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Pencil, Trash2, Check, X } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Pencil, Trash2, Check, X } from "lucide-react";
 
-export const columns = ({  handleEdit, handleDelete,editingRowId, setEditingRowId, editedValues, setEditedValues }) => [
+// ✅ Memoized editable input with local state
+const EditableCell = React.memo(({ defaultValue, onSave }) => {
+  const [value, setValue] = useState(defaultValue);
 
+  return (
+    <Input
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={() => onSave(value)}
+      className="border p-1 border-blue-primary w-full"
+    />
+  );
+});
+
+export const getColumns = ({
+  handleEdit,
+  handleDelete,
+  editingRowId,
+  setEditingRowId,
+}) => [
   {
     accessorKey: "id",
-    header: () => <div className="text-left ">Id</div>,
+    header: () => <div className="text-left">ID</div>,
     cell: ({ row }) => (
-      
-      <div className="w-[150px] mr-10 text-left">{row.original.id}</div>
+      <div className="text-left w-[150px]">{row.original.id}</div>
     ),
     size: 200,
   },
   {
     accessorKey: "fullName",
-    header: () => <div className="text-left ">Full Name</div>,
+    header: () => <div className="text-left">Full Name</div>,
     cell: ({ row }) => {
       const user = row.original;
       const isEditing = editingRowId === user.id;
-      
+
       return isEditing ? (
-        <input
-          value={editedValues.fullName || ""}
-          onChange={(e) => setEditedValues((prev) => ({ ...prev, fullName: e.target.value }))}
-          className="border p-1"
+        <EditableCell
+          defaultValue={user.fullName}
+          onSave={(val) =>
+            handleEdit(user.id, { fullName: val, email: user.email })
+          }
         />
       ) : (
-        user.fullName
+        <div className="w-full text-left">{user.fullName}</div>
       );
-      
-     
     },
-    // Added size property to explicitly set column width to 800 units
     size: 200,
   },
   {
     accessorKey: "email",
-    header: () => <div className="text-left ">Email</div>,
+    header: () => <div className="text-left">Email</div>,
     cell: ({ row }) => {
       const user = row.original;
       const isEditing = editingRowId === user.id;
+
       return isEditing ? (
-        <input
-          value={editedValues.email || ""}
-          onChange={(e) => setEditedValues((prev) => ({ ...prev, email: e.target.value }))}
-          className="border p-1"
+        <EditableCell
+          defaultValue={user.email}
+          onSave={(val) =>
+            handleEdit(user.id, { fullName: user.fullName, email: val })
+          }
         />
       ) : (
-        user.email
+        <div className="w-full text-left">{user.email}</div>
       );
-     
-      
     },
-    // Added size property to explicitly set column width to 800 units
     size: 200,
   },
-
-
   {
     accessorKey: "admin",
     header: () => <div className="text-center">Admin</div>,
     cell: ({ row }) => {
       const admin = row.getValue("admin");
       return (
-        <div className="flex justify-center min-w-[100px]">
-            {admin ? (
-              <>
-                 <Check className="ml-1  text-green-500 w-5 h-5" />
-              </>
-            ) : (
-              <>
-                 <X className="ml-1 w-5 h-5 text-red-500 "  />
-              </>
-            )}
-         
+        <div className="flex justify-center items-center min-w-[100px]">
+          {admin ? (
+            <Check className="text-green-500 w-5 h-5" />
+          ) : (
+            <X className="text-red-500 w-5 h-5" />
+          )}
         </div>
       );
     },
   },
-   {
-    header: "Actions",
+  {
     id: "actions",
+    header: "Actions",
     cell: ({ row }) => {
       const user = row.original;
       const isEditing = editingRowId === user.id;
 
-      return isEditing ? (
-        <div className="flex gap-2">
-          <button
-            className="text-green-600"
-            onClick={() => handleEdit(user.id, editedValues)}
-          >
-            Save
-          </button>
-          <button
-            className="text-gray-500"
-            onClick={() => {
-              setEditingRowId(null);
-              setEditedValues({});
-            }}
-          >
-            Cancel
-          </button>
-        </div>
-      ) : (
-        <div className="flex gap-2">
-          <button
-            className="text-blue-600"
-            onClick={() => {
-              setEditingRowId(user.id);
-              setEditedValues({ fullName: user.fullName, email: user.email });
-            }}
-          >
-            Edit
-          </button>
-          <button className="text-red-600" onClick={() => handleDelete(user.id)}>
-            Delete
-          </button>
+      return (
+        <div className="flex items-center gap-2">
+          {isEditing ? (
+            <div className=" flex gap-2">
+               <button
+              className="text-green-500"
+              onClick={() => {
+                setEditingRowId(null);
+              }}
+            >
+              Save
+            </button>
+            <button
+              className="text-red-500"
+              onClick={() => {
+                setEditingRowId(null);
+              }}
+            >
+              Cancel
+            </button>
+            </div>
+            
+           
+          ) : (
+            <>
+              <button
+                className="text-blue-600"
+                onClick={() => {
+                  setEditingRowId(user.id);
+                }}
+              >
+                <Pencil className="w-5 h-5 text-blue-primary" />
+              </button>
+              <button
+                className="text-red-600"
+                onClick={() => handleDelete(user.id)}
+              >
+                <Trash2 className="w-5 h-5 text-red-500" />
+              </button>
+            </>
+          )}
         </div>
       );
     },
   },
- 
 ];
