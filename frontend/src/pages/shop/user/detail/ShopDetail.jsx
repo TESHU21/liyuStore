@@ -12,6 +12,7 @@ import ProductDetailsTabs from "./ProductDetailsTabs";
 import { useSelector, useDispatch } from "react-redux";
 import { addProductToCart } from "@/store/cartSlice";
 import { toast } from "sonner";
+import Rating from "@/components/Rating";
 
 const ShopDetail = () => {
   const [quantity, setQuantity] = useState(null);
@@ -20,6 +21,7 @@ const ShopDetail = () => {
 
   const dispatch = useDispatch();
   const product = useSelector((state) => state.selectedProduct.product);
+  console.log("Proddddduct",product.rating)
 
   const handleAddToCart = () => {
     if (!product || !quantity) return;
@@ -52,28 +54,10 @@ const ShopDetail = () => {
         {/* Product Info */}
         <div className="lg:w-1/2 flex flex-col">
           {/* Brand and Rating */}
-          <div className="flex items-center mb-2 text-sm text-gray-600">
+          <div className="flex items-center mb-2 text-sm pt-8 text-gray-600">
             <span className="mr-4 text-base">{product?.brand}</span>
-            <div className="flex items-center text-yellow-500">
-              {[...Array(4)].map((_, i) => (
-                <svg
-                  key={i}
-                  className="w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.72a1 1 0 01.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
-                </svg>
-              ))}
-              <svg
-                className="w-4 h-4 text-gray-300"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.92 8.72a1 1 0 01.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
-              </svg>
-              <span className="ml-1 text-gray-600">(1 review)</span>
-            </div>
+          
+            <Rating rating={product.rating} totalReviews={product.numReviews}/>
           </div>
 
           {/* Product Name */}
