@@ -15,7 +15,7 @@ import { toast } from "sonner";
 import Rating from "@/components/Rating";
 
 const ShopDetail = () => {
-  const [quantity, setQuantity] = useState(null);
+  const [quantity, setQuantity] = useState("");
   const maxQuantity = 1000;
   const quantityOptions = Array.from({ length: maxQuantity }, (_, i) => i + 1);
 
@@ -82,17 +82,17 @@ const ShopDetail = () => {
           {/* Quantity Selector */}
           <div className="w-32 mb-6">
             <Select value={quantity} onValueChange={setQuantity}>
-              <SelectTrigger className="w-[151px] bg-[#E6EFF5] h-12">
-                <SelectValue placeholder="Quantity" />
-              </SelectTrigger>
-              <SelectContent className="max-h-60 overflow-auto">
-                {quantityOptions.map((num) => (
-                  <SelectItem key={num} value={num.toString()}>
-                    {num}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+  <SelectTrigger className="w-[151px] bg-[#E6EFF5] h-12">
+    <SelectValue className="text-black" placeholder="Select Quantity" />
+  </SelectTrigger>
+  <SelectContent className="max-h-60 overflow-auto">
+    {quantityOptions.map((num) => (
+      <SelectItem key={num} value={num.toString()}>
+        {num}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
           </div>
 
           {/* Add to Cart Button */}

@@ -13,7 +13,7 @@ const ProductDetailsTabs = () => {
   return (
     <div className='pt-[80px]' >
      
-      <Tabs defaultValue="relatedproducts "  >
+      <Tabs defaultValue="relatedproducts"  >
          <div  className=' flex justify-center pb-[50px]'>
         <TabsList asChild className="bg-transparent flex border-none shadow-none">
           <div className='flex gap-[64px] '>
