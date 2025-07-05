@@ -1,5 +1,5 @@
 import React ,{useEffect} from 'react'
-import { ProductCard } from './ProductCard';
+import { ProductCardHome } from './ProductCardHome';
 import { Truck,PackageCheck,Gem } from 'lucide-react';
 import {fetchTopProducts} from "../../../store/productSlice"
 import { useSelector,useDispatch } from 'react-redux';
@@ -15,49 +15,9 @@ const TopTrending = () => {
     fetchData();
   }, [dispatch]);
     const top_products = useSelector((state) => state.products.top_products);
-    const formattedTop_products=top_products.map((item)=>({
-     ...item
-
-    }))
   
-    const products = [
-    {
-      id: 1,
-      title: "Macbook",
-      description: "Up to 50% off laptop",
-      imageUrl: "/images/macbook.png", // Adjust path to your image
-      imageAlt: "Macbook",
-      linkHref: "#macbook",
-      backgroundColorClass: "", // No specific background for Macbook
-    },
-    {
-      id: 2,
-      title: "Iphones",
-      description: "Free shipping",
-      imageUrl: "/images/iphones.png", // Adjust path to your image
-      imageAlt: "Iphones",
-      linkHref: "#iphones",
-      backgroundColorClass: "bg-blue-50", // Subtle blue background
-    },
-    {
-      id: 3,
-      title: "Digital Lens",
-      description: "Up to 40% off Camera",
-      imageUrl: "/images/digital-lens.png", // Adjust path to your image
-      imageAlt: "Digital Lens",
-      linkHref: "#digital-lens",
-      backgroundColorClass: "", // No specific background for Digital Lens
-    },
-    {
-      id: 4,
-      title: "Digital Lens",
-      description: "Up to 40% off Camera",
-      imageUrl: "/images/digital-lens.png", // Adjust path to your image
-      imageAlt: "Digital Lens",
-      linkHref: "#digital-lens",
-      backgroundColorClass: "", // No specific background for Digital Lens
-    },
-  ];
+  
+  
   const features = [
     {
       icon: Truck, // Placeholder icon (you'd replace with an actual SVG/component)
@@ -84,13 +44,11 @@ const TopTrending = () => {
         </div>
         {/* Top Trending */}
          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:px-[38px]"> {/* Adjust padding and gap as needed */}
-      {top_products.map((product) => (
-        <ProductCard
-          key={product._id} // Essential for list rendering in React
-          title={product.brand}
-          description={product.name}
-          imageUrl={product.image}
-          imageAlt={product.name}
+      {top_products && top_products?.map((product) => (
+        <ProductCardHome
+          key={product._id} 
+          // Essential for list rendering in React
+          product={product}
         />
       ))}
     </div>
