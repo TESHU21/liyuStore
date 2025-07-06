@@ -30,7 +30,6 @@ const ProductCard = ({  product, onEdit }) => {
         navigate(`/shop/${product._id}`)
       }
       const handleAddToFavourite=(product)=>{
-         console.log(product)
         dispatch(addProductToFavorite(product))
          toast.success("You Added Item to Favourite sucessfully! ")
 

@@ -6,6 +6,7 @@ import ProductCard from '../shop/user/ProductCard'
 
 const Favourite = () => {
   const favourite=useSelector((state)=>state.favourite.favorites)
+  console.log("Favourite",favourite)
 
 return (
   <div>

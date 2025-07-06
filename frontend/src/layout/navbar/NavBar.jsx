@@ -77,7 +77,7 @@ const NavBar = () => {
         )}
             </NavLink>
             <NavLink to="/favourite" className={getDesktopNavLinkClasses}> <span><Heart size={24}/></span>Favourite
-                {cartItemCount > 0 && (
+                {favouriteItemCount > 0 && (
           <span className=" flex items-center justify-center  w-5 h-5  bg-blue-primary text-white text-xs font-bold px-1  rounded-full">
             {favouriteItemCount}
           </span>

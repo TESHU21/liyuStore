@@ -11,7 +11,9 @@ const favoriteSlice = createSlice({
   reducers: {
     addProductToFavorite(state, action) {
       const product = action.payload; // product object or at least an id
+      console.log("Product added to favourite",product)
       const exists = state.favorites.find(item => item._id === product._id);
+      console.log(exists)
       if (!exists) {
         state.favorites.push(product);
       }
