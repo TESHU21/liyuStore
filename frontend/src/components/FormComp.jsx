@@ -68,7 +68,8 @@ const FormComp = forwardRef(
     }, [initialValues, reset, fields]);
 
     useImperativeHandle(ref, () => ({
-      submit: () => form.handleSubmit(onSubmit)(),
+      submitForm: () => form.handleSubmit(onSubmit)(),
+
       getValues,
       reset: (values) => reset(values),
     }));
