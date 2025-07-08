@@ -21,7 +21,6 @@ class Paystack {
         },
       };
 
-      // If the method is POST, include the body in the request
       if (method === "POST" && body) {
         fetchOptions.body = JSON.stringify(body);
       }
@@ -30,24 +29,30 @@ class Paystack {
 
       if (!response.ok) {
         const error = await response.json();
-
-        response.status(response.status);
         throw new Error(error.message);
       }
 
       const data = await response.json();
-
       return data;
     } catch (error) {
       throw new Error(error.message);
     }
   };
 
+  // ✅ Already present
   initializeTransaction = async (body) => {
     return await this.makePaystackRequest({
       endPoint: "/transaction/initialize",
       method: "POST",
       body,
+    });
+  };
+
+  // ✅ ADD THIS FUNCTION to fix your error
+  verifyTransaction = async (reference) => {
+    return await this.makePaystackRequest({
+      endPoint: `/transaction/verify/${reference}`,
+      method: "GET",
     });
   };
 }
