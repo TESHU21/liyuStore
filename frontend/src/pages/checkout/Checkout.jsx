@@ -3,15 +3,19 @@ import PageHeader from "@/components/PageHeader";
 import FormComp from "@/components/FormComp";
 import { checkoutSchema, fields, initialValues } from "./components/data";
 import { OrderSummaryCard } from "./components/OrderSummeryCard";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import PaystackPop from "@paystack/inline-js"; // ✅ Correct import
-
+import PaystackPop from "@paystack/inline-js";
+import { createOrder, payOrder, verifyPayment } from "../../store/orderSlice";
+import { clearCart } from "@/store/cartSlice";
+import { useNavigate } from "react-router-dom";
 const Checkout = () => {
   const cart = useSelector((state) => state.cart.items);
   const user = useSelector((state) => state.auth.user);
   const formRef = useRef(null);
+  const dispatch = useDispatch();
+  const navigate=useNavigate()
 
   const [billingDetails, setBillingDetails] = useState(initialValues);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -20,78 +24,107 @@ const Checkout = () => {
   const shippingFees = sub_total * 0.05;
   const tax = sub_total * 0.1;
   const total = sub_total + shippingFees + tax;
-const email=user?.email;
+
   const headers = {
     title: "Checkout",
     currentPage: "checkout",
     description: "",
   };
 
-  const handleFormSubmit = (formData) => {
+  // Step 1: Handle form submit - create order and start payment
+  const handleFormSubmit = async (formData) => {
     setBillingDetails(formData);
-    startPaystackPayment(formData);
-  };
-
-  const startPaystackPayment = (billingData) => {
-   
-
     setIsProcessing(true);
 
-    const paystack = new PaystackPop();
+    try {
+      console.log("CArt",cart)
+      // 1. Create order (unpaid)
+     const orderPayload = {
+  orderItems: cart.map((item) => ({
+    product: item._id,
+    qty: item.quantity, 
+    ...item,
+    
+    // ✅ rename to match backend expectation
+  })),
+  shippingAddress: formData,
+  paymentMethod: "paystack",
+};
 
-    paystack.newTransaction({
-      key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "pk_test_xxx",
-      email: user.email,
-      amount: Math.round(total * 100), // Convert to kobo
-      currency: "ZAR", // Must be supported (NGN, GHS, USD, etc.)
-      reference: `LIYU_${Date.now()}`,
-      metadata: {
-        cart,
-        billingDetails: billingData,
-      },
-      onSuccess: (transaction) => {
-        toast.success("Payment successful!");
 
-        // Save order to backend
-        const orderData = {
-          reference: transaction.reference,
-          user: user?.email || billingData.email,
-          items: cart,
-          billingDetails: billingData,
-          subtotal: sub_total,
-          shippingFees,
-          tax,
-          total,
-          paymentMethod: "paystack",
-          paymentStatus: "completed",
-          status: "paid",
-          createdAt: new Date().toISOString(),
-        };
+      const createdOrder = await dispatch(createOrder(orderPayload)).unwrap();
 
-        fetch("/api/orders", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        })
-          .then((res) => {
-            if (!res.ok) throw new Error("Failed to save order");
-            return res.json();
-          })
-          .then(() => toast.success("Order placed successfully!"))
-          .catch(() => toast.error("Payment succeeded but order failed."))
-          .finally(() => setIsProcessing(false));
-      },
-      onCancel: () => {
-        toast.info("Payment popup was closed.");
-        setIsProcessing(false);
-      },
-      onError: (error) => {
-        console.error("Payment error:", error.message);
-        toast.error("Payment failed: " + error.message);
-        setIsProcessing(false);
-      },
-    });
+
+      // 2. Initialize Paystack payment on backend to get reference
+      const payPayload = {
+        order: createdOrder._id,
+        callback_url: `${window.location.origin}/payment-success`, // your frontend success page
+      };
+
+      const payInit = await dispatch(payOrder(payPayload)).unwrap();
+
+      if (!payInit || !payInit.transaction || !payInit.transaction.data) {
+        throw new Error("Failed to initialize payment");
+      }
+
+      const paystackReference = payInit.transaction.data.reference;
+
+      // 3. Start Paystack inline payment with the backend reference
+      const paystack = new PaystackPop();
+
+      paystack.newTransaction({
+        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "pk_test_xxx",
+        email: user.email,
+        amount: Math.round(total * 100), // in kobo
+        currency: "ZAR",
+        reference: paystackReference,
+        metadata: {
+          orderId: createdOrder._id,
+          billingDetails: formData,
+          cart,
+        },
+        onSuccess: async (transaction) => {
+          toast.success("Payment successful!");
+
+          try {
+            // 4. Verify payment with backend
+            const verifyRes = await dispatch(verifyPayment(transaction.reference)).unwrap();
+
+            if (!verifyRes || verifyRes.status !== "success") {
+              throw new Error("Payment verification failed");
+            }
+
+            toast.success("Order payment verified and completed!");
+            // After Sucessful payment and Verification ,clear cart
+            dispatch(clearCart())
+            navigate("/orders")
+
+            
+
+
+          } catch (err) {
+            toast.error("Payment succeeded but verification failed.");
+            console.error(err);
+          } finally {
+            setIsProcessing(false);
+          }
+        },
+        onCancel: () => {
+          toast.info("Payment popup closed.");
+          setIsProcessing(false);
+        },
+        onError: (error) => {
+          toast.error("Payment failed: " + error.message);
+          setIsProcessing(false);
+        },
+      });
+    } catch (error) {
+      toast.error("Checkout failed: " + error.message);
+      setIsProcessing(false);
+    }
   };
 
+  // Trigger form submission from external button
   const handlePlaceOrderClick = () => {
     if (formRef.current && formRef.current.submitForm) {
       formRef.current.submitForm();
@@ -113,7 +146,7 @@ const email=user?.email;
               fields={fields}
               initialValues={initialValues}
               onSubmit={handleFormSubmit}
-              hideButton={true} // 🔁 Hide Submit button, trigger via Place Order
+              hideButton={true}
             />
           </div>
         </div>
