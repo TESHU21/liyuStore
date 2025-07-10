@@ -39,6 +39,18 @@ export const payOrder = createAsyncThunk(
     }
   }
 );
+// 4 Fetch all Order by user
+export const fetchAllOrderByUser = createAsyncThunk(
+  "orders/fetchAllOrderByUser",
+  async ( { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post("/api/orders/mine");
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response || error.message);
+    }
+  }
+);
 
 const initialState = {
   order: null,
@@ -53,6 +65,10 @@ const initialState = {
   paymentVerified: false,
   isVerifyingPayment: false,
   verifyPaymentError: null,
+   order_mine: null,
+  isFetchingOrder: false,
+  fetchOrderSuccess: false,
+  fetchOrderError: null
 };
 
 const orderSlice = createSlice({
@@ -72,6 +88,9 @@ const orderSlice = createSlice({
       state.paymentVerified = false;
       state.isVerifyingPayment = false;
       state.verifyPaymentError = null;
+       state.isFetchingOrder- false,
+  state.fetchOrderSuccess- false,
+  state.fetchOrderError=null
     },
   },
   extraReducers: (builder) => {
@@ -90,6 +109,22 @@ const orderSlice = createSlice({
       .addCase(createOrder.rejected, (state, action) => {
         state.isCreatingOrder = false;
         state.createOrderError = action.payload;
+      })
+      // Fetch User Order-Mine
+      .addCase(fetchAllOrderByUser.pending, (state) => {
+        state.isFetchingOrder = true;
+        state.fetchOrderError = null;
+        state.fetchOrderSuccess = false;
+        
+      })
+      .addCase(fetchAllOrderByUser.fulfilled, (state, action) => {
+        state.isFetchingOrder = false;
+        state.fetchOrderSuccess = true;
+        state.order_mine = action.payload;
+      })
+      .addCase(fetchAllOrderByUser.rejected, (state, action) => {
+        state.isFetchingOrder = false;
+        state.fetchOrderError = action.payload;
       })
 
       // Pay order
