@@ -91,10 +91,10 @@ const ShopUser = () => {
       <PageHeader header={headers} />
       <div className="flex pb-12 md:pb-[154px]">
         {/* Left Section - Filters */}
-        <div className="pt-[55px] md:px-[42px]">
+        <div className="pt-[55px] md:px-6">
           <h4 className="text-lg font-bold">Shop By</h4>
 
-          <div className="w-64 bg-white mt-4 text-sm border-r">
+          <div className=" bg-white mt-4 text-sm border-r">
             <Accordion type="multiple" className="w-full px-4">
               {/* Product Categories */}
               <AccordionItem value="categories" className="md:pb-[31px]">
@@ -172,7 +172,7 @@ const ShopUser = () => {
         </div>
 
         {/* Right Section - Products */}
-        <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 px-[39px] mt-[110px] gap-6 justify-items-center">
+        <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 pr-[39px] mt-[110px] gap-4 justify-items-center">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id || product._id} product={product} />
           ))}

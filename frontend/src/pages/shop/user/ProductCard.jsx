@@ -56,7 +56,7 @@ const ProductCard = ({  product, onEdit }) => {
       }
   
   return (
-    <Card className="w-[300px] py-1 rounded-sm sm:w-[280px] md:w-[300px] lg:w-[340px] xl:w-[340px]  flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
+    <Card className="w-[300px] py-1 rounded-sm sm:w-[280px] md:w-[300px] lg:w-[300px] xl:w-[320px]  flex flex-col justify-between overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-[#F9FBFC]">
       <CardHeader className=" text-right">
         <span className="text-xs font-semibold text-blue-primary leading-6">{product.brand}</span>
       </CardHeader>

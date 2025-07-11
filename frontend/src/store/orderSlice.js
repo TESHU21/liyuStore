@@ -39,18 +39,22 @@ export const payOrder = createAsyncThunk(
     }
   }
 );
-// 4 Fetch all Order by user
-export const fetchAllOrderByUser = createAsyncThunk(
-  "orders/fetchAllOrderByUser",
-  async ( { rejectWithValue }) => {
+
+// ✅ Fetch aLL pRODUCTS
+export const fetchAllOrderByUser  = createAsyncThunk(
+  'products/fetchAllOrderByUser ',
+  async (_, thunkAPI) => {
     try {
-      const res = await axiosInstance.post("/api/orders/mine");
-      return res.data;
+      const response = await axiosInstance.get("/api/orders/mine");
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to fetch products"
+      );
     }
   }
 );
+
 
 const initialState = {
   order: null,
@@ -124,7 +128,7 @@ const orderSlice = createSlice({
       })
       .addCase(fetchAllOrderByUser.rejected, (state, action) => {
         state.isFetchingOrder = false;
-        state.fetchOrderError = action.payload;
+        state.fe = action.payload;
       })
 
       // Pay order
