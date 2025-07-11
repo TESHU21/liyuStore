@@ -94,7 +94,10 @@ const handleViewDetail=(data)=>{
     <div className=' flex flex-col items-center justify-center '>
       <h1 className=' felx py-8 font-lato font-semibold'>My Orders</h1>
       <div className=' flex mx-auto'>
-        <DataTable columns={columns({handleViewDetail})} data={formattedData}/>
+        {formattedData &&
+                <DataTable columns={columns({handleViewDetail})} data={formattedData}/>
+
+        }
         </div>
     </div>
   )

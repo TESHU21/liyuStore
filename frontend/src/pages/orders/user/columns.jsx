@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Eye ,Clock,Check} from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const columns = ({ handleViewDetail }) => [
   {
@@ -10,11 +9,10 @@ export const columns = ({ handleViewDetail }) => [
     cell: ({ row }) => {
       const {  image } = row.original;
       return (
-        <div className="flex items-center gap-3 min-w-[150px]">
-          <Avatar>
-            <AvatarImage src={image} />
-      
-          </Avatar>
+        <div className="flex items-center gap-3 ">
+          
+           <img src={image} alt=""  className=" w-32 h-24 " />
+    
         </div>
       );
     },
@@ -23,11 +21,9 @@ export const columns = ({ handleViewDetail }) => [
     accessorKey: "id",
     header: () => <div className="text-left ">Id</div>,
     cell: ({ row }) => (
-      // The size property in the column definition controls the width in TanStack Table.
-      // Keeping the Tailwind class here as well, but 'size' is primary.
+     
       <div className="w-[150px] mr-10 text-left">{row.original.id}</div>
     ),
-    // Added size property to explicitly set column width to 800 units
     size: 200,
   },
  
@@ -42,21 +38,21 @@ export const columns = ({ handleViewDetail }) => [
     accessorKey: "total",
     header: () => <div className="text-left ">Total</div>,
     cell: ({ row }) => (
-      // The size property in the column definition controls the width in TanStack Table.
-      // Keeping the Tailwind class here as well, but 'size' is primary.
+      
       <div className="w-[150px] mr-10 text-left">{row.original.total}</div>
     ),
-    // Added size property to explicitly set column width to 800 units
     size: 200,
   },
   {
     accessorKey: "status",
     header: () => <div className="text-center">Payment</div>,
     cell: ({ row }) => {
-      const status = row.getValue("status");
+     const status = row.getValue("status");
       const isPaid = status === "Paid";
+      
       return (
         <div className="flex justify-center min-w-[100px]">
+          
           <Badge variant={isPaid ? "success" : "secondary"}>
             {isPaid ? (
               <>
