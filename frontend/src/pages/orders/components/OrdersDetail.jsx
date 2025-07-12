@@ -1,6 +1,5 @@
 import React,{useEffect} from 'react'
 import { columns } from "./colomns"
-import { dummyData } from './dummyData'
 import { DataTable } from '@/components/data-table'
 import OrderDetailSummery from './OrderDetailSummery'
 import { useParams } from 'react-router-dom'
@@ -43,8 +42,9 @@ console.log("formattedData",formattedData)
  
   return (
     <div className='flex gap-10 pt-10 mx-auto justify-center'>
+      {formattedData &&         <DataTable columns={columns()} data={formattedData}/>
+}
 
-        <DataTable columns={columns()} data={formattedData}/>
         <OrderDetailSummery/>
 
     </div>

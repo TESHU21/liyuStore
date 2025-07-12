@@ -21,13 +21,11 @@ export const columns = () => [
   },
   {
     accessorKey: "product",
-    header: () => <div className="text-left ">Id</div>,
+    header: () => <div className="text-left ">Product</div>,
     cell: ({ row }) => (
-      // The size property in the column definition controls the width in TanStack Table.
-      // Keeping the Tailwind class here as well, but 'size' is primary.
+      
       <div className="w-[150px] mr-10 text-left">{row.original.product}</div>
     ),
-    // Added size property to explicitly set column width to 800 units
     size: 200,
   },
  
@@ -42,8 +40,7 @@ export const columns = () => [
     accessorKey: "unitprice",
     header: () => <div className="text-left ">Unit Price</div>,
     cell: ({ row }) => (
-      // The size property in the column definition controls the width in TanStack Table.
-      // Keeping the Tailwind class here as well, but 'size' is primary.
+      
       <div className="w-[150px] mr-10 text-left">{row.original.unitprice}</div>
     ),
     // Added size property to explicitly set column width to 800 units
