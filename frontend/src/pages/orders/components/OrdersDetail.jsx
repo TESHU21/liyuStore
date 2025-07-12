@@ -45,7 +45,7 @@ console.log("formattedData",formattedData)
       {formattedData &&         <DataTable columns={columns()} data={formattedData}/>
 }
 
-        <OrderDetailSummery/>
+        <OrderDetailSummery order={order}/>
 
     </div>
   )

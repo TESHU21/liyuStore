@@ -1,6 +1,7 @@
 import React from 'react';
 
-const OrderDetailSummery = () => {
+const OrderDetailSummery = ({order}) => {
+  
   return (
     <div className="border border-gray-200 rounded-md p-6 bg-white">
       {/* Shipping Section */}
@@ -9,7 +10,7 @@ const OrderDetailSummery = () => {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Order:</span>
-            <span>6537b4b8fb1be49cc3f658</span>
+            <span>{order._id}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Name:</span>
@@ -21,11 +22,11 @@ const OrderDetailSummery = () => {
           </div>
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Order:</span>
-            <span>AK-1129-2289, GH</span>
+            <span>{order.shippingAddress.city} ,{order.shippingAddress.country}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Method:</span>
-            <span>PayStack</span>
+            <span>{order.itemsPrice}</span>
           </div>
         </div>
       </div>
@@ -39,7 +40,7 @@ const OrderDetailSummery = () => {
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Items:</span>
-            <span>$ 5000.00</span>
+            <span>$ {order?.itemsPrice}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Shipping:</span>
@@ -47,11 +48,11 @@ const OrderDetailSummery = () => {
           </div>
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Tax:</span>
-            <span>$ 20</span>
+            <span>$ {order?.taxPrice}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-semibold text-blue-800">Total:</span>
-            <span className="font-bold">$ 52000.00</span>
+            <span className="font-bold">$ {order?.totalPrice}</span>
           </div>
         </div>
       </div>
