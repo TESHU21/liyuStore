@@ -40,7 +40,7 @@ export const payOrder = createAsyncThunk(
   }
 );
 
-// ✅ Fetch aLL pRODUCTS
+// ✅ Fetch aLL orders by user
 export const fetchAllOrderByUser  = createAsyncThunk(
   'products/fetchAllOrderByUser ',
   async (_, thunkAPI) => {
@@ -49,7 +49,21 @@ export const fetchAllOrderByUser  = createAsyncThunk(
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data || "Failed to fetch products"
+        error.response?.data || "Failed to fetch Orders by user"
+      );
+    }
+  }
+);
+// ✅ Fetch Orders by user
+export const fetchOrderById  = createAsyncThunk(
+  'products/fetchOrderById ',
+  async (id, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(`/api/orders/${id}`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error || "Failed to fetch Order by Id"
       );
     }
   }
@@ -70,6 +84,7 @@ const initialState = {
   isVerifyingPayment: false,
   verifyPaymentError: null,
    order_mine: null,
+   orderdetail:null,
   isFetchingOrder: false,
   fetchOrderSuccess: false,
   fetchOrderError: null
@@ -129,6 +144,22 @@ const orderSlice = createSlice({
       .addCase(fetchAllOrderByUser.rejected, (state, action) => {
         state.isFetchingOrder = false;
         state.fe = action.payload;
+      })
+      // Fetch User Order-By Id
+      .addCase(fetchOrderById.pending, (state) => {
+        state.isFetchingOrder = true;
+        state.fetchOrderError = null;
+        state.fetchOrderSuccess = false;
+        
+      })
+      .addCase(fetchOrderById.fulfilled, (state, action) => {
+        state.isFetchingOrder = false;
+        state.fetchOrderSuccess = true;
+        state.orderdetail = action.payload;
+      })
+      .addCase(fetchOrderById.rejected, (state, action) => {
+        state.isFetchingOrder = false;
+        state.fetchOrderError = action.payload;
       })
 
       // Pay order
