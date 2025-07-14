@@ -11,7 +11,7 @@ export const columns = ({ handleViewDetail }) => [
       return (
         <div className="flex items-center gap-3 ">
           
-           <img src={image} alt=""  className=" w-32 h-24 " />
+           <img src={image} alt=""  className=" w-32 h-24  object-cover" />
     
         </div>
       );
@@ -56,11 +56,12 @@ export const columns = ({ handleViewDetail }) => [
           <Badge variant={isPaid ? "success" : "secondary"}>
             {isPaid ? (
               <>
-                Paid <Check className="ml-1 w-4 h-4" />
+               <div className="p-2 bg-green-600">Completed</div>
               </>
             ) : (
               <>
-                Pending <Clock className="ml-1 w-4 h-4" />
+                 <div className="p-2 bg-[#F7E9EA]">Pending</div>
+
               </>
             )}
           </Badge>
@@ -78,12 +79,13 @@ export const columns = ({ handleViewDetail }) => [
         <div className="flex justify-center min-w-[100px]">
           <Badge variant={isPaid ? "success" : "secondary"}>
             {isPaid ? (
-              <>
-                Paid <Check className="ml-1 w-4 h-4" />
+                <>
+               <div className="p-2 bg-green-600">Delivered</div>
               </>
             ) : (
               <>
-                Pending <Clock className="ml-1 w-4 h-4" />
+                 <div className="p-2 bg-[#F7E9EA]">Pending</div>
+
               </>
             )}
           </Badge>
