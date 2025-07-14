@@ -9,53 +9,7 @@ const OrdersUser = () => {
   const navigate=useNavigate()
   const dispatch=useDispatch()
 
-const userData = [
-  {
-    id: "L001",
-    firstName: "Teshome",
-    image: "https://randomuser.me/api/portraits/men/1.jpg",
-    date: "2025-06-01",
-    total: "500 ETB",
-    status: "Paid",
-    delivered: "Paid",
-  },
-  {
-    id: "L002",
-    firstName: "Sara",
-    image: "https://randomuser.me/api/portraits/women/2.jpg",
-    date: "2025-06-03",
-    total: "300 ETB",
-    status: "Pending",
-    delivered: "Pending",
-  },
-  {
-    id: "L003",
-    firstName: "Mulugeta",
-    image: "https://randomuser.me/api/portraits/men/3.jpg",
-    date: "2025-06-05",
-    total: "750 ETB",
-    status: "Paid",
-    delivered: "Paid",
-  },
-  {
-    id: "L004",
-    firstName: "Rediet",
-    image: "https://randomuser.me/api/portraits/women/4.jpg",
-    date: "2025-06-08",
-    total: "620 ETB",
-    status: "Pending",
-    delivered: "Pending",
-  },
-  {
-    id: "L005",
-    firstName: "Yared",
-    image: "https://randomuser.me/api/portraits/men/5.jpg",
-    date: "2025-06-10",
-    total: "890 ETB",
-    status: "Paid",
-    delivered: "Paid",
-  },
-];
+
 useEffect(() => {
   const fetchOrders=async()=>{
     try{
