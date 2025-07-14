@@ -11,10 +11,10 @@ export const columns = () => [
       const {  image } = row.original;
       return (
         <div className="flex items-center gap-3 min-w-[150px]">
-          <Avatar>
-            <AvatarImage src={image} />
+          
+            <img src={image} alt="Images of Order"  className="w-32 h-24 object-cover"/>
       
-          </Avatar>
+          
         </div>
       );
     },
@@ -50,8 +50,7 @@ export const columns = () => [
     accessorKey: "total",
     header: () => <div className="text-left ">Total</div>,
     cell: ({ row }) => (
-      // The size property in the column definition controls the width in TanStack Table.
-      // Keeping the Tailwind class here as well, but 'size' is primary.
+   
       <div className="w-[150px] mr-10 text-left">{row.original.total}</div>
     ),
     // Added size property to explicitly set column width to 800 units
