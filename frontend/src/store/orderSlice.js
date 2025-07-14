@@ -68,6 +68,20 @@ export const fetchOrderById  = createAsyncThunk(
     }
   }
 );
+// fetch All Orders..Admin
+export const fetchAllOrders  = createAsyncThunk(
+  'products/fetchAllOrders ',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(`/api/orders`);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error || "Failed to fetch Order by Id"
+      );
+    }
+  }
+);
 
 
 const initialState = {
@@ -139,9 +153,25 @@ const orderSlice = createSlice({
       .addCase(fetchAllOrderByUser.fulfilled, (state, action) => {
         state.isFetchingOrder = false;
         state.fetchOrderSuccess = true;
-        state.order_mine = action.payload;
+        state.order = action.payload;
       })
       .addCase(fetchAllOrderByUser.rejected, (state, action) => {
+        state.isFetchingOrder = false;
+        state.fetchOrderError = action.payload;
+      })
+      // Fetch all order from admin
+      .addCase(fetchAllOrders.pending, (state) => {
+        state.isFetchingOrder = true;
+        state.fetchOrderError = null;
+        state.fetchOrderSuccess = false;
+        
+      })
+      .addCase(fetchAllOrders.fulfilled, (state, action) => {
+        state.isFetchingOrder = false;
+        state.fetchOrderSuccess = true;
+        state.order_mine = action.payload;
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
         state.isFetchingOrder = false;
         state.fe = action.payload;
       })
