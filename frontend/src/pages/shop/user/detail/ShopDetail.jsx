@@ -40,14 +40,14 @@ const ShopDetail = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center font-inter px-[40px] pb-16">
-      <div className="bg-white rounded-xl flex flex-col lg:flex-row w-full overflow-hidden gap-10">
+    <div className="flex flex-col justify-center font-inter md:px-[40px] pb-16">
+      <div className="bg-white rounded-xl flex flex-col lg:flex-row w-full overflow-hidden gap-10 px-6 ">
         {/* Product Image */}
         <div className="lg:w-1/2 flex items-center justify-center bg-gray-50 rounded-t-xl lg:rounded-l-xl lg:rounded-tr-none">
           <img
             src={product?.image}
             alt={product?.name}
-            className="max-w-full max-h-[332px] rounded-lg shadow-md"
+            className="max-w-full max-h-[332px] rounded-lg shadow-md mt-4"
           />
         </div>
 
@@ -82,7 +82,7 @@ const ShopDetail = () => {
           {/* Quantity Selector */}
           <div className="w-32 mb-6">
             <Select value={quantity} onValueChange={setQuantity}>
-  <SelectTrigger className="w-[151px] bg-[#E6EFF5] h-12">
+  <SelectTrigger className="md:w-[151px] bg-[#E6EFF5] h-12">
     <SelectValue className="text-black" placeholder="Select Quantity" />
   </SelectTrigger>
   <SelectContent className="max-h-60 overflow-auto">

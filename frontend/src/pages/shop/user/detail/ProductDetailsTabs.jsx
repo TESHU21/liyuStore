@@ -16,7 +16,7 @@ const ProductDetailsTabs = () => {
       <Tabs defaultValue="relatedproducts"  >
          <div  className=' flex justify-center pb-[50px]'>
         <TabsList asChild className="bg-transparent flex border-none shadow-none">
-          <div className='flex gap-[64px] '>
+          <div className='flex gap-6 md:gap-[64px] '>
             <TabsTrigger value="relatedproducts"    className="
                   data-[state=active]:text-blue-primary 
                   data-[state=active]:bg-transparent 

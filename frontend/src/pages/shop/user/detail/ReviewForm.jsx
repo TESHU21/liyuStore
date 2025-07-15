@@ -48,7 +48,7 @@ const ReviewForm = () => {
 
   return (
     <div className='flex justify-center'>
-      <div className='min-w-[668px]'>
+      <div className=' w-full md:min-w-[668px] px-6'>
         <FormComp
           schema={ReviewSchema}
           initialValues={initialValues}

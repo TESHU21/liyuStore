@@ -18,7 +18,7 @@ const ReletedProducts = () => {
   if (!selectedProduct) return null;
 
   return (
-    <div className="flex flex-wrap gap-6">
+    <div className="flex justify-center items-center flex-wrap gap-6">
       {relatedProducts.length > 0 ? (
         relatedProducts.map((product) => (
           <ProductCard key={product.id || product._id} product={product} />

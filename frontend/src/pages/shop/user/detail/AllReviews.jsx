@@ -23,7 +23,7 @@ const AllReviews = () => {
   }, [dispatch, product?._id]);
 
   return (
-    <div className="space-y-4 mt-6">
+    <div className="space-y-4 mt-6 px-6">
       {reviews && reviews.length > 0 ? (
         reviews.map((review) => (
           <ReviewCard key={review._id} review={review} />
