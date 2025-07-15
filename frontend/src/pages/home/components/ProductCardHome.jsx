@@ -2,11 +2,13 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ArrowUpRight } from 'lucide-react';
 import { NavLink } from "react-router-dom";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 
 export function ProductCardHome({ product }) {
+  const user=useSelector((state)=>state.auth.user)
+
   const dispatch=useDispatch()
   const navigate=useNavigate()
        const handleDetail=(product)=>{
@@ -31,10 +33,19 @@ export function ProductCardHome({ product }) {
     
       </CardContent>
       <CardFooter className="pt-2 gap-2 underline">
-        <button  onClick={() => handleDetail(product)} className="flex items-center  hover:underline cursor-pointer hover:text-gray-800 transition-colors" >
-          Shop now
-          <span className="ml-1 text-sm"><ArrowUpRight size={24}/></span>
-        </button>
+       {!user?.isAdmin && (
+  <button
+    onClick={() => handleDetail(product)}
+    className="flex items-center hover:underline cursor-pointer hover:text-gray-800 transition-colors"
+  >
+    Shop now
+    <span className="ml-1 text-sm">
+      <ArrowUpRight size={24} />
+    </span>
+  </button>
+)}
+
+       
     
       </CardFooter>
     </Card>

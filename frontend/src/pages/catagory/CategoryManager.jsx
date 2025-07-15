@@ -127,7 +127,7 @@ const CategoryManager = () => {
 
       <div className="flex flex-wrap gap-8 mt-4">
         {categories.map((cat) => (
-           <Card className="gap-0 py-2">
+           <Card  key ={cat._id} className="gap-0 py-2">
 
   <CardContent >
     <p>{cat.name}</p>
