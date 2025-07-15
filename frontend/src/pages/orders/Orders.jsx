@@ -27,10 +27,13 @@ useEffect(() => {
     fetchOrders();
   }
 }, [dispatch, user]);
+const order_mine = useSelector((state) => state.orders.order_mine);
+const order_general = useSelector((state) => state.orders.order);
+
+const order = user?.isAdmin ? order_mine : order_general;
 
 
-const order=useSelector((state)=>state.orders.order_mine)
-console.log("Orders",user)
+
 const formattedData=order?.map((item)=>({
  id: item._id,
  
