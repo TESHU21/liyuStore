@@ -30,7 +30,7 @@ const Product = () => {
   }, [dispatch]);
 
   return (
-    <div className='flex flex-col'>
+    <div className='flex flex-col py-6'>
       <div className='flex md:pl-[148px] gap-2 md:my-[40px] my-6 px-4'>
         <ChevronLeft onClick={() => setIsEditingProducts(null)} className="cursor-pointer" />
         <span>Back</span>

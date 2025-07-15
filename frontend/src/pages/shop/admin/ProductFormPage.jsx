@@ -113,7 +113,7 @@ const ProductFormPage = ({
   };
 
   return (
-    <div className="px-20 pt-10 space-y-4">
+    <div className="md:px-20 pt-10 space-y-4">
       <div className="flex justify-end">
         {productToEdit && (
           <button
