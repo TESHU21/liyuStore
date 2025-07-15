@@ -38,12 +38,12 @@ const TopTrending = () => {
 
   return (
     <div>
-        <div className='my-[86px]'>
-            <h1 className='font-inter font-bold text-center text-[42px] leading-6 '>Top Trending Products</h1>
-            <p className=' text-center mt-6 md:px-[310px]'>Discover the latest must-have items that are taking the market by storm. Stay ahead with our curated collection of trending products designed to elevate your lifestyle.</p>
+        <div className='my-10 md:my-[86px]'>
+            <h1 className='font-inter font-bold text-center md:text-[42px] leading-6 '>Top Trending Products</h1>
+            <p className=' md:text-center text-justify mt-6  px-6 md:px-[310px]'>Discover the latest must-have items that are taking the market by storm. Stay ahead with our curated collection of trending products designed to elevate your lifestyle.</p>
         </div>
         {/* Top Trending */}
-         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:px-[38px]"> {/* Adjust padding and gap as needed */}
+         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-6  md:px-[38px]"> {/* Adjust padding and gap as needed */}
       {top_products && top_products?.map((product) => (
         <ProductCardHome
           key={product._id} 
@@ -53,14 +53,14 @@ const TopTrending = () => {
       ))}
     </div>
 
-        <section className=" bg-[#01589A] text-white mt-[86px] md:py-[42px] md:px-[40px]">
+        <section className=" bg-[#01589A] text-white mt-6 md:mt-[86px] py-6 md:py-[42px] px-6 md:px-[40px]">
       {/* Main Heading */}
-      <h2 className=" md:text-[42px]  md:w-[958px] mb-12 md:mb-16 leading-12">
+      <h2 className=" md:text-[42px]  md:w-[958px] mb-12 md:mb-16 leading-8">
         We're tackling the biggest challenges in laptops and electronic products.
       </h2>
 
       {/* Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 ">
         {features.map((feature, index) => (
           <div key={index} className="flex flex-col items-center gap-4">
             {/* Icon */}
