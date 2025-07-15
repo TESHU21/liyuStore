@@ -3,32 +3,34 @@ import { DataTable } from '@/components/data-table'
 import {columns} from "./columns"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
-import { fetchAllOrderByUser } from '@/store/orderSlice'
+import { fetchAllOrderByUser,fetchAllOrders } from '@/store/orderSlice'
 
 const OrdersUser = () => {
   const navigate=useNavigate()
   const dispatch=useDispatch()
-
+  const user=useSelector((state)=>state.auth.user)
 
 useEffect(() => {
-  const fetchOrders=async()=>{
-    try{
-      
-   
-      const response =  await dispatch(fetchAllOrderByUser()).unwrap() // .unwrap gives raw result or throws
-      console.log("orders:", response); // This is your actual order data
+  const fetchOrders = async () => {
+    try {
+      const response = user?.isAdmin
+        ? await dispatch(fetchAllOrders()).unwrap()
+        : await dispatch(fetchAllOrderByUser()).unwrap();
 
+      console.log("Fetched Orders:", response);
+    } catch (error) {
+      console.error("Order fetch failed:", error);
     }
-    catch(error){
-      console.log(error)
-    }
+  };
+
+  if (user) {
+    fetchOrders();
   }
-  fetchOrders()
- 
-  
-}, [dispatch]);
+}, [dispatch, user]);
+
+
 const order=useSelector((state)=>state.orders.order_mine)
-console.log("Orders",order)
+console.log("Orders",user)
 const formattedData=order?.map((item)=>({
  id: item._id,
  
@@ -36,7 +38,7 @@ const formattedData=order?.map((item)=>({
     date: new Date(item.createdAt).toISOString().split("T")[0],
     total: `${item.totalPrice} ETB`,
     status: item.isPaid ? "Paid" : "Pending",
-    delivered: item.isDelivered ? "Paid" : "Pending",
+    delivered: item.isDelivered ? "Delivered" : "Pending",
 }))
 
 const handleViewDetail=(data)=>{

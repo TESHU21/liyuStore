@@ -73,12 +73,13 @@ export const columns = ({ handleViewDetail }) => [
     accessorKey: "delivered",
     header: () => <div className="text-center">Delivered</div>,
     cell: ({ row }) => {
-      const status = row.getValue("status");
-      const isPaid = status === "Paid";
+      const delivered = row.getValue("delivered");
+            const isDelivered = delivered === "Delivered";
+
       return (
         <div className="flex justify-center min-w-[100px]">
-          <Badge variant={isPaid ? "success" : "secondary"}>
-            {isPaid ? (
+          <Badge variant={isDelivered? "success" : "secondary"}>
+            {isDelivered? (
                 <>
                <div className="p-2 bg-green-600">Delivered</div>
               </>
