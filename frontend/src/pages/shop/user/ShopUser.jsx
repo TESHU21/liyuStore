@@ -98,7 +98,7 @@ const ShopUser = () => {
             <Accordion type="multiple" className="w-full px-4">
               {/* Product Categories */}
               <AccordionItem value="categories" className="md:pb-[31px]">
-                <AccordionTrigger className="font-semibold">
+                <AccordionTrigger className="font-semibold cursor-pointer">
                   Product Categories
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-2">
@@ -118,7 +118,7 @@ const ShopUser = () => {
 
               {/* Brands */}
               <AccordionItem value="brands" className="md:py-[31px]">
-                <AccordionTrigger className="font-semibold">Brand</AccordionTrigger>
+                <AccordionTrigger className="font-semibold cursor-pointer">Brand</AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-2">
                     {brands.map((brand) => (

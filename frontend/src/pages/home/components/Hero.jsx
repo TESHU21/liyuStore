@@ -29,7 +29,7 @@ const Hero = () => {
 
       {/* Text Content */}
       <div className="z-10 flex flex-col items-start max-w-[600px]">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight">
+        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold  -mt-36 md:mt-0 md:mb-4 leading-tight">
           Next-Gen <br />
           Mobility
         </h1>
