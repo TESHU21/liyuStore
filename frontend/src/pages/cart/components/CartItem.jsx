@@ -15,8 +15,9 @@ const CartItem = ({ cart }) => {
   const total = (cart.price * cart.quantity).toFixed(2);
 
   return (
-    <div className="mx-auto max-w-4xl border-b pb-4 mb-4">
-      <div className="grid grid-cols-5 font-semibold text-lg leading-[23.1px] mb-2">
+    <div className="mx-auto max-w-4xl border-b pb-4 mb-4 px-4">
+      {/* Header Row - hidden on mobile */}
+      <div className="hidden md:grid grid-cols-5 font-semibold text-lg leading-[23.1px] mb-2">
         <div>Product</div>
         <div></div>
         <div className="col-span-1">Price</div>
@@ -24,16 +25,17 @@ const CartItem = ({ cart }) => {
         <div className="col-span-1">Total</div>
       </div>
 
-      <div className="grid grid-cols-5 items-center gap-4 py-4 border-t">
+      {/* Item Row */}
+      <div className="grid grid-cols-1 md:grid-cols-5 items-center gap-4 py-4 border-t">
         {/* Product Info */}
-        <div className="flex items-center space-x-4 col-span-2">
+        <div className="md:col-span-2 flex md:flex-row flex-col md:items-center space-x-0 md:space-x-4 space-y-2 md:space-y-0">
           <img
             src={cart.image}
             alt={cart.name}
-            className="w-28 h-20 object-cover"
+            className="w-full md:w-28 h-40 md:h-20 object-cover rounded"
           />
           <div>
-            <p className="font-semibold">{cart.name}</p>
+            <p className="font-semibold text-base md:text-lg">{cart.name}</p>
             <p className="text-gray-500 text-sm">Brand: {cart.brand}</p>
             <button
               className="text-red-500 text-sm hover:underline mt-1"
@@ -45,10 +47,14 @@ const CartItem = ({ cart }) => {
         </div>
 
         {/* Price */}
-        <div>${cart.price.toLocaleString()}</div>
+        <div className="flex justify-between md:block">
+          <span className="md:hidden font-semibold">Price: </span>
+          <span>${cart.price.toLocaleString()}</span>
+        </div>
 
         {/* Quantity Selector */}
-        <div>
+        <div className="flex justify-between md:block">
+          <span className="md:hidden font-semibold">Qty: </span>
           <select
             value={cart.quantity}
             onChange={handleQuantityChange}
@@ -63,7 +69,10 @@ const CartItem = ({ cart }) => {
         </div>
 
         {/* Total Price */}
-        <div>${total}</div>
+        <div className="flex justify-between md:block">
+          <span className="md:hidden font-semibold">Total: </span>
+          <span>${total}</span>
+        </div>
       </div>
     </div>
   );
