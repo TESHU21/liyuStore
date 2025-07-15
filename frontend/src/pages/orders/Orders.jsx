@@ -1,11 +1,11 @@
 import React,{useEffect} from 'react'
 import { DataTable } from '@/components/data-table'
-import {columns} from "./columns"
+import {columns} from "./user/columns"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 import { fetchAllOrderByUser,fetchAllOrders } from '@/store/orderSlice'
 
-const OrdersUser = () => {
+const Orders = () => {
   const navigate=useNavigate()
   const dispatch=useDispatch()
   const user=useSelector((state)=>state.auth.user)
@@ -59,4 +59,4 @@ const handleViewDetail=(data)=>{
   )
 }
 
-export default OrdersUser
+export default Orders

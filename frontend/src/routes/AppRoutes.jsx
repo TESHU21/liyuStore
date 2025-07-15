@@ -9,9 +9,9 @@ import Favourite from '@/pages/favourite/Favourite'
 import Login from '@/pages/auth/login/Login'
 import Checkout from '@/pages/checkout/Checkout'
 import CreateProduct from '@/pages/shop/admin/ProductFormPage'
+import Orders from '@/pages/orders/Orders'
 import Profile from '@/pages/profile/Profile'
 import CategoryManager from "../pages/catagory/CategoryManager"
-import OrdersUser from '@/pages/orders/user/OrdersUser'
 import OrdersDetail from '@/pages/orders/components/OrdersDetail'
 import UpdateUserProfile from '@/pages/profile/user/UpdateUserProfile'
 import User from '@/pages/users/User'
@@ -29,7 +29,7 @@ const AppRoutes = () => {
         <Route path="product" element={<CreateProduct/>}/>
         <Route path="profile" element={<Profile/>}/>
         <Route path="category" element={<CategoryManager/>}/>
-        <Route path="orders" element={<OrdersUser/>}/>
+        <Route path="orders" element={<Orders/>}/>
         <Route path='orders/:id' element={<OrdersDetail/>}/>
         <Route path='update-profile' element={<UpdateUserProfile/>}/>
         <Route path='/user' element={<User/>}/>
