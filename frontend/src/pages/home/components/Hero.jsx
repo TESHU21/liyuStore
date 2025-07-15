@@ -2,8 +2,10 @@ import React from 'react'
 import HeroImage from "../../../assets/Hero.jpg"
 import { Button } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const Hero = () => {
+  const navigate=useNavigate()
   return (
     <div
       className='
@@ -37,7 +39,8 @@ const Hero = () => {
         <Button
           className="h-[48px] px-6 gap-2 text-base md:text-lg font-semibold
                      bg-white text-purple-800 hover:bg-gray-100
-                     transition-colors duration-200"
+                     transition-colors duration-200 cursor-pointer"
+            onClick={()=>navigate("/shop")}
         >
           Shop Now <ChevronRight className="w-5 h-5" />
         </Button>
