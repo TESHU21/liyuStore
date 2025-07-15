@@ -32,7 +32,7 @@ const Login = () => {
 
   return (
     <Dialog open={isLoginOpen} onOpenChange={(open) => !open && dispatch(closeLogin())}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="  ">
         <DialogHeader>
           <DialogTitle className="text-[24px]  font-normal  ">Login</DialogTitle>
           <DialogDescription className="sr-only">Please enter your credentials.</DialogDescription>

@@ -12,7 +12,7 @@ const Footer = () => {
 
       </div>
 
-      © 2022 Evershop.All rights reserved.
+      © 2025 LiyuStore.All rights reserved.
     </div>
   )
 }

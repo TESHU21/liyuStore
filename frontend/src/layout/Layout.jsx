@@ -20,8 +20,10 @@ const Layout = () => {
     className: 'mt-[80px]', // push down to not overlap top navbar or profile
   }}/>
 
-        <Login/>
-        <SignUp/>
+     <Login/>
+        <SignUp/> 
+
+     
       <Footer />
     </div>
   )

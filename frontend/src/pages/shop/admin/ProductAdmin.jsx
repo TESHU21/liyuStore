@@ -31,12 +31,12 @@ const Product = () => {
 
   return (
     <div className='flex flex-col'>
-      <div className='flex md:pl-[148px] gap-2 md:my-[40px]'>
+      <div className='flex md:pl-[148px] gap-2 md:my-[40px] my-6 px-4'>
         <ChevronLeft onClick={() => setIsEditingProducts(null)} className="cursor-pointer" />
         <span>Back</span>
       </div>
 
-      <div className='flex-grow mx-[43px] bg-[#F9FBFC] md:pb-20 px-[170px]'>
+      <div className='flex-grow md:mx-[43px] bg-[#F9FBFC] md:pb-20 md:px-[170px] px-6'>
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
