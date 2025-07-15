@@ -15,9 +15,9 @@ const PageHeader = ({header}) => {
   return (
     <div>
         <div>
-            <div className=' flex flex-col items-center gap-8 h-[316px] bg-gradient-to-l from-[#009CDE] to-[#01589A] pt-[107px]'>
-                <h1 className=' font-lato text-white font-bold text-[60px] leading-[86px]'>{header?.title}</h1>
-                <p className=' font-semibold text-[20px]  text-white'>{header?.description}</p>
+            <div className=' flex flex-col items-center justify-center gap-3 md:gap-8 md:h-[316px] h-[100px] bg-gradient-to-l from-[#009CDE] to-[#01589A] pb-4 md:pb-0 md:pt-[107px]'>
+                <h1 className=' font-lato text-white font-bold md:text-[60px] md:leading-[86px]'>{header?.title}</h1>
+                <p className=' font-semibold md:text-[20px] px-16 text-white'>{header?.description}</p>
             </div>
         </div>
         <div className=' flex justify-center pt-[22px]'>
@@ -25,7 +25,7 @@ const PageHeader = ({header}) => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/"  className='text-[20px]'>Home</Link>
+            <Link to="/"  className='md:text-[20px]'>Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>
@@ -33,7 +33,7 @@ const PageHeader = ({header}) => {
         </BreadcrumbSeparator>
         
         <BreadcrumbItem>
-          <BreadcrumbPage className="text-[20px]">{header?.currentPage}</BreadcrumbPage>
+          <BreadcrumbPage className="md:text-[20px]">{header?.currentPage}</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
