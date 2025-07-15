@@ -50,15 +50,19 @@ const handleViewDetail=(data)=>{
 }
 
   return (
-    <div className=' flex flex-col items-center justify-center '>
-      <h1 className=' felx py-8 font-lato font-semibold'>My Orders</h1>
-      <div className=' flex mx-auto'>
-        {formattedData &&
-                <DataTable columns={columns({handleViewDetail})} data={formattedData}/>
+   <div className="flex flex-col items-center justify-center">
+  <h1 className="py-8 font-lato font-semibold text-xl">My Orders</h1>
 
-        }
-        </div>
+  {/* Scrollable Table Wrapper */}
+  <div className="w-full px-4  overflow-x-auto">
+    <div className=""> {/* Optional: ensures table has enough width */}
+      {formattedData && (
+        <DataTable columns={columns({ handleViewDetail })} data={formattedData} />
+      )}
     </div>
+  </div>
+</div>
+
   )
 }
 

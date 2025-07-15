@@ -22,7 +22,7 @@ export const columns = ({ handleViewDetail }) => [
     header: () => <div className="text-left ">Id</div>,
     cell: ({ row }) => (
      
-      <div className="w-[150px] mr-10 text-left">{row.original.id}</div>
+      <div className="md:w-[150px] mr-10 text-left">{row.original.id}</div>
     ),
     size: 200,
   },
@@ -31,7 +31,7 @@ export const columns = ({ handleViewDetail }) => [
     accessorKey: "date",
     header: () => <div className="text-center">Date</div>,
     cell: ({ row }) => (
-      <div className="text-center min-w-[100px]">{row.getValue("date")}</div>
+      <div className="text-center md:min-w-[100px]">{row.getValue("date")}</div>
     ),
   },
     {
@@ -39,7 +39,7 @@ export const columns = ({ handleViewDetail }) => [
     header: () => <div className="text-left ">Total</div>,
     cell: ({ row }) => (
       
-      <div className="w-[150px] mr-10 text-left">{row.original.total}</div>
+      <div className="md:w-[150px] md:mr-10 text-left">{row.original.total}</div>
     ),
     size: 200,
   },
@@ -77,7 +77,7 @@ export const columns = ({ handleViewDetail }) => [
             const isDelivered = delivered === "Delivered";
 
       return (
-        <div className="flex justify-center min-w-[100px]">
+        <div className="flex justify-center md:min-w-[100px]">
           <Badge variant={isDelivered? "success" : "secondary"}>
             {isDelivered? (
                 <>
@@ -98,7 +98,7 @@ export const columns = ({ handleViewDetail }) => [
     id: "detail",
     header: () => <div className="text-center"></div>,
     cell: ({ row }) => (
-      <div className="flex justify-center gap-2 min-w-[120px]">
+      <div className="flex justify-center gap-2 md:min-w-[120px]">
         <Button size="icon" variant="ghost" onClick={() => handleViewDetail(row.original)}>
           <Eye className="h-4 w-4 text-green-600" />
         </Button>
