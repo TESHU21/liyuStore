@@ -11,9 +11,9 @@ const Favourite = () => {
 return (
   <div>
     <PageHeader header={headers} />
-    <div className='md:mt-[100px] px-[60px] mb-[60px]'>
+    <div className='mt-6 md:mt-[100px] px-[60px] mb-[60px]'>
       {favourite.length > 0 ? (
-        <div className='flex gap-10 flex-wrap'>
+        <div className='flex gap-4 md:gap-10 flex-wrap'>
           {favourite.map((item) => (
             <ProductCard key={item._id} product={item} />
           ))}

@@ -23,10 +23,22 @@ const UserProfileMenu = () => {
       <DropdownMenuTrigger asChild>
         <button className='flex gap-3 h-[38px]  justify-between items-center'>
           <div className='flex gap-[8px] items-center '>
-            {/* <p className=' flex w-[40px] h-[40px] bg-blue-primary rounded-full  items-center justify-center text-white leading-6 text-base'>
-              {profileInitial}
-            </p> */}
-            <p className=' font-inter text-base leading-6'>{fullName}</p>
+          <p className="font-inter text-base leading-6">
+  {/* Full name for md+ screens */}
+  <span className="hidden md:inline">{fullName}</span>
+
+  {/* Initials inside circle for mobile */}
+  <span className="inline md:hidden">
+    <span className="inline-flex items-center justify-center w-8 h-8 p-2 rounded-full bg-purple-600 text-white font-semibold">
+      {fullName
+        .split(" ")
+        .map((n) => n[0])
+        .join("")}
+    </span>
+  </span>
+</p>
+
+
           </div>
           <ChevronDown size={24} />
         </button>

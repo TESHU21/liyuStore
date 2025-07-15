@@ -23,7 +23,7 @@ const NavBar = () => {
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuVisibility(false);
+        setMenuVisibility(!menuVisiblity);
       }
     };
   
@@ -62,7 +62,7 @@ const NavBar = () => {
         <div className=" hidden md:flex  justify-between md:px-10  h-[80px] items-center bg-white ">
         <div className=' flex items-center gap-8   '>
             <div className=' flex gap-[2.72px] items-center'>
-                <span className="font-lusitana text-[19px] font-bold leading-[100%] text-blue-primary ">Azushop</span>
+                <span className="font-lusitana text-[19px] font-bold leading-[100%] text-blue-primary  capitalize ">Liyustore</span>
             </div>
             <div className='flex gap-8 ml-[342px]'>
             <NavLink to="/" className={getDesktopNavLinkClasses}><span><Home size={24}/></span>Home</NavLink>
@@ -110,48 +110,92 @@ const NavBar = () => {
         
         </div>
         {/* Mobile Menu */}
-        <div className='md:hidden flex justify-between p-[17px]  items-center'>
-          <div className='flex items-center text-blue-primary gap-[2.3px]'> 
-          <span className=' font-bold font-lusitana text-[16.54px] leading-[100%] '>CLient</span>
-          </div>
-         { menuVisiblity? (<X onClick={handleClick}/>) :(<AlignJustify onClick={handleClick}/>)}
-        
+<div className="md:hidden flex justify-between items-center 
+p-4 border-b">
+  {/* Left: Hamburger/Close Icon */}
+  <div onClick={handleClick} className="cursor-pointer">
+    {menuVisiblity ? <X size={24} className='text-red-800' /> : <AlignJustify size={24} />}
+  </div>
 
-        </div>
+  {/* Center: Logo */}
+  <div className="text-blue-primary font-bold font-lusitana text-[16.5px] leading-none">
+    Liyustore
+  </div>
 
-        {menuVisiblity && (
-  <div className="md:hidden fixed right-0 md:top-[56px] top-10 z-50 w-[269px] min-h-screen shadow-md bg-white pl-[21px] pt-[25px] flex flex-col">
-    <ul className="flex flex-col gap-4">
+  {/* Right: Profile Menu or Auth Buttons */}
+  <div>
+    {user ? (
+      <ProfileMenu />
+    ) : (
+      <div className="flex items-center gap-2">
+        <Button
+          className="py-2 px-3 bg-white hover:bg-white text-sm font-semibold text-black shadow-none border-0 rounded-md"
+          onClick={() => dispatch(openLogin())}
+        >
+          <LogIn size={20} className="mr-1" />
+          Login
+        </Button>
+        <Button
+          className="py-2 px-3 bg-white text-black text-sm font-semibold rounded-md border-0 shadow-none hover:bg-white"
+          onClick={() => dispatch(openSignup())}
+        >
+          <User size={20} className="mr-1" />
+          Register
+        </Button>
+      </div>
+    )}
+  </div>
+</div>
+{menuVisiblity && (
+  <div className="md:hidden fixed top-0 left-0 w-[270px] h-screen z-50 bg-white shadow-lg pt-16 px-6">
+      <div className="absolute top-4 right-6 cursor-pointer" onClick={handleClick}>
+      <X size={24} className=' text-red-600' />
+    </div>
+    <ul className="flex flex-col gap-5 text-base font-medium">
       <li>
-                    <NavLink to="/" className={({isActive})=>`${isActive ? "text-blue-primary ":""} flex items-center gap-2`}><span><Home size={24}/></span>Home</NavLink>
-
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
+          }
+        >
+          <Home size={20} /> Home
+        </NavLink>
       </li>
       <li>
-        <NavLink to="/shop" className={({ isActive }) => `${isActive ? "text-blue-primary" : ""} flex items-center gap-2` }> <ShoppingBag  size={24}/> <span>shop</span></NavLink>
-
+        <NavLink
+          to="/shop"
+          className={({ isActive }) =>
+            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
+          }
+        >
+          <ShoppingBag size={20} /> Shop
+        </NavLink>
       </li>
       <li>
-      <NavLink to="/cart" className={({isActive})=>`${isActive ? "text-blue-primary":""} flex items-center gap-2`}><span><ShoppingCart size={24 }/></span>cart</NavLink>
-
+        <NavLink
+          to="/cart"
+          className={({ isActive }) =>
+            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
+          }
+        >
+          <ShoppingCart size={20} /> Cart
+        </NavLink>
       </li>
       <li>
-
-                    <NavLink to="/favourite" className={({isActive})=>`${isActive ? "text-blue-primary":""} flex items-center gap-2`}> <span><Heart size={24}/></span>Favourite</NavLink>
-
+        <NavLink
+          to="/favourite"
+          className={({ isActive }) =>
+            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
+          }
+        >
+          <Heart size={20} /> Favourite
+        </NavLink>
       </li>
     </ul>
-           <div className=" flex flex-col items-start justify-start">
-          <Button className="py-3 px-2   bg-white  hover:bg-white text-base leading-6 font-semibold text-black border-0 md:shadow-none rounded-md  cursor-pointer" onClick={()=>navigate("/login")}>  <span className=''><LogIn size={26}/></span>Login</Button>
-          <Button
-  className="py-3 px-2 bg-white text-black text-base leading-6 font-semibold rounded-md border-0 cursor-pointer shadow-none hover:bg-white"
-  onClick={() => navigate("/signup")}
->
-   <span className=""><User size={26} /></span> Register
-</Button>
-
-      </div>
   </div>
 )}
+
 
     </div>
   )

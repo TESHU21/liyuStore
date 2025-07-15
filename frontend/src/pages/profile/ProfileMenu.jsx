@@ -12,7 +12,7 @@ const ProfileMenu = () => {
   {user ? (
     user.isAdmin ? <AdminProfileMenu /> : <UserProfileMenu />
   ) : (
-    <p>No user logged in</p>
+    <p>No User</p>
   )}
 </div>
 
