@@ -64,7 +64,7 @@ const ProductCard = ({  product, onEdit }) => {
       <CardContent className="flex flex-col gap-0 py-1 items-center  ">
         <div className="relative flex items-center justify-center mb-4">
        
-          <img src={product.image} alt={product.name} className=" w-full h-[159px] object-cover"/>
+          <img src={product.image} alt={product.name} className=" w-full h-[120px] md:h-[159px] object-cover"/>
         </div>
         <div className="flex flex-col gap-2 justify-center items-center">
         <h3 className="text-base font-semibold text-center leading-tight mb-1">{product.name}</h3>
