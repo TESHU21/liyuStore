@@ -89,8 +89,8 @@ const CategoryManager = () => {
   return (
     
   <div className="flex ">
-     <div className=" flex-1 px-16 mx-[43px] md:pb-80 bg-[#F9FBFC] ">
-      <h1  className="text-blue-primary font-lato text-xl py-6 font-semibold">{!editId?"Create Category":"Update Category"}</h1>
+     <div className=" flex-1 md:px-16 px-6 md:mx-[43px] md:pb-80 bg-[#F9FBFC] ">
+      <h1  className="text-blue-primary font-lato text-xl py-6 md:font-semibold">{!editId?"Create Category":"Update Category"}</h1>
       <form onSubmit={handleSubmit} className=" flex flex-col gap-4">
         <label className="block mb-1 text-neutral-600">Category</label>
         <Input

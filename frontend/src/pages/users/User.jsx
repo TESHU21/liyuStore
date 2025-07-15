@@ -46,7 +46,7 @@ const User = () => {
   );
 
   return (
-    <div className="mx-[250px]">
+    <div className="md:mx-[250px] px-2">
       <div className="flex py-15">
         <ChevronLeft />
         <span>Back</span>
@@ -54,7 +54,7 @@ const User = () => {
       <h6 className="font-semibold leading-relaxed text-2xl text-blue-primary pb-4">
         Users
       </h6>
-      <div>
+      <div className=" overflow-x-auto">
         <DataTable columns={columns} data={formattedData} />
       </div>
     </div>

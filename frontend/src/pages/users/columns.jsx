@@ -26,7 +26,7 @@ export const getColumns = ({
     accessorKey: "id",
     header: () => <div className="text-left">ID</div>,
     cell: ({ row }) => (
-      <div className="text-left w-[150px]">{row.original.id}</div>
+      <div className="text-left md:w-[150px]">{row.original.id}</div>
     ),
     size: 200,
   },
