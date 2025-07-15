@@ -35,7 +35,7 @@ const Pagination = ({ table }) => {
             onClick={() => table.firstPage()}
             // eslint-disable-next-line react/prop-types
             disabled={!table.getCanPreviousPage()}
-            className={`${
+            className={` cursor-pointer ${
               !table.getCanPreviousPage() ? " text-gray-300" : " text-gray-600"
             }`}
           >
@@ -44,7 +44,7 @@ const Pagination = ({ table }) => {
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className={`text-3xl ${
+            className={`text-3xl cursor-pointer ${
               !table.getCanPreviousPage() ? "text-gray-300" : " text-gray-600"
             }`}
           >
@@ -54,7 +54,7 @@ const Pagination = ({ table }) => {
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className={`text-3xl ${
+            className={`text-3xl cursor-pointer ${
               !table.getCanNextPage() ? "text-gray-300" : " text-gray-600"
             }
             `}
@@ -65,7 +65,7 @@ const Pagination = ({ table }) => {
           <button
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className={`text-3xl ${
+            className={`text-3xl  cursor-pointer ${
               !table.getCanNextPage() ? "text-gray-200" : "text-gray-600"
             }`}
           >
