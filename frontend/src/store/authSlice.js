@@ -48,9 +48,9 @@ import axiosInstance from "@/lib/axiosInstance";
   }
 )
 
-const updateProfile=createAsyncThunk("auth/updateProfile",async(_,thunkAPI)=>{
+const updateProfile=createAsyncThunk("auth/updateProfile",async(data,thunkAPI)=>{
   try{
-    const response= await axiosInstance.put('/api/users/profile')
+    const response= await axiosInstance.put('/api/users/profile',data)
       return response.data
   }
   catch(error){
