@@ -48,6 +48,28 @@ import axiosInstance from "@/lib/axiosInstance";
   }
 )
 
+const updateProfile=createAsyncThunk("auth/updateProfile",async(_,thunkAPI)=>{
+  try{
+    const response= await axiosInstance.put('/api/users/profile')
+      return response.data
+  }
+  catch(error){
+          return thunkAPI.rejectWithValue(error.response?.data?.message || "Fetching User Profile Failed,Please try again.")
+
+
+  }
+})
+const getCurrentUserProfile=createAsyncThunk("auth/getCurrentUserProfile",async(_,thunkAPI)=>{
+  try{
+    const response= await axiosInstance.get('/api/users/profile')
+      return response.data
+  }
+  catch(error){
+          return thunkAPI.rejectWithValue(error.response?.data?.message || "Fetching User Profile Failed,Please try again.")
+
+
+  }
+})
 // ✅ The auth slice
 const authSlice = createSlice({
   name: "auth",
@@ -119,6 +141,42 @@ const authSlice = createSlice({
 
       })
       .addCase(getUser.rejected,(state,action)=>{
+         state.isLoading = false;
+        state.error = action.payload; // set error message from rejected action
+
+      })
+      // Fetch current profiles
+      .addCase(getCurrentUserProfile.pending,(state)=>{
+         state.isLoading = true;
+        state.error = null; // Clear previous error
+
+      })
+      .addCase(getCurrentUserProfile.fulfilled,(state,action)=>{
+         state.isLoading = false;
+        // state.user = action.payload.user;
+        
+
+
+      })
+      .addCase(getCurrentUserProfile.rejected,(state,action)=>{
+         state.isLoading = false;
+        state.error = action.payload; // set error message from rejected action
+
+      })
+      // Update current profiles
+      .addCase(updateProfile.pending,(state)=>{
+         state.isLoading = true;
+        state.error = null; // Clear previous error
+
+      })
+      .addCase(updateProfile.fulfilled,(state,action)=>{
+         state.isLoading = false;
+        // state.user = action.payload.user;
+        
+
+
+      })
+      .addCase(updateProfile.rejected,(state,action)=>{
          state.isLoading = false;
         state.error = action.payload; // set error message from rejected action
 
