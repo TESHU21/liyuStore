@@ -44,7 +44,7 @@ const NavBar = () => {
     `relative flex items-center justify-center  gap-2 group pb-2 transition-colors duration-200 ease-in-out ${
       isActive ? "text-blue-800" : "text-gray-700 hover:text-blue-primary"
     }
-    after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:bg-blue-600 after:transition-all after:duration-300 after:ease-in-out
+    after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-blue-600 after:transition-all after:duration-300 after:ease-in-out
     ${isActive ? "after:w-full" : "group-hover:after:w-full after:w-0"}
     `;
 
@@ -53,7 +53,7 @@ const NavBar = () => {
     `relative  flex gap-2 group pb-1 transition-colors duration-200 ease-in-out block w-fit ${ // Added w-fit here
       isActive ? "text-blue-800" : "text-gray-700 hover:text-blue-primary"
     }
-    after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-500 after:transition-all after:duration-300 after:ease-in-out
+    after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-blue-primary after:transition-all after:duration-300 after:ease-in-out
     ${isActive ? "after:w-full" : "group-hover:after:w-full after:w-0"}
     `;
   return (
@@ -114,7 +114,7 @@ const NavBar = () => {
 p-4 border-b">
   {/* Left: Hamburger/Close Icon */}
   <div onClick={handleClick} className="cursor-pointer">
-    {menuVisiblity ? <X size={24} className='text-red-800' /> : <AlignJustify size={24} />}
+    {menuVisiblity ? <X size={24} className='' /> : <AlignJustify size={24} />}
   </div>
 
   {/* Center: Logo */}
@@ -155,9 +155,7 @@ p-4 border-b">
       <li>
         <NavLink
           to="/"
-          className={({ isActive }) =>
-            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
-          }
+          className={getMobileNavLinkClasses}
         >
           <Home size={20} /> Home
         </NavLink>
@@ -165,9 +163,7 @@ p-4 border-b">
       <li>
         <NavLink
           to="/shop"
-          className={({ isActive }) =>
-            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
-          }
+          className={getMobileNavLinkClasses}
         >
           <ShoppingBag size={20} /> Shop
         </NavLink>
