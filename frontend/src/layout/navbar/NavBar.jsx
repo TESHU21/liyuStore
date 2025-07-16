@@ -50,7 +50,7 @@ const NavBar = () => {
 
   // Function for Mobile NavLink classes (includes w-fit to constrain line length)
   const getMobileNavLinkClasses = ({ isActive }) =>
-    `relative group pb-1 transition-colors duration-200 ease-in-out block w-fit ${ // Added w-fit here
+    `relative  flex gap-2 group pb-1 transition-colors duration-200 ease-in-out block w-fit ${ // Added w-fit here
       isActive ? "text-blue-800" : "text-gray-700 hover:text-blue-primary"
     }
     after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-red-500 after:transition-all after:duration-300 after:ease-in-out
@@ -173,25 +173,26 @@ p-4 border-b">
         </NavLink>
       </li>
       <li>
-        <NavLink
-          to="/cart"
-          className={({ isActive }) =>
-            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
-          }
-        >
-          <ShoppingCart size={20} /> Cart
-        </NavLink>
-      </li>
-      <li>
-        <NavLink
-          to="/favourite"
-          className={({ isActive }) =>
-            `${isActive ? "text-blue-primary" : "text-black"} flex items-center gap-2`
-          }
-        >
-          <Heart size={20} /> Favourite
-        </NavLink>
-      </li>
+       <NavLink to="/cart" className={getMobileNavLinkClasses}><span><ShoppingCart size={24 }/></span>Cart
+                {cartItemCount > 0 && (
+          <span className="   flex  items-center justify-center  bg-blue-primary w-5 h-5 text-white text-xs font-bold px-1  rounded-full">
+            {cartItemCount}
+          </span>
+        )}
+            </NavLink>
+             </li>
+             <li>
+                          <NavLink to="/favourite" className={getMobileNavLinkClasses}> <span><Heart size={24}/></span>Favourite
+                {favouriteItemCount > 0 && (
+          <span className=" flex items-center justify-center  w-5 h-5  bg-blue-primary text-white text-xs font-bold px-1  rounded-full">
+            {favouriteItemCount}
+          </span>
+        )}
+            
+            </NavLink>
+             </li>
+
+     
     </ul>
   </div>
 )}
