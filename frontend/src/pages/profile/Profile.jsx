@@ -1,5 +1,4 @@
 import React from 'react'
-import UserProfile from './user/UserProfile'
 import AdminProfile from './admin/AdminProfile'
 
 const Profile = () => {
