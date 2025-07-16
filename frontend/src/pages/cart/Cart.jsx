@@ -9,6 +9,14 @@ const Cart = () => {
   const cart=useSelector((state)=>state.cart.items)
   const totalPrice=useSelector((state)=>state.cart.totalAmount)
   const totalQuantity=useSelector((state)=>state.cart.totalQuantity)
+    const user = useSelector((state) => state.auth.user);
+     // ⛔ Protect Cart Page for Admins
+  if (user?.isAdmin) {
+    // return <Navigate to="/" replace />;
+    // Or you can show a message instead:
+    return <p className="text-center py-20 text-lg font-semibold text-red-500">Admins cannot access the cart.</p>;
+  }
+
   
   return (
     <div className=' pb-20'>

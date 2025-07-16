@@ -7,6 +7,13 @@ import ProductCard from '../shop/user/ProductCard'
 const Favourite = () => {
   const favourite=useSelector((state)=>state.favourite.favorites)
   console.log("Favourite",favourite)
+     const user = useSelector((state) => state.auth.user);
+       // ⛔ Protect Cart Page for Admins
+    if (user?.isAdmin) {
+      // return <Navigate to="/" replace />;
+      // Or you can show a message instead:
+      return <p className="text-center py-20 text-lg font-semibold text-red-500">Admins cannot access favourite.</p>;
+    }
 
 return (
   <div>
