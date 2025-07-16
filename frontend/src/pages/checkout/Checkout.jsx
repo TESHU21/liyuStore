@@ -133,60 +133,66 @@ const Checkout = () => {
     }
   };
 
-  return (
-    <div>
-      <PageHeader header={headers} />
-      <div className="flex gap-12 md:mt-[40px] px-[39px]">
-        <div className="w-full md:w-[782px]">
-          <h6 className="mb-8">Billing Details</h6>
-          <div className="bg-[#F9FBFC] px-[59px] pt-[61px] pb-[85px]">
-            <FormComp
-              ref={formRef}
-              schema={checkoutSchema}
-              fields={fields}
-              initialValues={initialValues}
-              onSubmit={handleFormSubmit}
-              hideButton={true}
-            />
-          </div>
+ return (
+  <div>
+    <PageHeader header={headers} />
+
+    <div className="flex flex-col md:flex-row gap-12 mt-10 px-4 md:px-10 lg:px-20">
+      
+      {/* Billing Section */}
+      <div className="w-full md:w-1/2">
+        <h6 className="mb-4  text-md md:text-lg font-semibold">Billing Details</h6>
+        <div className="bg-[#F9FBFC] p-6 md:p-10 rounded-md shadow-sm">
+          <FormComp
+            ref={formRef}
+            schema={checkoutSchema}
+            fields={fields}
+            initialValues={initialValues}
+            onSubmit={handleFormSubmit}
+            hideButton={true}
+          />
         </div>
+      </div>
 
-        <div className="w-1/2">
-          <h6 className="pb-8">Products</h6>
-          <div className="bg-[#F9FBFC] pt-12 px-12">
-            {cart.map((item) => (
-              <OrderSummaryCard key={item._id} orderItem={item} />
-            ))}
+      {/* Order Summary Section */}
+      <div className="w-full md:w-1/2">
+        <h6 className="mb-4 text-lg font-semibold">Products</h6>
+        <div className="bg-[#F9FBFC] p-6 md:p-10 rounded-md shadow-sm">
+          {cart.map((item) => (
+            <OrderSummaryCard key={item._id} orderItem={item} />
+          ))}
 
-            <div className="p-4 border-t mt-4 space-y-4">
-              <div className="flex justify-between text-sm">
-                <span>Shipping fees</span>
-                <span className="font-medium">ETB {shippingFees.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span>Tax</span>
-                <span className="font-medium">ETB {tax.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between pt-4 border-t text-lg font-bold">
-                <span>Total</span>
-                <span>ETB {total.toFixed(2)}</span>
-              </div>
+          <div className="pt-6 border-t mt-6 space-y-4 text-sm">
+            <div className="flex justify-between">
+              <span>Shipping fees</span>
+              <span className="font-medium">ETB {shippingFees.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Tax</span>
+              <span className="font-medium">ETB {tax.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between pt-4 border-t text-lg font-bold">
+              <span>Total</span>
+              <span>ETB {total.toFixed(2)}</span>
+            </div>
 
-              <div className="pt-6">
-                <Button
-                  onClick={handlePlaceOrderClick}
-                  disabled={isProcessing}
-                  className="w-full h-12 bg-blue-primary disabled:opacity-50"
-                >
-                  {isProcessing ? "Processing..." : "Place Order & Pay"}
-                </Button>
-              </div>
+            <div className="pt-6">
+              <Button
+                onClick={handlePlaceOrderClick}
+                disabled={isProcessing}
+                className="w-full h-12 bg-blue-primary disabled:opacity-50"
+              >
+                {isProcessing ? "Processing..." : "Place Order & Pay"}
+              </Button>
             </div>
           </div>
         </div>
       </div>
+
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Checkout;
