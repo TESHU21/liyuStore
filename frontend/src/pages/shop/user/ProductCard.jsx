@@ -30,15 +30,30 @@ const ProductCard = ({  product, onEdit }) => {
         navigate(`/shop/${product._id}`)
       }
       const handleAddToFavourite=(product)=>{
-        dispatch(addProductToFavorite(product))
+        if(!user){
+          navigate("/")
+       toast.info("Sign in to add products to favourite!", {
+
+});
+
+
+        }
+        else{
+               dispatch(addProductToFavorite(product))
          toast.success("You Added Item to Favourite sucessfully! ")
+        }
+   
 
 
 
       }
       const handleAddToCart = () => {
           if (!product) return;
-      
+          if(!user){
+                      navigate("/")
+       toast.info("Sign in to add products to cart")
+          }
+          else{
           dispatch(
             addProductToCart({
              
@@ -47,6 +62,9 @@ const ProductCard = ({  product, onEdit }) => {
             })
           );
           toast.success("You Added Item to cart sucessfully! ")
+
+          }
+      
         };
       const handleRemoveProduct=(product)=>{
         console.log("Id",product._id)

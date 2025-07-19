@@ -17,7 +17,7 @@ const Layout = () => {
         
       </main>
       <Toaster position="top-right"  toastOptions={{
-    className: 'mt-[80px]', // push down to not overlap top navbar or profile
+    className: 'mt-[80px] bg-green text-white', // push down to not overlap top navbar or profile
   }}/>
 
      <Login/>
