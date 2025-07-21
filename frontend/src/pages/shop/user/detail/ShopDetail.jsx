@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addProductToCart } from "@/store/cartSlice";
 import { toast } from "sonner";
 import Rating from "@/components/Rating";
+import { useNavigate } from "react-router-dom";
 
 const ShopDetail = () => {
   const [quantity, setQuantity] = useState("");
@@ -20,13 +21,21 @@ const ShopDetail = () => {
   const quantityOptions = Array.from({ length: maxQuantity }, (_, i) => i + 1);
 
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const product = useSelector((state) => state.selectedProduct.product);
-  console.log("Proddddduct",product.rating)
-
+const user=useSelector((state)=>state?.auth.user)
   const handleAddToCart = () => {
     if (!product || !quantity) return;
-
-    dispatch(
+        if(!user){
+              navigate("/")
+           toast.info("Sign in to add products to favourite!", {
+    
+    });
+    
+    
+            }
+            else{
+                  dispatch(
       addProductToCart({
         _id: product._id,
         name: product.name,
@@ -37,6 +46,10 @@ const ShopDetail = () => {
       })
     );
     toast.success("You Added Items to cart sucessfully")
+                 
+            }
+
+
   };
 
   return (
@@ -97,7 +110,7 @@ const ShopDetail = () => {
 
           {/* Add to Cart Button */}
           <Button
-            className="bg-[#01589A] h-12 hover:bg-blue-primary"
+            className="bg-[#01589A] h-12 hover:bg-blue-primary cursor-pointer"
             onClick={handleAddToCart}
           >
             Add to Cart

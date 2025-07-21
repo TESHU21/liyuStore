@@ -3,6 +3,7 @@ import PageHeader from '@/components/PageHeader'
 import { headers } from './components/data'
 import { useSelector } from 'react-redux'
 import ProductCard from '../shop/user/ProductCard'
+import { Helmet } from 'react-helmet-async'
 
 const Favourite = () => {
   const favourite=useSelector((state)=>state.favourite.favorites)
@@ -16,7 +17,15 @@ const Favourite = () => {
     }
 
 return (
-  <div>
+  <>
+    <Helmet>
+        <title>Favourites | Liyu Mart</title>
+        <meta
+          name="description"
+          content="Your saved and favorite items at Liyu Mart. Shop them later easily!"
+        />
+      </Helmet>
+    <div>
     <PageHeader header={headers} />
     <div className='mt-6 md:mt-[100px] px-[60px] mb-[60px]'>
       {favourite.length > 0 ? (
@@ -32,6 +41,8 @@ return (
       )}
     </div>
   </div>
+  </>
+
 );
 
 }

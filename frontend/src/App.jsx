@@ -1,12 +1,17 @@
 import { useState } from 'react'
 import AppRoutes from './routes/AppRoutes'
+import { HelmetProvider } from "react-helmet-async";
+
 
 
 function App() {
 
   return (
    <div>
-    <AppRoutes/>
+        <HelmetProvider>
+           <AppRoutes/>
+</HelmetProvider>
+   
    </div>
   )
 }

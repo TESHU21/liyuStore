@@ -12,6 +12,9 @@ export function ProductCardHome({ product }) {
   const dispatch=useDispatch()
   const navigate=useNavigate()
        const handleDetail=(product)=>{
+        if(!user){
+
+        }
          
           dispatch(setSelectedProduct(product))
   
@@ -28,6 +31,7 @@ export function ProductCardHome({ product }) {
           src={product?.image}
           alt={product?.name}
           className="my-4"
+          loading="lazy"
           style={{ width: '200px', height: '150px', objectFit: 'contain' }}
         />
     

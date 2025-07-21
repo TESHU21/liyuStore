@@ -6,6 +6,7 @@ import { useNavigate,NavLink } from "react-router-dom";
 import { useDispatch ,useSelector} from "react-redux";
 import { openLogin,openSignup } from "@/store/uiSlice";
 import ProfileMenu from '@/pages/profile/ProfileMenu';
+import LiyuStore from "../../assets/Liyu Mart.webp"
 
 
 
@@ -62,7 +63,7 @@ const NavBar = () => {
         <div className=" hidden md:flex  justify-between md:px-10  h-[80px] items-center bg-white ">
         <div className=' flex items-center gap-8   '>
             <div className=' flex gap-[2.72px] items-center'>
-                <span className="font-lusitana text-[19px] font-bold leading-[100%] text-blue-primary  capitalize ">Liyustore</span>
+                <span className="font-lusitana text-[19px] font-bold leading-[100%] text-blue-primary  capitalize "><img src={LiyuStore} alt="Liyu Mart Logo" loading='lazy' className='w-full h-10 object-cover' /></span>
             </div>
             <div className='flex gap-8 ml-[342px]'>
             <NavLink to="/" className={getDesktopNavLinkClasses}><span><Home size={24}/></span>Home</NavLink>

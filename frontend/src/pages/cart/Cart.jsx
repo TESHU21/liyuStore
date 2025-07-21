@@ -4,6 +4,7 @@ import { headers } from './components/data'
 import { useSelector } from 'react-redux'
 import CartItem from './components/CartItem'
 import { useNavigate } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 const Cart = () => {
   const navigate=useNavigate()
   const cart=useSelector((state)=>state.cart.items)
@@ -19,6 +20,14 @@ const Cart = () => {
 
   
   return (
+    <>
+         <Helmet>
+        <title>Cart | Liyu Mart</title>
+        <meta
+          name="description"
+          content="View and manage the items in your cart. Ready to checkout on Liyu Mart?"
+        />
+      </Helmet>
     <div className=' pb-20'>
       <PageHeader header={headers}/>
       <div className=' pt-4 px-4 md:pt-10'>
@@ -44,6 +53,8 @@ const Cart = () => {
       </div>
 
     </div>
+    </>
+    
   )
 }
 

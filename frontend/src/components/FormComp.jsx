@@ -8,7 +8,7 @@ import React, {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavLink } from "react-router-dom";
-import { ChevronRight, AlertCircle, Check, Image as ImageIcon } from "lucide-react";
+import { ChevronRight, AlertCircle } from "lucide-react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
 
 import Loader from "./Loader";
@@ -24,9 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "./ui/label";
-// Removed direct import of Shadcn Select components as CustomSelect now encapsulates them
-// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import CustomSelect from "./CustomSelect"; // Make sure this path is correct
+import CustomSelect from "./CustomSelect"; // Adjust path as needed
 
 const FormComp = forwardRef(
   (
@@ -48,17 +46,18 @@ const FormComp = forwardRef(
       resolver: zodResolver(schema),
       defaultValues: initialValues,
       mode: "onBlur",
+      shouldFocusError: false,
     });
 
     const { trigger, formState, reset, getValues } = form;
-    const { isValid } = formState;
+    const { errors, isSubmitted } = formState;
 
     const [showPassword, setShowPassword] = useState(false);
     const [filePreviews, setFilePreviews] = useState({});
 
     useEffect(() => {
       const previews = {};
-      fields.forEach(field => {
+      fields.forEach((field) => {
         if (field.type === "file" && initialValues[field.name]) {
           previews[field.name] = initialValues[field.name];
         }
@@ -69,12 +68,11 @@ const FormComp = forwardRef(
 
     useImperativeHandle(ref, () => ({
       submitForm: () => form.handleSubmit(onSubmit)(),
-
       getValues,
       reset: (values) => reset(values),
     }));
 
-    const handlePasswordVisibility = () =>
+    const togglePasswordVisibility = () =>
       setShowPassword((prev) => !prev);
 
     const handleFileChange = (e, field, name) => {
@@ -100,26 +98,20 @@ const FormComp = forwardRef(
       }
     };
 
-    // Helper component for validation icons, now generalized
-    const ValidationIcons = ({  error, isPassword = false, isFile = false }) => {
-      if (isLoading) return null; // Don't show icons if loading
+    // Validation icon for inputs with errors
+    const ValidationIcon = ({ error, isPassword = false, isFile = false }) => {
+      if (isLoading || !isSubmitted || !error) return null;
 
-      let rightPositionClass = "right-3"; // Default for text inputs, textareas
-      if (isPassword) {
-        rightPositionClass = "right-10"; // Space for eye icon
-      } else if (isFile) {
-        rightPositionClass = "right-10"; // Space for close button on file preview
-      }
+      let rightPosition = "right-3";
+      if (isPassword || isFile) rightPosition = "right-10";
 
-    
-      if (error) {
-        return (
-          <span className={`absolute ${rightPositionClass} top-1/2 transform -translate-y-1/2 text-red-500`}>
-            <AlertCircle size={18} />
-          </span>
-        );
-      }
-      return null;
+      return (
+        <span
+          className={`absolute ${rightPosition} top-1/2 transform -translate-y-1/2 text-red-500`}
+        >
+          <AlertCircle size={18} />
+        </span>
+      );
     };
 
     return (
@@ -128,13 +120,18 @@ const FormComp = forwardRef(
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col items-center w-full"
+            noValidate
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
               {errorMessage && (
-                <p className="text-sm text-red-600 col-span-full text-center">{errorMessage}</p>
+                <p className="text-sm text-red-600 col-span-full text-center">
+                  {errorMessage}
+                </p>
               )}
               {successMessage && (
-                <p className="text-sm text-green-600 col-span-full text-center">{successMessage}</p>
+                <p className="text-sm text-green-600 col-span-full text-center">
+                  {successMessage}
+                </p>
               )}
 
               {fields?.map(
@@ -145,16 +142,10 @@ const FormComp = forwardRef(
                     name={name}
                     render={({ field, fieldState }) => {
                       const { error } = fieldState;
-                      // Determine hasValue based on field type for more accurate success
-                      const hasValue = type === "file"
-                        ? field.value !== null && field.value !== undefined && field.value !== ""
-                        : field.value !== "" && field.value != null;
-                
 
                       return (
                         <FormItem className={`${className || ""} w-full`}>
                           <FormLabel>{label}</FormLabel>
-                          {/* Centralized wrapper for most input types for relative positioning and validation icons */}
                           <div className="relative w-full">
                             <FormControl>
                               {type === "select" ? (
@@ -162,7 +153,7 @@ const FormComp = forwardRef(
                                   field={field}
                                   options={options}
                                   placeholder={placeholder}
-                                  error={error} // CustomSelect will handle its own icon display
+                                  error={error}
                                 />
                               ) : type === "textarea" ? (
                                 <Textarea
@@ -175,21 +166,29 @@ const FormComp = forwardRef(
                                     trigger(name);
                                   }}
                                   onBlur={() => trigger(name)}
-                                  className={`h-auto  w-full  pr-8 break-all bg-[#E6EFF5] text-black border-b-[#999999]  ${error ? "bg-red-200 border-red-500" : ""}`}
+                                  className={`h-auto w-full pr-8 break-all bg-[#E6EFF5] text-black border-b-[#999999] ${
+                                    error && isSubmitted
+                                      ? "bg-red-200 border-red-500"
+                                      : ""
+                                  }`}
                                 />
                               ) : type === "file" ? (
-                                <div> {/* Fragment because Label and Input are siblings */}
+                                <>
                                   <Input
                                     id={name}
                                     type="file"
                                     accept="image/*"
                                     onChange={(e) => handleFileChange(e, field, name)}
-                                    className="hidden" // Hide the actual file input
+                                    className="hidden"
                                     placeholder={placeholder}
                                   />
                                   <Label
-                                    htmlFor={name} // Link label to hidden input
-                                    className={`bg-[#E6EFF5]   w-full border rounded-t-sm dark:bg-input/30 flex items-center justify-center px-6 cursor-pointer min-h-[120px] ${error ? "bg-red-200 border-red-500" : ""}`}
+                                    htmlFor={name}
+                                    className={`bg-[#E6EFF5] w-full border rounded-t-sm dark:bg-input/30 flex items-center justify-center px-6 cursor-pointer min-h-[120px] ${
+                                      error && isSubmitted
+                                        ? "bg-red-200 border-red-500"
+                                        : ""
+                                    }`}
                                   >
                                     {filePreviews[name] ? (
                                       <div className="relative w-fit">
@@ -201,14 +200,14 @@ const FormComp = forwardRef(
                                         <button
                                           type="button"
                                           onClick={(e) => {
-                                            e.stopPropagation(); // Prevent opening file dialog
+                                            e.stopPropagation();
                                             setFilePreviews((prev) => {
                                               const updated = { ...prev };
                                               delete updated[name];
                                               return updated;
                                             });
-                                            field.onChange(null); // Clear react-hook-form's value
-                                            trigger(name); // Retrigger validation
+                                            field.onChange(null);
+                                            trigger(name);
                                           }}
                                           className="absolute -top-2 -right-2 text-2xl cursor-pointer w-4 h-4 rounded-full border-0 flex items-center justify-center shadow text-red-600 bg-inherit"
                                           aria-label="Remove image"
@@ -222,10 +221,10 @@ const FormComp = forwardRef(
                                       </div>
                                     )}
                                   </Label>
-                                </div>
-                              ) : ( // Default input type (text, email, number, password etc.)
-                                <div> {/* Fragment for multiple siblings like icon and input */}
-                                  {Icon && ( // Optional leading icon
+                                </>
+                              ) : (
+                                <div>
+                                  {Icon && (
                                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
                                       <Icon size={18} />
                                     </span>
@@ -245,8 +244,8 @@ const FormComp = forwardRef(
                                       name === "password"
                                         ? "current-password"
                                         : name === "email"
-                                          ? "email"
-                                          : "on"
+                                        ? "email"
+                                        : "on"
                                     }
                                     onFocus={(e) => {
                                       trigger(name);
@@ -260,31 +259,38 @@ const FormComp = forwardRef(
                                       field.onChange(e);
                                       trigger(name);
                                     }}
-                                    className={`px-10 py-2 h-[48px] bg-[#E6EFF5] w-full border rounded-t-sm text-input-text focus:outline-none focus:ring-1 focus:ring-indigo-200 focus:border-indigo-500  ${error ? "bg-red-200 border-red-500" : ""}`}
+                                    className={`px-10 py-2 h-[48px] bg-[#E6EFF5] w-full border rounded-t-sm text-input-text focus:outline-none focus:ring-1 focus:ring-indigo-200 focus:border-indigo-500 ${
+                                      error && isSubmitted
+                                        ? "bg-red-200 border-red-500"
+                                        : ""
+                                    }`}
                                   />
-                                  {type === "password" && ( // Password visibility toggle
+                                  {type === "password" && (
                                     <span
-                                      onClick={handlePasswordVisibility}
+                                      onClick={togglePasswordVisibility}
                                       className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400"
                                     >
-                                      {showPassword ? <BsEye size={18} /> : <BsEyeSlash size={18} />}
+                                      {showPassword ? (
+                                        <BsEye size={18} />
+                                      ) : (
+                                        <BsEyeSlash size={18} />
+                                      )}
                                     </span>
                                   )}
                                 </div>
                               )}
                             </FormControl>
-                            {/* Render ValidationIcons ONLY for Input, Textarea, and File (NOT Select) */}
                             {type !== "select" && (
-                              <ValidationIcons
+                              <ValidationIcon
                                 error={error}
                                 isPassword={type === "password"}
                                 isFile={type === "file"}
                               />
                             )}
-                          </div> {/* End of relative wrapper */}
+                          </div>
 
                           <div className="py-0 h-[10px] text-sm">
-                            {error && (
+                            {error && isSubmitted && (
                               <FormMessage className="text-xs text-red-600">
                                 {error.message}
                               </FormMessage>
@@ -300,7 +306,10 @@ const FormComp = forwardRef(
 
             {showForgotPassword && (
               <div className="w-full flex justify-start mt-2">
-                <NavLink to="/forgotpassword" className="text-sm text-[#177DDC] hover:underline">
+                <NavLink
+                  to="/forgotpassword"
+                  className="text-sm text-[#177DDC] hover:underline"
+                >
                   Forgot password?
                 </NavLink>
               </div>
@@ -311,12 +320,16 @@ const FormComp = forwardRef(
                 <Button
                   disabled={isLoading}
                   type="submit"
-                  className={`w-full h-[48px] cursor-pointer px-6 bg-blue-primary hover:bg-blue-900 text-white py-3 flex items-center justify-center gap-2`}
+                  className="w-full h-[48px] cursor-pointer px-6 bg-blue-primary hover:bg-blue-900 text-white py-3 flex items-center justify-center gap-2"
                 >
-                  {isLoading ? <Loader /> : <>
-                    {submitBtnText}
-                    <ChevronRight size={22} />
-                  </>}
+                  {isLoading ? (
+                    <Loader />
+                  ) : (
+                    <>
+                      {submitBtnText}
+                      <ChevronRight size={22} />
+                    </>
+                  )}
                 </Button>
               </div>
             )}
