@@ -54,7 +54,7 @@ const handleViewDetail=(data)=>{
   <h1 className="py-8 font-lato font-semibold text-xl">My Orders</h1>
 
   {/* Scrollable Table Wrapper */}
-  <div className="w-full px-4  overflow-x-auto">
+  <div className="w-full md:max-w-6xl px-4  overflow-x-auto">
     <div className=""> {/* Optional: ensures table has enough width */}
       {formattedData && (
         <DataTable columns={columns({ handleViewDetail })} data={formattedData} />
