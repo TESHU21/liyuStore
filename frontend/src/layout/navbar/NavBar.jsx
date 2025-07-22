@@ -119,9 +119,9 @@ p-4 border-b">
   </div>
 
   {/* Center: Logo */}
-  <div className="text-blue-primary font-bold font-lusitana text-[16.5px] leading-none">
-    Liyustore
-  </div>
+   <div className=' flex gap-[2.72px] items-center'>
+                <span className="font-lusitana text-[19px] font-bold leading-[100%] text-blue-primary  capitalize "><img src={LiyuStore} alt="Liyu Mart Logo" loading='lazy' className='w-full h-10 object-cover' /></span>
+            </div>
 
   {/* Right: Profile Menu or Auth Buttons */}
   <div>
