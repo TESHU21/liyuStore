@@ -179,7 +179,7 @@ const removeProduct = asyncHandler(async (req, res) => {
 
 const fetchProducts = asyncHandler(async (req, res) => {
     console.log("--- fetchProducts Controller Hit ---");
-    const pageSize = 6; // Number of products per page
+    const pageSize = 10; // Number of products per page
     const page = Number(req.query.pageNumber) || 1; // Current page number, default to 1
 
     // Build keyword query for search functionality
