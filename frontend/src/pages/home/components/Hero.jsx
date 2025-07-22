@@ -16,12 +16,14 @@ const Hero = () => {
         src={HeroImage}
         alt="Liyu Mart Hero"
         className=" absolute inset-0 w-full h-full object-cover opacity-30 z-0  hidden md:flex  "
+        loading="lazy"
       />
       {/* Hero Image  Mobile*/}
       <img
         src={Hero1}
         alt="Liyu Mart Hero"
         className="absolute inset-0 w-full h-full object-cover opacity-30 z-0  md:hidden  "
+        loading="lazy"
       />
 
       {/* Overlay Text */}
@@ -57,7 +59,7 @@ const Hero = () => {
     <p className="text-sm">Unique Products</p>
   </div>
   <div className="text-white text-center md:text-left">
-    <p className="text-2xl font-bold font-lato flex  gap-4 ">4.9 <span className="text-yellow-400"><Sparkles/></span></p>
+    <p className="text-2xl font-bold font-lato flex justify-center  gap-4 ">4.9 <span className="text-yellow-400"><Sparkles/></span></p>
     <p className="text-sm">Customer Rating</p>
   </div>
 </div>
