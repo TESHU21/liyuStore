@@ -37,9 +37,10 @@ app.use(
         return callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Needed if you send cookies or Authorization headers
+    credentials: true,
   })
 );
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
