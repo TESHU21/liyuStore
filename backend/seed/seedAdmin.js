@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import User from '../models/userModel.js';
+require('dotenv').config();
 
-const MONGO_URI = 'mongodb://localhost:27017';
+const MONGO_URI = process.env.MONGO_URI;
+
+// const MONGO_URI = 'mongodb://localhost:27017';
 
 const seedAdmin = async () => {
   try {
