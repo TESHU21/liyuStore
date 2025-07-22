@@ -32,12 +32,12 @@ const Hero = () => {
           <Sparkles className="text-yellow-400" />
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+        <h1 className="text-4xl md:text-5xl font-bold leading-tight">
           Liyu Mart <br />
           <span className="text-white">Shop Unique</span>
         </h1>
 
-        <p className="mt-4 text-lg md:text-xl text-gray-200">
+        <p className="mt-8 text-lg md:text-xl text-gray-200 ">
           Discover next-gen products, curated for your lifestyle.
         </p>
 
