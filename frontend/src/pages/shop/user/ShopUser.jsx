@@ -172,7 +172,7 @@ const ShopUser = () => {
         </div>
 
         {/* Right Section - Products */}
-        <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 md:pr-[39px] mt-4  md:mt-[110px] gap-4 justify-items-center">
+        <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 md:pr-[39px] mt-4  md:mt-[110px] gap-4 justify-items-center">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id || product._id} product={product} />
           ))}
