@@ -85,7 +85,7 @@ export const fetchAllOrders  = createAsyncThunk(
 
 
 const initialState = {
-  order: null,
+  order: [],
   isCreatingOrder: false,
   createOrderSuccess: false,
   createOrderError: null,
@@ -97,7 +97,7 @@ const initialState = {
   paymentVerified: false,
   isVerifyingPayment: false,
   verifyPaymentError: null,
-   order_mine: null,
+   order_mine: [],
    orderdetail:null,
   isFetchingOrder: false,
   fetchOrderSuccess: false,
