@@ -24,7 +24,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://your-netlify-site.netlify.app"  // Replace with your actual Netlify URL
+  "'https://liyumart.netlify.app'"  // 
 ];
 
 app.use(
