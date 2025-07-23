@@ -46,7 +46,7 @@ const User = () => {
   );
 
   return (
-    <div className="md:mx-[250px] px-2">
+    <div className="md:mx-[350px] px-2">
       <div className="flex py-15">
         <ChevronLeft />
         <span>Back</span>
