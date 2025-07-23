@@ -54,7 +54,7 @@ const User = () => {
       <h6 className="font-semibold leading-relaxed text-2xl text-blue-primary pb-4">
         Users
       </h6>
-      <div className=" overflow-x-auto">
+      <div className=" overflow-x-auto md:max-w-4xl">
         <DataTable columns={columns} data={formattedData} />
       </div>
     </div>
