@@ -39,9 +39,9 @@ export const columns = ({ handleViewDetail }) => [
     header: () => <div className="text-left ">Total</div>,
     cell: ({ row }) => (
       
-      <div className="md:w-[150px] md:mr-10 text-left">{row.original.total}</div>
+      <div className="  text-left">{row.original.total}</div>
     ),
-    size: 200,
+    
   },
   {
     accessorKey: "status",
