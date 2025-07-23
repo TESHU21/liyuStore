@@ -5,7 +5,7 @@ import { Eye ,Clock,Check} from "lucide-react";
 export const columns = ({ handleViewDetail }) => [
   {
     accessorKey: "firstName",
-    header: () => <div className="text-left">Learners</div>,
+    header: () => <div className="text-left">Product Image</div>,
     cell: ({ row }) => {
       const {  image } = row.original;
       return (
