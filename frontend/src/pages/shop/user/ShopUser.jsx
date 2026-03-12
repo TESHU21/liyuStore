@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Separator } from '@/components/ui/separator';
-import ShopHeader from '../admin/components/ShopHeader';
-import ProductCard from './ProductCard';
-import { headers } from '../admin/components/products';
-import PageHeader from '@/components/PageHeader';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllProducts } from '@/store/productSlice';
-import { fetchCategories } from '@/store/categorySlice';
+import { Separator } from "@/components/ui/separator";
+import ShopHeader from "../admin/components/ShopHeader";
+import ProductCard from "./ProductCard";
+import { headers } from "../admin/components/products";
+import PageHeader from "@/components/PageHeader";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllProducts } from "@/store/productSlice";
+import { fetchCategories } from "@/store/categorySlice";
+import Loader from "@/components/Loader";
 
 const ShopUser = () => {
   const dispatch = useDispatch();
@@ -21,18 +22,19 @@ const ShopUser = () => {
   const [brands, setBrands] = useState([]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const prod = useSelector((state) => state.products);
   const categories = useSelector((state) => state.category.categories);
 
   // Create a lookup map from category ID to name
   const categoryMap = Object.fromEntries(
-    categories.map((cat) => [cat._id, cat.name])
+    categories.map((cat) => [cat._id, cat.name]),
   );
 
   const toggleBrand = (brand) => {
     setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
     );
   };
 
@@ -40,7 +42,7 @@ const ShopUser = () => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
+        : [...prev, category],
     );
   };
 
@@ -52,6 +54,7 @@ const ShopUser = () => {
   };
 
   const fetchProductsFun = async () => {
+    setLoading(true);
     try {
       const res = await dispatch(fetchAllProducts()).unwrap();
       const uniqueBrands = [
@@ -62,6 +65,8 @@ const ShopUser = () => {
       await dispatch(fetchCategories()).unwrap();
     } catch (err) {
       console.error("Failed to fetch products:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,7 +82,8 @@ const ShopUser = () => {
       selectedBrands.length === 0 || selectedBrands.includes(product.brand);
 
     const categoryMatch =
-      selectedCategories.length === 0 || selectedCategories.includes(categoryName);
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(categoryName);
 
     const priceMatch =
       (!minPrice || product.price >= parseFloat(minPrice)) &&
@@ -92,7 +98,9 @@ const ShopUser = () => {
       <div className="flex flex-col md:flex-row pb-12 md:pb-[154px]">
         {/* Left Section - Filters */}
         <div className=" mt-6 md:pt-[55px] md:px-6">
-          <h4 className="  text-2xs  md:text-lg font-bold text-center md:text-start">Shop By</h4>
+          <h4 className="  text-2xs  md:text-lg font-bold text-center md:text-start">
+            Shop By
+          </h4>
 
           <div className=" flex flex-row md:flex-col bg-white mt-4 text-sm border-r">
             <Accordion type="multiple" className="w-full px-2">
@@ -103,7 +111,10 @@ const ShopUser = () => {
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-2">
                   {categories.map((category) => (
-                    <label key={category._id} className="flex items-center space-x-2">
+                    <label
+                      key={category._id}
+                      className="flex items-center space-x-2"
+                    >
                       <input
                         type="checkbox"
                         checked={selectedCategories.includes(category.name)}
@@ -118,11 +129,16 @@ const ShopUser = () => {
 
               {/* Brands */}
               <AccordionItem value="brands" className="md:py-[31px]">
-                <AccordionTrigger className="font-semibold cursor-pointer">Brand</AccordionTrigger>
+                <AccordionTrigger className="font-semibold cursor-pointer">
+                  Brand
+                </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-2">
                     {brands.map((brand) => (
-                      <label key={brand} className="flex items-center space-x-2">
+                      <label
+                        key={brand}
+                        className="flex items-center space-x-2"
+                      >
                         <input
                           type="checkbox"
                           checked={selectedBrands.includes(brand)}
@@ -173,9 +189,19 @@ const ShopUser = () => {
 
         {/* Right Section - Products */}
         <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 md:pr-[39px] mt-4  md:mt-[110px] gap-4 justify-items-center">
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id || product._id} product={product} />
-          ))}
+          {loading ? (
+            <div className="col-span-full flex items-center  py-12">
+              <Loader />
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="col-span-full text-center py-12 text-gray-500">
+              No products found matching your filters
+            </div>
+          ) : (
+            filteredProducts.map((product) => (
+              <ProductCard key={product.id || product._id} product={product} />
+            ))
+          )}
         </div>
       </div>
     </div>
