@@ -1,9 +1,9 @@
 // packages
+import "./env.js";
 import path from "path";
 import express from "express";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import cors from "cors"
+import cors from "cors";
 
 // Utiles
 import connectDB from "./config/db.js";
@@ -13,8 +13,6 @@ import productRoutes from "./routes/productRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import webhookRoutes from "./routes/webhookRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-
-dotenv.config();
 const port = process.env.PORT || 5000;
 
 connectDB();
@@ -24,8 +22,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-  "https://liyumart.netlify.app"  // 
-
+  "https://liyumart.netlify.app", //
 ];
 
 app.use(
@@ -39,9 +36,8 @@ app.use(
       }
     },
     credentials: true,
-  })
+  }),
 );
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

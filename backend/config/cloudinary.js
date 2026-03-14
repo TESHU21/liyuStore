@@ -7,6 +7,20 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+// Debug - Check if credentials loaded
+console.log("Cloudinary config:");
+console.log(
+  "Cloud name:",
+  process.env.CLOUDINARY_CLOUD_NAME ? "✅ Loaded" : "❌ Missing",
+);
+console.log(
+  "API key:",
+  process.env.CLOUDINARY_API_KEY ? "✅ Loaded" : "❌ Missing",
+);
+console.log(
+  "API secret:",
+  process.env.CLOUDINARY_API_SECRET ? "✅ Loaded" : "❌ Missing",
+);
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
