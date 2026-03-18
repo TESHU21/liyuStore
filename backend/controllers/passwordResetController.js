@@ -43,8 +43,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
   if (existingToken) {
     // Check cooldown period
     const lastOtpSent = existingToken.createdAt;
-    if (!canSendOTP(lastOtpSent, 2)) {
-      // 2 minute cooldown
+    if (!canSendOTP(lastOtpSent, 1)) {
+      // 1 minute cooldown
       res.status(429);
       throw new Error("Please wait 2 minutes before requesting another OTP");
     }
@@ -66,11 +66,10 @@ export const forgotPassword = asyncHandler(async (req, res) => {
       "PASSWORD_RESET",
       5,
     );
+    console.log(`Password reset OTP sent to ${email}: ${otp}`);
 
     // Send OTP email
     await sendOtpEmail(email, otp);
-
-    console.log(`Password reset OTP sent to ${email}: ${otp}`);
 
     res.status(200).json({
       message: "Password reset OTP sent to your email",
@@ -171,6 +170,24 @@ export const resetPassword = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
+  // Add before the token query
+  console.log("=== Reset Password Debug ===");
+  console.log("Email:", email);
+  console.log("ResetToken:", resetToken);
+
+  // Check ALL tokens for this email
+  const allTokens = await VerificationToken.find({ email });
+  console.log("All tokens for this email:", allTokens.length);
+  allTokens.forEach((token, index) => {
+    console.log(`Token ${index + 1}:`, {
+      purpose: token.purpose,
+      used: token.used,
+      isVerified: token.isVerified,
+      expiresAt: token.expiresAt,
+      resetTokenExpires: token.resetTokenExpires,
+      hasResetTokenHash: !!token.resetTokenHash,
+    });
+  });
 
   // Find verification token with reset token
   const tokenDoc = await VerificationToken.findOne({
@@ -179,6 +196,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
     used: false,
     isVerified: true,
   });
+  console.log("Token found:", tokenDoc ? "✅ Yes" : "❌ No");
 
   if (!tokenDoc) {
     res.status(400);

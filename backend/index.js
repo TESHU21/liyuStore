@@ -13,6 +13,7 @@ import productRoutes from "./routes/productRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import webhookRoutes from "./routes/webhookRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import passwordResetRoutes from "./routes/passwordResetRoutes.js";
 const port = process.env.PORT || 5000;
 
 connectDB();
@@ -49,7 +50,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/webhooks", webhookRoutes);
 app.use("/api/orders", orderRoutes);
-
+app.use("/api/auth", passwordResetRoutes);
 app.get("/", (req, res) => {
   res.json({ msg: "Hello world!" });
 });
