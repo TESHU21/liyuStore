@@ -3,6 +3,8 @@
  * Generates secure 6-digit OTPs for various verification purposes
  */
 
+import crypto from "crypto";
+
 /**
  * Generate a 6-digit numeric OTP
  * @returns {string} 6-digit OTP string
@@ -58,7 +60,6 @@ export const isOTPExpired = (expiresAt) => {
  * @returns {string} Hex string
  */
 export const generateSecureToken = (bytes = 32) => {
-  const crypto = require("crypto");
   return crypto.randomBytes(bytes).toString("hex");
 };
 

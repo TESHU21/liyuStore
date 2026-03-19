@@ -5,7 +5,6 @@ const userSchema = mongoose.Schema(
   {
     fullName: {
       type: String,
-      required: true,
     },
 
     email: {
@@ -21,7 +20,7 @@ const userSchema = mongoose.Schema(
 
     isAdmin: {
       type: Boolean,
-      required: true,
+
       default: false,
     },
   },

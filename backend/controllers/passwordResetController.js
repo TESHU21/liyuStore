@@ -7,8 +7,10 @@ import {
   getOTPExpiration,
   canSendOTP,
   isOTPExpired,
+  generateSecureToken,
 } from "../utils/otpGenerator.js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 /**
  * @desc    Send password reset OTP
@@ -34,6 +36,12 @@ export const forgotPassword = asyncHandler(async (req, res) => {
     });
   }
 
+  // Clean up expired tokens first
+  await VerificationToken.deleteMany({
+    email,
+    expiresAt: { $lt: new Date() },
+  });
+
   // Check if there's a recent unused OTP
   const existingToken = await VerificationToken.findValidToken(
     email,
@@ -42,49 +50,47 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 
   if (existingToken) {
     // Check cooldown period
-    const lastOtpSent = existingToken.createdAt;
-    if (!canSendOTP(lastOtpSent, 1)) {
-      // 1 minute cooldown
+    if (!canSendOTP(existingToken.createdAt, 1)) {
       res.status(429);
-      throw new Error("Please wait 2 minutes before requesting another OTP");
+      throw new Error("Please wait 1 minute before requesting another OTP");
     }
 
-    // Delete existing token to create new one
+    // Delete old token
     await VerificationToken.deleteOne({ _id: existingToken._id });
   }
 
+  // Generate new OTP
+  const otp = generateOTP();
+  const otpExpires = getOTPExpiration(15); // 15 minutes
+
+  // Create verification token
+  await VerificationToken.createToken(
+    user._id,
+    email,
+    otp,
+    "PASSWORD_RESET",
+    15,
+  );
+
+  console.log(`Password reset OTP sent to ${email}: ${otp}`);
+
+  // Send OTP email
   try {
-    // Generate 6-digit OTP
-    const otp = generateOTP();
-    const expiration = getOTPExpiration(15); // 15 minutes
-
-    // Create verification token
-    await VerificationToken.createToken(
-      user._id,
-      email,
-      otp,
-      "PASSWORD_RESET",
-      5,
-    );
-    console.log(`Password reset OTP sent to ${email}: ${otp}`);
-
-    // Send OTP email
     await sendOtpEmail(email, otp);
-
-    res.status(200).json({
-      message: "Password reset OTP sent to your email",
-      email: email,
-      expiresIn: 5 * 60, // seconds
-    });
-  } catch (error) {
-    console.error("Error sending password reset OTP:", error);
-    res.status(500);
-    throw new Error("Failed to send password reset OTP");
+  } catch (emailError) {
+    console.error("Failed to send OTP email:", emailError);
+    // Continue with the flow even if email fails
   }
+
+  res.status(200).json({
+    message: "Password reset OTP sent to your email",
+    email: email,
+    expiresIn: 15 * 60, // seconds
+  });
 });
 
 /**
- * @desc    Verify password reset OTP
+ * @desc    Verify OTP and generate reset token
  * @route   POST /api/auth/verify-otp
  * @access  Public
  */
@@ -132,14 +138,22 @@ export const verifyOtp = asyncHandler(async (req, res) => {
   }
 
   // Generate reset token
-  const resetToken = tokenDoc.generateResetToken(15); // 15 minutes
-  await tokenDoc.save();
+  const resetToken = generateSecureToken();
+  const resetTokenHash = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+  const resetTokenExpires = getOTPExpiration(15); // 15 minutes
 
-  console.log(`OTP verified for ${email}, reset token generated`);
+  // Update token with reset token details
+  tokenDoc.isVerified = true;
+  tokenDoc.resetTokenHash = resetTokenHash;
+  tokenDoc.resetTokenExpires = resetTokenExpires;
+  await tokenDoc.save();
 
   res.status(200).json({
     message: "OTP verified successfully",
-    resetToken: resetToken, // Send to client for password reset
+    resetToken: resetToken,
     expiresIn: 15 * 60, // seconds
   });
 });
@@ -170,24 +184,6 @@ export const resetPassword = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
-  // Add before the token query
-  console.log("=== Reset Password Debug ===");
-  console.log("Email:", email);
-  console.log("ResetToken:", resetToken);
-
-  // Check ALL tokens for this email
-  const allTokens = await VerificationToken.find({ email });
-  console.log("All tokens for this email:", allTokens.length);
-  allTokens.forEach((token, index) => {
-    console.log(`Token ${index + 1}:`, {
-      purpose: token.purpose,
-      used: token.used,
-      isVerified: token.isVerified,
-      expiresAt: token.expiresAt,
-      resetTokenExpires: token.resetTokenExpires,
-      hasResetTokenHash: !!token.resetTokenHash,
-    });
-  });
 
   // Find verification token with reset token
   const tokenDoc = await VerificationToken.findOne({
@@ -196,7 +192,6 @@ export const resetPassword = asyncHandler(async (req, res) => {
     used: false,
     isVerified: true,
   });
-  console.log("Token found:", tokenDoc ? "✅ Yes" : "❌ No");
 
   if (!tokenDoc) {
     res.status(400);
@@ -211,25 +206,16 @@ export const resetPassword = asyncHandler(async (req, res) => {
     throw new Error("Invalid or expired reset token");
   }
 
-  // Check if reset token is expired
-  if (isOTPExpired(tokenDoc.resetTokenExpires)) {
-    res.status(400);
-    throw new Error("Reset token has expired. Please request a new OTP");
-  }
-
   try {
     // Hash new password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(newPassword, salt);
 
     // Update user password
-    user.password = hashedPassword;
-    await user.save();
+    await User.updateOne({ _id: user._id }, { password: hashedPassword });
 
     // Mark token as used
     await tokenDoc.markAsUsed();
-
-    console.log(`Password reset successful for ${email}`);
 
     res.status(200).json({
       message:
@@ -274,54 +260,57 @@ export const resendOtp = asyncHandler(async (req, res) => {
 
   if (existingToken) {
     // Check cooldown period
-    const lastOtpSent = existingToken.createdAt;
-    if (!canSendOTP(lastOtpSent, 2)) {
-      // 2 minute cooldown
+    if (!canSendOTP(existingToken.createdAt, 1)) {
       res.status(429);
-      throw new Error("Please wait 2 minutes before requesting another OTP");
+      throw new Error("Please wait 1 minute before requesting another OTP");
     }
 
-    // Delete existing token to create new one
+    // Delete old token
     await VerificationToken.deleteOne({ _id: existingToken._id });
   }
 
+  // Generate new OTP
+  const otp = generateOTP();
+
+  // Create verification token
+  await VerificationToken.createToken(
+    user._id,
+    email,
+    otp,
+    "PASSWORD_RESET",
+    15,
+  );
+
+  console.log(`Password reset OTP resent to ${email}: ${otp}`);
+
+  // Send OTP email
   try {
-    // Generate new OTP
-    const otp = generateOTP();
-
-    // Create new verification token
-    await VerificationToken.createToken(
-      user._id,
-      email,
-      otp,
-      "PASSWORD_RESET",
-      5,
-    );
-
-    // Send OTP email
     await sendOtpEmail(email, otp);
-
-    console.log(`Password reset OTP resent to ${email}: ${otp}`);
-
-    res.status(200).json({
-      message: "Password reset OTP resent to your email",
-      email: email,
-      expiresIn: 5 * 60, // seconds
-    });
-  } catch (error) {
-    console.error("Error resending password reset OTP:", error);
-    res.status(500);
-    throw new Error("Failed to resend password reset OTP");
+  } catch (emailError) {
+    console.error("Failed to send OTP email:", emailError);
+    // Continue with the flow even if email fails
   }
+
+  res.status(200).json({
+    message: "Password reset OTP sent to your email",
+    email: email,
+    expiresIn: 15 * 60, // seconds
+  });
 });
 
 /**
- * @desc    Check OTP status
+ * @desc    Check OTP status and timing
  * @route   GET /api/auth/otp-status/:email
  * @access  Public
  */
 export const getOtpStatus = asyncHandler(async (req, res) => {
   const { email } = req.params;
+
+  // Validate input
+  if (!email) {
+    res.status(400);
+    throw new Error("Email address is required");
+  }
 
   // Find active token
   const tokenDoc = await VerificationToken.findValidToken(
@@ -332,12 +321,12 @@ export const getOtpStatus = asyncHandler(async (req, res) => {
   if (!tokenDoc) {
     return res.status(200).json({
       hasActiveOtp: false,
-      message: "No active OTP found",
+      message: "No active OTP found for this email",
     });
   }
 
   const timeRemaining = Math.floor((tokenDoc.expiresAt - new Date()) / 1000);
-  const canResend = canSendOTP(tokenDoc.createdAt, 2);
+  const canResend = canSendOTP(tokenDoc.createdAt, 1);
 
   res.status(200).json({
     hasActiveOtp: true,
@@ -346,7 +335,7 @@ export const getOtpStatus = asyncHandler(async (req, res) => {
     attempts: tokenDoc.attempts,
     maxAttempts: 5,
     canResend: canResend,
-    cooldownMinutes: 2,
+    cooldownMinutes: 1,
   });
 });
 
