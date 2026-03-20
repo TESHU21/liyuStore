@@ -57,14 +57,29 @@ const ShopUser = () => {
     setLoading(true);
     try {
       const res = await dispatch(fetchAllProducts()).unwrap();
+
+      // Check if response is valid
+      if (!res || typeof res !== "object") {
+        throw new Error("Invalid API response");
+      }
+
+      // Handle different response structures
+      const productsArray = Array.isArray(res)
+        ? res
+        : res?.products || res?.data || [];
+
       const uniqueBrands = [
-        ...new Set(res.products?.map((product) => product?.brand)),
+        ...new Set(
+          productsArray?.map((product) => product?.brand).filter(Boolean),
+        ),
       ];
       setBrands(uniqueBrands);
 
       await dispatch(fetchCategories()).unwrap();
     } catch (err) {
       console.error("Failed to fetch products:", err);
+      // Set empty arrays as fallback
+      setBrands([]);
     } finally {
       setLoading(false);
     }
@@ -74,8 +89,13 @@ const ShopUser = () => {
     fetchProductsFun();
   }, [dispatch]);
 
+  // Extract products array from different possible response structures
+  const productsArray = Array.isArray(prod.products)
+    ? prod.products
+    : prod.products?.products || prod.products?.data || [];
+
   // Filter products based on brand, category name, and price
-  const filteredProducts = prod.products.filter((product) => {
+  const filteredProducts = productsArray.filter((product) => {
     const categoryName = categoryMap[product.category]; // convert ID to name
 
     const brandMatch =
@@ -110,7 +130,7 @@ const ShopUser = () => {
                   Product Categories
                 </AccordionTrigger>
                 <AccordionContent className="flex flex-col gap-2">
-                  {categories.map((category) => (
+                  {categories?.map((category) => (
                     <label
                       key={category._id}
                       className="flex items-center space-x-2"
@@ -134,7 +154,7 @@ const ShopUser = () => {
                 </AccordionTrigger>
                 <AccordionContent>
                   <div className="space-y-2">
-                    {brands.map((brand) => (
+                    {brands?.map((brand) => (
                       <label
                         key={brand}
                         className="flex items-center space-x-2"

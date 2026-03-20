@@ -16,6 +16,18 @@ const TopTrending = () => {
   }, [dispatch]);
   const { top_products, loading } = useSelector((state) => state.products);
 
+  if (
+    !top_products ||
+    !Array.isArray(top_products) ||
+    top_products.length === 0
+  ) {
+    return (
+      <div className="text-center py-12 text-gray-500">
+        No trending products available
+      </div>
+    );
+  }
+
   const features = [
     {
       icon: Truck, // Placeholder icon (you'd replace with an actual SVG/component)

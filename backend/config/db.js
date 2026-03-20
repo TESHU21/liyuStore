@@ -2,15 +2,18 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI,{
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // increase timeout if needed
-});
-    console.log(`Successfully connnected to mongoDB 👍`);
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+
+    console.log(`Successfully connected to mongoDB 👍`);
+    console.log(`MongoDB Host: ${conn.connection.host}`);
   } catch (error) {
     console.error(`ERROR: ${error.message}`);
-    process.exit(1);
+
+    // Retry connection after 5 seconds
+    setTimeout(() => {
+      console.log("Retrying MongoDB connection...");
+      connectDB();
+    }, 5000);
   }
 };
 
