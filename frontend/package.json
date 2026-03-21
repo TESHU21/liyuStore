@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:analyze": "set ANALYZE=true && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "perf:build": "npm run build:analyze && start dist/stats.html",
+    "perf:lighthouse": "npx lighthouse http://localhost:5173 --output html --output-path ./lighthouse-report.html"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -39,9 +42,11 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.2",
     "react-spinners": "^0.17.0",
+    "rollup-plugin-visualizer": "^7.0.1",
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.8",
+    "web-vitals": "^5.1.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {

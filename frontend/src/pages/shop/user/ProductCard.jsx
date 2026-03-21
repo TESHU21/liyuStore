@@ -1,4 +1,3 @@
-// components/ProductCard.jsx
 import React from "react";
 import {
   Card,
@@ -19,6 +18,7 @@ import {
 } from "@/store/favoriteSlice";
 import { addProductToCart } from "../../../store/cartSlice";
 import { toast } from "sonner";
+import { trackCustomEvent } from "../../../lib/performance";
 
 const ProductCard = ({ product, onEdit }) => {
   const navigate = useNavigate();
@@ -28,20 +28,32 @@ const ProductCard = ({ product, onEdit }) => {
   const isFavouritePage = location.pathname === "/favourite";
 
   const handleDetail = (product) => {
+    const startTime = performance.now();
     dispatch(setSelectedProduct(product));
-
     navigate(`/shop/${product._id}`);
+
+    // Track navigation performance
+    const duration = performance.now() - startTime;
+    trackCustomEvent("product_detail_navigation", duration, {
+      productId: product._id,
+    });
   };
   const handleAddToFavourite = (product) => {
+    const startTime = performance.now();
     if (!user) {
       navigate("/");
       toast.info("Sign in to add products to favourite!", {});
     } else {
       dispatch(addProductToFavorite(product));
       toast.success("You Added Item to Favourite sucessfully! ");
+
+      // Track add to favorite performance
+      const duration = performance.now() - startTime;
+      trackCustomEvent("add_to_favorite", duration, { productId: product._id });
     }
   };
   const handleAddToCart = () => {
+    const startTime = performance.now();
     if (!product) return;
     if (!user) {
       navigate("/");
@@ -54,6 +66,13 @@ const ProductCard = ({ product, onEdit }) => {
         }),
       );
       toast.success("You Added Item to cart sucessfully! ");
+
+      // Track add to cart performance
+      const duration = performance.now() - startTime;
+      trackCustomEvent("add_to_cart", duration, {
+        productId: product._id,
+        price: product.price,
+      });
     }
   };
   const handleRemoveProduct = (product) => {
