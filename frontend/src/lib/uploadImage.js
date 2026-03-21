@@ -11,7 +11,8 @@ export async function uploadImage(file) {
     const response = await axiosInstance.post("/api/upload", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    return response.data.secure_url || response.data.url;
+    console.log("Upload Response:", response.data);
+    return response.data.secure_image || response.data.image;
   } catch (error) {
     console.error("Error uploading Image:", error);
     return null;

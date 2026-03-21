@@ -1,18 +1,39 @@
-import {z} from "zod"
-import { GraduationCap, MonitorCheck,Image,PenIcon } from "lucide-react";
-export const schema=z.object({
-     
-      
+import { z } from "zod";
+import { GraduationCap, MonitorCheck, Image, PenIcon } from "lucide-react";
+export const schema = z.object({
   image: z
-    .instanceof(File)
-    .refine(file => file.type.startsWith("image/"), {
-      message: "Only image files are allowed",
-    })
-    .refine(file => file.size <= 5 * 1024 * 1024, {
-      message: "Image must be less than 5MB",
-    }),
-     name: z.string().min(3, { message: "Name should be at least three characters" }),
-     // Price
+    .union([z.instanceof(File), z.string().optional()])
+    .refine(
+      (val) => {
+        // If it's a File, validate it's an image
+        if (val instanceof File) {
+          return val.type.startsWith("image/");
+        }
+        // If it's a string or undefined, it's valid (existing image or empty)
+        return true;
+      },
+      {
+        message: "Only image files are allowed",
+      },
+    )
+    .refine(
+      (val) => {
+        // If it's a File, check size
+        if (val instanceof File) {
+          return val.size <= 5 * 1024 * 1024;
+        }
+        // If it's a string or undefined, no size limit
+        return true;
+      },
+      {
+        message: "Image must be less than 5MB",
+      },
+    )
+    .optional(),
+  name: z
+    .string()
+    .min(3, { message: "Name should be at least three characters" }),
+  // Price
   price: z.preprocess(
     (val) => {
       const num = Number(val);
@@ -20,11 +41,11 @@ export const schema=z.object({
     },
     z
       .number()
-      .min(0.01, { message: 'Price must be a positive number.' })
-      .max(1_000_000, { message: 'Price cannot exceed 1,000,000.' })
+      .min(0.01, { message: "Price must be a positive number." })
+      .max(1_000_000, { message: "Price cannot exceed 1,000,000." })
       .refine((val) => Number.isFinite(val), {
-        message: 'Price must be a valid number.',
-      })
+        message: "Price must be a valid number.",
+      }),
   ),
   quantity: z.preprocess(
     (val) => {
@@ -33,95 +54,97 @@ export const schema=z.object({
     },
     z
       .number()
-      .int({ message: 'Quantity must be an integer.' })
-      .min(1, { message: 'Quantity must be at least 1.' })
-      .max(10_000, { message: 'Quantity cannot exceed 10,000.' })
+      .int({ message: "Quantity must be an integer." })
+      .min(1, { message: "Quantity must be at least 1." })
+      .max(10_000, { message: "Quantity cannot exceed 10,000." }),
   ),
-  brand: z.string().trim().min(2, { message: "Brand must be at least 2 characters long." }).max(50, { message: "Brand cannot exceed 50 characters." }),
-// 6. Count in stock
+  brand: z
+    .string()
+    .trim()
+    .min(2, { message: "Brand must be at least 2 characters long." })
+    .max(50, { message: "Brand cannot exceed 50 characters." }),
+  // 6. Count in stock
   countInStock: z.preprocess(
     (val) => {
-      if (typeof val === 'string' && val.trim() === '') return undefined;
+      if (typeof val === "string" && val.trim() === "") return undefined;
       return Number(val);
     },
-    z.number()
-     .int({ message: "Count in stock must be an integer." })
-     .min(0, { message: "Count in stock cannot be negative." })
-     .max(100000, { message: "Count in stock cannot exceed 100,000." })
+    z
+      .number()
+      .int({ message: "Count in stock must be an integer." })
+      .min(0, { message: "Count in stock cannot be negative." })
+      .max(100000, { message: "Count in stock cannot exceed 100,000." }),
   ),
 
   // 7. Category
- category: z.string().min(1, { message: "Please select a valid category." }),
+  category: z.string().min(1, { message: "Please select a valid category." }),
 
-
-
-  description: z.string()
+  description: z
+    .string()
     .min(5, "Description must be at least 5 characters")
     .max(500, "Description must be less than 500 characters"),
-
-})
+});
 export const initialValues = {
- 
   image: "",
-  name:"",
-  price:"",
-  quantity:"",
-  brand:"",
-  countInStock:"",
-  category:"",
- description:""
+  name: "",
+  price: "",
+  quantity: "",
+  brand: "",
+  countInStock: "",
+  category: "",
+  description: "",
 };
-export const fields=[
+export const fields = [
   {
-        name: "image",
-        placeholder: "Select Image",
-        icon:Image,
-        type: "file",
-        className: "col-span-2 "
-      },
-    {
-        name: "name",
-        placeholder: "Name",
-        type: "text",
-        className: "col-span-1 "
-      },
-    {
-        name: "price",
-        placeholder: "Price",
-        type: "text",
-        className: "col-span-1 "
-      },
-    {
-        name: "quantity",
-        placeholder: "Quantity",
-        type: "text",
-        className: "col-span-1 "
-      },
-    {
-        name: "brand",
-        placeholder: "Brand",
-        type: "text",
-        className: "col-span-1 "
-      },
-    {
-        name: "countInStock",
-        placeholder: "Count ",
-        type: "text",
-        className: "col-span-1 "
-      },
-    {
-        name: "category",
-        placeholder: "Category ",
-        type: "select",
-        options: [],
-        className: "col-span-1 "
-      },
-    
-    {
-        name: "description",
-        placeholder: "Enter Description",
-        icon:PenIcon,
-        type: "textarea",
-        className: "col-span-2 "
-      },
-]
+    name: "image",
+    placeholder: "Select Image",
+    icon: Image,
+    type: "file",
+    className: "col-span-2 ",
+  },
+  {
+    name: "name",
+    placeholder: "Name",
+    type: "text",
+    className: "col-span-1 ",
+  },
+  {
+    name: "price",
+    placeholder: "Price",
+    type: "text",
+    className: "col-span-1 ",
+  },
+  {
+    name: "quantity",
+    placeholder: "Quantity",
+    type: "text",
+    className: "col-span-1 ",
+  },
+  {
+    name: "brand",
+    placeholder: "Brand",
+    type: "text",
+    className: "col-span-1 ",
+  },
+  {
+    name: "countInStock",
+    placeholder: "Count ",
+    type: "text",
+    className: "col-span-1 ",
+  },
+  {
+    name: "category",
+    placeholder: "Category ",
+    type: "select",
+    options: [],
+    className: "col-span-1 ",
+  },
+
+  {
+    name: "description",
+    placeholder: "Enter Description",
+    icon: PenIcon,
+    type: "textarea",
+    className: "col-span-2 ",
+  },
+];

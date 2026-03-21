@@ -1,14 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch ,useSelector} from 'react-redux';
-import { createProduct, updateProduct, deleteProduct } from '@/store/productSlice';
-import { fetchCategories } from '@/store/categorySlice';
-import { uploadImage } from '../../../lib/uploadImage';
-import FormComp from '@/components/FormComp';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from "@/store/productSlice";
+import { fetchCategories } from "@/store/categorySlice";
+import { uploadImage } from "../../../lib/uploadImage";
+import FormComp from "@/components/FormComp";
 import {
   schema,
   fields as staticFields,
   initialValues as baseInitialValues,
-} from './data';
+} from "./data";
 
 const ProductFormPage = ({
   productToEdit = null,
@@ -20,7 +24,8 @@ const ProductFormPage = ({
   const [fields, setFields] = useState(staticFields);
   const [initialValues, setInitialValues] = useState(baseInitialValues);
   const [formKey, setFormKey] = useState(0); // used to reset form after create
-  const { loading,error,success}=useSelector((state)=>state.products.products)
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const { loading, error, success } = useSelector((state) => state.products);
 
   // 🔁 Fetch categories for the category select field
   useEffect(() => {
@@ -34,12 +39,14 @@ const ProductFormPage = ({
         }));
 
         const updatedFields = staticFields.map((field) =>
-          field.name === 'category' ? { ...field, options: categoryOptions } : field
+          field.name === "category"
+            ? { ...field, options: categoryOptions }
+            : field,
         );
 
         setFields(updatedFields);
       } catch (err) {
-        console.error('Failed to load categories:', err);
+        console.error("Failed to load categories:", err);
       }
     };
 
@@ -57,19 +64,34 @@ const ProductFormPage = ({
     }
   }, [productToEdit]);
 
-  // 📦 Handle form submission for both create and update
+  // Handle form submission for both create and update
   const handleSubmit = async (formData) => {
-    let imageUrl = productToEdit?.image || '';
+    let imageUrl = productToEdit?.image || "";
 
-    // 🖼️ Upload new image if it's a File (not an existing URL)
-    const file = formData.image instanceof FileList ? formData.image[0] : formData.image;
-    if (file && typeof file !== 'string') {
+    // 🖼️ Upload new image ONLY if it's a new file (not an existing URL)
+    const file =
+      formData.image instanceof FileList ? formData.image[0] : formData.image;
+
+    console.log("Form data image:", formData.image);
+    console.log("Extracted file:", file);
+    console.log("File type:", typeof file);
+    console.log("Is File?", file instanceof File);
+    console.log("Is FileList?", formData.image instanceof FileList);
+
+    // Only upload if it's a File object (new image selected)
+    if (file instanceof File) {
       try {
+        setIsUploadingImage(true);
         imageUrl = await uploadImage(file);
       } catch (uploadError) {
-        alert('Image upload failed. Please try again.');
+        alert("Image upload failed. Please try again.");
         return;
+      } finally {
+        setIsUploadingImage(false);
       }
+    } else {
+      // Keep existing image if no new file selected
+      imageUrl = productToEdit?.image || "";
     }
 
     const payload = {
@@ -77,20 +99,25 @@ const ProductFormPage = ({
       image: imageUrl,
     };
 
+    console.log("Product Update Payload:", payload);
+    console.log("Product ID:", productToEdit?._id);
+
     try {
       if (productToEdit) {
-        await dispatch(updateProduct({ id: productToEdit._id, data: payload })).unwrap();
-        alert('Product updated successfully!');
+        await dispatch(
+          updateProduct({ id: productToEdit._id, formData: payload }),
+        ).unwrap();
+        alert("Product updated successfully!");
       } else {
         await dispatch(createProduct(payload)).unwrap();
-        alert('Product created successfully!');
+        alert("Product created successfully!");
         setInitialValues(baseInitialValues);
         setFormKey((prev) => prev + 1); // reset form
       }
     } catch (error) {
       const errorMessage =
-        error?.error?.message || error?.message || 'An unknown error occurred.';
-      alert(`${productToEdit ? 'Update' : 'Creation'} failed: ${errorMessage}`);
+        error?.error?.message || error?.message || "An unknown error occurred.";
+      alert(`${productToEdit ? "Update" : "Creation"} failed: ${errorMessage}`);
     }
   };
 
@@ -98,17 +125,19 @@ const ProductFormPage = ({
   const handleDelete = async () => {
     if (!productToEdit) return;
 
-    const confirmDelete = window.confirm('Are you sure you want to delete this product?');
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?",
+    );
     if (!confirmDelete) return;
 
     try {
       await dispatch(deleteProduct(productToEdit._id)).unwrap();
       await refreshProducts(); // refresh product list
       setIsEditingProducts(null);
-      setActiveTab('products');
-      alert('Product deleted successfully!');
+      setActiveTab("products");
+      alert("Product deleted successfully!");
     } catch (error) {
-      alert(`Delete failed: ${error?.message || 'An unknown error occurred.'}`);
+      alert(`Delete failed: ${error?.message || "An unknown error occurred."}`);
     }
   };
 
@@ -130,13 +159,11 @@ const ProductFormPage = ({
         schema={schema}
         fields={fields}
         initialValues={productToEdit ? initialValues : baseInitialValues}
-        submitBtnText={productToEdit ? 'Update' : 'Create'}
+        submitBtnText={productToEdit ? "Update" : "Create"}
         onSubmit={handleSubmit}
         errorMessage={error}
-        isLoading={loading}
+        isLoading={loading || isUploadingImage}
         successMessage={success}
-        
-        
       />
     </div>
   );
