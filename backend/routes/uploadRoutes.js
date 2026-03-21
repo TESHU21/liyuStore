@@ -16,11 +16,6 @@ router.post("/", (req, res) => {
   }
 
   upload.single("image")(req, res, (err) => {
-    console.log("=== Multer Processing ===");
-    console.log("req.file:", req.file);
-    console.log("req.body:", req.body);
-    console.log("Multer error:", err);
-
     if (err) {
       console.error("❌ Multer error:", err);
       return res.status(400).json({ message: err.message });
@@ -33,7 +28,6 @@ router.post("/", (req, res) => {
 
     try {
       console.log("✅ File uploaded successfully");
-      console.log("File path:", req.file.path);
 
       res.status(200).json({
         message: "Image uploaded successfully",
