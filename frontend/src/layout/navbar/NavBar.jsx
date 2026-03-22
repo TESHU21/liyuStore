@@ -9,14 +9,13 @@ import {
   User,
   BarChart3,
 } from "lucide-react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { openLogin, openSignup } from "@/store/uiSlice";
 import ProfileMenu from "@/pages/profile/ProfileMenu";
 import LiyuStore from "../../assets/Liyu Mart.webp";
 
 const NavBar = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const favourite = useSelector((state) => state.favourite.favorites);

@@ -44,6 +44,13 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          drop_console: true, // remove console.log
+          drop_debugger: true,
+        },
+      },
       // Performance budgets
       rollupOptions: {
         output: {
@@ -57,6 +64,7 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+
       // Set performance budgets
       chunkSizeWarningLimit: 1000, // 1MB warning
       assetsInlineLimit: 4096, // 4KB inline limit

@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavLink } from "react-router-dom";
 import { ChevronRight, AlertCircle } from "lucide-react";
-import { BsEye, BsEyeSlash } from "react-icons/bs";
+import { Eye, EyeOff } from "lucide-react";
 
 import Loader from "./Loader";
 import {
@@ -40,7 +40,7 @@ const FormComp = forwardRef(
       showForgotPassword,
       hideButton,
     },
-    ref
+    ref,
   ) => {
     const form = useForm({
       resolver: zodResolver(schema),
@@ -72,8 +72,7 @@ const FormComp = forwardRef(
       reset: (values) => reset(values),
     }));
 
-    const togglePasswordVisibility = () =>
-      setShowPassword((prev) => !prev);
+    const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
     const handleFileChange = (e, field, name) => {
       const file = e.target.files?.[0] || null;
@@ -135,7 +134,15 @@ const FormComp = forwardRef(
               )}
 
               {fields?.map(
-                ({ label, name, type, placeholder, className, options, icon: Icon }) => (
+                ({
+                  label,
+                  name,
+                  type,
+                  placeholder,
+                  className,
+                  options,
+                  icon: Icon,
+                }) => (
                   <FormField
                     key={name}
                     control={form.control}
@@ -178,7 +185,9 @@ const FormComp = forwardRef(
                                     id={name}
                                     type="file"
                                     accept="image/*"
-                                    onChange={(e) => handleFileChange(e, field, name)}
+                                    onChange={(e) =>
+                                      handleFileChange(e, field, name)
+                                    }
                                     className="hidden"
                                     placeholder={placeholder}
                                   />
@@ -244,8 +253,8 @@ const FormComp = forwardRef(
                                       name === "password"
                                         ? "current-password"
                                         : name === "email"
-                                        ? "email"
-                                        : "on"
+                                          ? "email"
+                                          : "on"
                                     }
                                     onFocus={(e) => {
                                       trigger(name);
@@ -271,9 +280,9 @@ const FormComp = forwardRef(
                                       className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-400"
                                     >
                                       {showPassword ? (
-                                        <BsEye size={18} />
+                                        <Eye size={18} />
                                       ) : (
-                                        <BsEyeSlash size={18} />
+                                        <EyeOff size={18} />
                                       )}
                                     </span>
                                   )}
@@ -300,7 +309,7 @@ const FormComp = forwardRef(
                       );
                     }}
                   />
-                )
+                ),
               )}
             </div>
 
@@ -337,7 +346,7 @@ const FormComp = forwardRef(
         </Form>
       </div>
     );
-  }
+  },
 );
 
 export default FormComp;

@@ -14,8 +14,10 @@ const Footer = () => {
         />
         <img
           src={PaypalIcon}
-          loading="lazy"
+          loading="eager"
           alt=""
+          width="64"
+          height="64"
           className=" w-[64px] h-[64px] "
         />
         <img
@@ -25,7 +27,7 @@ const Footer = () => {
           className=" w-[64.5px] h-[43px]"
         />
       </div>
-      © 2025 LiyuStore.All rights reserved.
+      © 2026 LiyuStore.All rights reserved.
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
-// 🔥 Lazy imports
-const Layout = React.lazy(() => import("@/layout/Layout"));
-const Home = React.lazy(() => import("@/pages/home/Home"));
+import Layout from "@/layout/Layout";
+import Home from "@/pages/home/Home";
+
+// Optimized lazy loading with prefetching
 const Shop = React.lazy(() => import("@/pages/shop/Shop"));
 const ShopDetail = React.lazy(
   () => import("@/pages/shop/user/detail/ShopDetail"),
@@ -31,40 +32,166 @@ const PerformanceDashboard = React.lazy(
   () => import("@/components/PerformanceDashboard"),
 );
 
+// Optimized Loader Components
+const FullPageLoader = () => (
+  <div className="flex flex-col justify-center items-center min-h-screen bg-gray-50">
+    <div className="relative">
+      <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+      <div className="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-l-blue-400 rounded-full animate-spin animation-delay-150"></div>
+    </div>
+    <div className="mt-4 text-center">
+      <p className="text-gray-600 font-medium">Loading...</p>
+      <p className="text-gray-400 text-sm">Preparing your experience</p>
+    </div>
+  </div>
+);
+
+const PageLoader = () => (
+  <div className="flex flex-col justify-center items-center h-[60vh]">
+    <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+    <p className="mt-3 text-gray-600 text-sm">Loading page...</p>
+  </div>
+);
+
+const ContentLoader = () => (
+  <div className="flex justify-center items-center py-8">
+    <div className="w-8 h-8 border-3 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+  </div>
+);
+
 const AppRoutes = () => {
   return (
-    <Suspense
-      fallback={
-        <div className="flex items-center justify-center h-screen">
-          Loading...
-        </div>
-      }
-    >
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="shop" element={<Shop />} />
-          <Route path="shop/:id" element={<ShopDetail />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="favourite" element={<Favourite />} />
-          <Route path="detail" element={<ShopDetail />} />
-          <Route path="checkout" element={<Checkout />} />
-          <Route path="product" element={<CreateProduct />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="category" element={<CategoryManager />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="orders/:id" element={<OrdersDetail />} />
-          <Route path="update-profile" element={<UpdateUserProfile />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
 
-          {/* ✅ fixed path */}
-          <Route path="user" element={<User />} />
+        <Route
+          path="shop"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Shop />
+            </Suspense>
+          }
+        />
 
-          <Route path="performance" element={<PerformanceDashboard />} />
-        </Route>
+        <Route
+          path="shop/:id"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ShopDetail />
+            </Suspense>
+          }
+        />
 
-        <Route path="login" element={<Login />} />
-      </Routes>
-    </Suspense>
+        <Route
+          path="cart"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Cart />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="favourite"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Favourite />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="checkout"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Checkout />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="product"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CreateProduct />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="profile"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Profile />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="category"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <CategoryManager />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="orders"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Orders />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="orders/:id"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <OrdersDetail />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="update-profile"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <UpdateUserProfile />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="user"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <User />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="performance"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PerformanceDashboard />
+            </Suspense>
+          }
+        />
+      </Route>
+
+      <Route
+        path="login"
+        element={
+          <Suspense fallback={<FullPageLoader />}>
+            <Login />
+          </Suspense>
+        }
+      />
+    </Routes>
   );
 };
 
