@@ -1,9 +1,10 @@
-/* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import { FaAngleLeft } from "react-icons/fa";
-import { FaAngleRight } from "react-icons/fa";
-import { FaAngleDoubleLeft } from "react-icons/fa";
-import { FaAngleDoubleRight } from "react-icons/fa";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 const Pagination = ({ table }) => {
   const [pageInput, setPageInput] = useState("");
@@ -39,7 +40,7 @@ const Pagination = ({ table }) => {
               !table.getCanPreviousPage() ? " text-gray-300" : " text-gray-600"
             }`}
           >
-            <FaAngleDoubleLeft className="  font-thin " size={20} />
+            <ChevronsLeft className="font-thin" size={20} />
           </button>
           <button
             onClick={() => table.previousPage()}
@@ -49,7 +50,7 @@ const Pagination = ({ table }) => {
             }`}
           >
             {" "}
-            <FaAngleLeft size={20} />
+            <ChevronLeft size={20} />
           </button>
           <button
             onClick={() => table.nextPage()}
@@ -59,7 +60,7 @@ const Pagination = ({ table }) => {
             }
             `}
           >
-            <FaAngleRight size={20} />
+            <ChevronRight size={20} />
           </button>
 
           <button
@@ -69,7 +70,7 @@ const Pagination = ({ table }) => {
               !table.getCanNextPage() ? "text-gray-200" : "text-gray-600"
             }`}
           >
-            <FaAngleDoubleRight size={20} />
+            <ChevronsRight size={20} />
           </button>
         </div>
       </div>

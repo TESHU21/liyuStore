@@ -115,12 +115,6 @@ const NavBar = () => {
                 </span>
               )}
             </NavLink>
-            <NavLink to="/performance" className={getDesktopNavLinkClasses}>
-              <span>
-                <BarChart3 size={24} />
-              </span>
-              Performance
-            </NavLink>
           </div>
         </div>
         {user ? (
@@ -169,6 +163,8 @@ p-4 border-b"
               src={LiyuStore}
               alt="Liyu Mart Logo"
               loading="lazy"
+              width={100}
+              height={50}
               className="w-full h-10 object-cover"
             />
           </span>

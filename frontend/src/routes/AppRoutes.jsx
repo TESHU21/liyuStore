@@ -28,9 +28,6 @@ const UpdateUserProfile = React.lazy(
   () => import("@/pages/profile/user/UpdateUserProfile"),
 );
 const User = React.lazy(() => import("@/pages/users/User"));
-const PerformanceDashboard = React.lazy(
-  () => import("@/components/PerformanceDashboard"),
-);
 
 // Optimized Loader Components
 const FullPageLoader = () => (
@@ -169,15 +166,6 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader />}>
               <User />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="performance"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <PerformanceDashboard />
             </Suspense>
           }
         />

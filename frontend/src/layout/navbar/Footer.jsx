@@ -10,20 +10,24 @@ const Footer = () => {
           src={VisaIcon}
           loading="lazy"
           alt=""
+          width={100}
+          height={100}
           className=" w-[65px] h-[65px] "
         />
         <img
           src={PaypalIcon}
-          loading="eager"
+          loading="lazy"
           alt=""
-          width="64"
-          height="64"
+          width={64}
+          height={64}
           className=" w-[64px] h-[64px] "
         />
         <img
           src={MasterCardIcon}
           loading="lazy"
           alt=""
+          width={64.5}
+          height={43}
           className=" w-[64.5px] h-[43px]"
         />
       </div>
