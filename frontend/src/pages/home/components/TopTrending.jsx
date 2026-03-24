@@ -1,20 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ProductCardHome } from "./ProductCardHome";
 import { Truck, PackageCheck, Gem } from "lucide-react";
-import { fetchTopProducts } from "../../../store/productSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useGetTopProductsQuery } from "@/store/api/productsApi";
 import Loader from "@/components/Loader";
 
 const TopTrending = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await dispatch(fetchTopProducts()).unwrap();
-    };
-
-    fetchData();
-  }, [dispatch]);
-  const { top_products, loading } = useSelector((state) => state.products);
+  const { data, isLoading, isFetching, isError, error } =
+    useGetTopProductsQuery(undefined, {
+      refetchOnMountOrArgChange: false,
+      refetchOnFocus: false,
+      refetchOnReconnect: false,
+    });
+  const top_products = data || [];
+  // placing to center if it is less than 2
+  const isFew = top_products.length <= 2;
 
   if (
     !top_products ||
@@ -48,7 +47,7 @@ const TopTrending = () => {
         "We use premium aluminum, high-resolution OLED displays, and durable batteries for superior quality.",
     },
   ];
-  if (loading) {
+  if (isLoading || isFetching) {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader />
@@ -77,8 +76,14 @@ const TopTrending = () => {
         </p>
       </div>
       {/* Top Trending */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-6  md:px-[38px]">
-        {" "}
+
+      <div
+        className={
+          isFew
+            ? "flex items-center justify-center gap-12 px-6 md:px-[38px]"
+            : "grid grid-cols-1 md:grid-cols-4 gap-8 px-6 md:px-[38px]"
+        }
+      >
         {/* Adjust padding and gap as needed */}
         {top_products &&
           top_products?.map((product) => (
