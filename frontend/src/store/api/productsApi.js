@@ -50,7 +50,7 @@ const productsApi = baseApi.injectEndpoints({
       query: (formData) => ({
         url: "/api/products",
         method: "POST",
-        body: formData,
+        data: formData,
       }),
       invalidatesTags: [{ type: "Products", id: "LIST" }],
     }),
@@ -58,7 +58,7 @@ const productsApi = baseApi.injectEndpoints({
       query: ({ id, formData }) => ({
         url: `/api/products/${id}`,
         method: "PUT",
-        body: formData,
+        data: formData,
       }),
       invalidatesTags: (result, error, { id }) => [
         { type: "Products", id },
@@ -81,7 +81,7 @@ const productsApi = baseApi.injectEndpoints({
       query: ({ id, reviewData }) => ({
         url: `/api/products/${id}/reviews`,
         method: "POST",
-        body: reviewData,
+        data: reviewData,
       }),
       invalidatesTags: (result, error, { id }) => [
         { type: "Products", id },
@@ -104,9 +104,9 @@ export const {
   useGetProductByIdQuery,
   useGetTopProductsQuery,
   useGetProductReviewsQuery,
-  useCreateProductQuery,
-  useUpdateProductQuery,
-  useDeleteProductQuery,
-  useCreateReviewQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
+  useCreateReviewMutation,
   useFetchReviewQuery,
 } = productsApi;
