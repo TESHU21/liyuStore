@@ -16,7 +16,6 @@ const Hero = () => {
         alt="Liyu Mart Hero"
         className=" absolute inset-0 w-full h-full object-cover opacity-30 z-0  hidden md:flex  "
         loading="eager"
-        fetchPriority="high"
         decoding="async"
         width={1920}
         height={727}
@@ -27,7 +26,6 @@ const Hero = () => {
         alt="Liyu Mart Hero"
         className="absolute inset-0 w-full h-full object-cover opacity-30 z-0  md:hidden  "
         loading="eager"
-        fetchPriority="high"
         decoding="async"
         width={750}
         height={650}
