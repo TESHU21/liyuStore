@@ -22,6 +22,7 @@ const store = configureStore({
     users: userReducer,
     orders: orderReducer,
     // add other slices here (e.g., product, cart, order)
+    [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(baseApi.middleware),
