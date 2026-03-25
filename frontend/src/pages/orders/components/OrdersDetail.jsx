@@ -1,54 +1,57 @@
-import React,{useEffect} from 'react'
-import { columns } from "./colomns"
-import { DataTable } from '@/components/data-table'
-import OrderDetailSummery from './OrderDetailSummery'
-import { useParams } from 'react-router-dom'
-import { useDispatch,useSelector } from 'react-redux'
-import { fetchOrderById } from '@/store/orderSlice'
-
-
+import React, { useMemo } from "react";
+import { columns } from "./colomns";
+import { DataTable } from "@/components/data-table";
+import OrderDetailSummery from "./OrderDetailSummery";
+import { useParams } from "react-router-dom";
+import { useFetchOrderByIdQuery } from "@/store/api/orderApi";
 
 const OrdersDetail = () => {
-  const dispatch=useDispatch()
-   const {id}=useParams()
-  useEffect(()=>{
-    const fetchOrderDetail=async()=>{
-      try{
-        const res=await dispatch(fetchOrderById(id)).unwrap()
-        console.log("Response",res)
-      }
-      catch(error){
-        console.log(error)
-      }
-    }
-     if (id) {
-      fetchOrderDetail()
-    }
+  const { id } = useParams();
 
+  const {
+    data: order,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+  } = useFetchOrderByIdQuery(id, {
+    skip: !id,
+  });
 
-  },[dispatch])
-    const order = useSelector(state => state.orders.orderdetail) // adjust based on your state shape
-const formattedData=order?.orderItems.map((item)=>(
-  {
-    image:item.image,
-    product:item.name,
-      quantity:item.qty,
-      unitprice:item.price,
-      total:item.price*item.qty
+  const formattedData = useMemo(() => {
+    const items = order?.orderItems || [];
+    return items.map((item) => ({
+      image: item.image,
+      product: item.name,
+      quantity: item.qty,
+      unitprice: item.price,
+      total: item.price * item.qty,
+    }));
+  }, [order]);
 
-  }
-))
-console.log("formattedData",formattedData)
- 
   return (
-    <div className='flex gap-10 pt-10 mx-auto justify-center'>
-      {formattedData &&         <DataTable columns={columns()} data={formattedData}/>
-}
+    <div className="flex gap-10 pt-10 mx-auto justify-center">
+      {isLoading ? (
+        <div className="text-gray-500">Loading order...</div>
+      ) : isError ? (
+        <div className="text-red-500">
+          {error?.data?.message || "Failed to load order"}
+        </div>
+      ) : (
+        <>
+          {formattedData?.length ? (
+            <DataTable columns={columns()} data={formattedData} />
+          ) : null}
 
-        <OrderDetailSummery order={order}/>
+          <OrderDetailSummery order={order} />
+        </>
+      )}
 
+      {isFetching && !isLoading ? (
+        <div className="text-gray-400">Refreshing...</div>
+      ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default OrdersDetail
+export default OrdersDetail;
