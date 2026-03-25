@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -10,26 +10,56 @@ import ShopHeader from "../admin/components/ShopHeader";
 import ProductCard from "./ProductCard";
 import { headers } from "../admin/components/products";
 import PageHeader from "@/components/PageHeader";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllProducts } from "@/store/productSlice";
-import { fetchCategories } from "@/store/categorySlice";
 import Loader from "@/components/Loader";
+import { useGetProductsQuery } from "@/store/api/productsApi";
+import { useGetCategoriesQuery } from "@/store/api/catagoriesApi";
 
 const ShopUser = () => {
-  const dispatch = useDispatch();
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [brands, setBrands] = useState([]);
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  const [loading, setLoading] = useState(true);
 
-  const prod = useSelector((state) => state.products);
-  const categories = useSelector((state) => state.category.categories);
+  // const prod = useSelector((state) => state.products);
+  // const categories = useSelector((state) => state.category.categories);
 
   // Create a lookup map from category ID to name
-  const categoryMap = Object.fromEntries(
-    categories.map((cat) => [cat._id, cat.name]),
+  const {
+    data: productsData,
+    isLoading: isProductsLoading,
+    error: productsError,
+  } = useGetProductsQuery();
+  const {
+    data: categoriesData,
+    isLoading: isCategoriesLoading,
+    error: categoriesError,
+  } = useGetCategoriesQuery();
+  const loading = isProductsLoading || isCategoriesLoading;
+  const error = productsError || categoriesError;
+
+  // normalize data
+  const productsArray = useMemo(() => {
+    if (Array.isArray(productsData)) return productsData;
+    return productsData?.products || productsData?.data || [];
+  }, [productsData]);
+
+  const categories = useMemo(() => {
+    if (Array.isArray(categoriesData)) return categoriesData;
+    return categoriesData?.categories || categoriesData?.data || [];
+  }, [categoriesData]);
+
+  const categoryMap = useMemo(
+    () => Object.fromEntries(categories.map((cat) => [cat._id, cat.name])),
+    [categories],
+  );
+
+  const brands = useMemo(
+    () => [
+      ...new Set(
+        productsArray.map((product) => product?.brand).filter(Boolean),
+      ),
+    ],
+    [productsArray],
   );
 
   const toggleBrand = (brand) => {
@@ -53,46 +83,7 @@ const ShopUser = () => {
     setMaxPrice("");
   };
 
-  const fetchProductsFun = async () => {
-    setLoading(true);
-    try {
-      const res = await dispatch(fetchAllProducts()).unwrap();
-
-      // Check if response is valid
-      if (!res || typeof res !== "object") {
-        throw new Error("Invalid API response");
-      }
-
-      // Handle different response structures
-      const productsArray = Array.isArray(res)
-        ? res
-        : res?.products || res?.data || [];
-
-      const uniqueBrands = [
-        ...new Set(
-          productsArray?.map((product) => product?.brand).filter(Boolean),
-        ),
-      ];
-      setBrands(uniqueBrands);
-
-      await dispatch(fetchCategories()).unwrap();
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-      // Set empty arrays as fallback
-      setBrands([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProductsFun();
-  }, [dispatch]);
-
   // Extract products array from different possible response structures
-  const productsArray = Array.isArray(prod.products)
-    ? prod.products
-    : prod.products?.products || prod.products?.data || [];
 
   // Filter products based on brand, category name, and price
   const filteredProducts = productsArray.filter((product) => {
@@ -212,6 +203,10 @@ const ShopUser = () => {
           {loading ? (
             <div className="col-span-full flex items-center  py-12">
               <Loader />
+            </div>
+          ) : error ? (
+            <div className="col-span-full text-center py-12 text-red-500">
+              {error?.data?.message || "Failed to load shop data"}
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="col-span-full text-center py-12 text-gray-500">

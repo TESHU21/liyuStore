@@ -32,6 +32,9 @@ export const baseApi = createApi({
     "Reviews",
     "Users",
     "Orders",
+    "Categories",
   ],
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
   endpoints: () => ({}),
 });
