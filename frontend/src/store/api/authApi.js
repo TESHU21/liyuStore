@@ -32,6 +32,13 @@ const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Users", id: "ME" }],
     }),
+    logoutUser: builder.mutation({
+      query: () => ({
+        url: "/api/users/logout",
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: "Users", id: "ME" }],
+    }),
   }),
 });
 
@@ -40,4 +47,5 @@ export const {
   useRegisterUserMutation,
   useGetCurrentUserProfileQuery,
   useUpdateProfileMutation,
+  useLogoutUserMutation,
 } = authApi;

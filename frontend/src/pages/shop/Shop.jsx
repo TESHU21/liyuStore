@@ -1,13 +1,15 @@
 import React from "react";
 import ShopUser from "./user/ShopUser";
-import { useSelector } from "react-redux";
 import ProductAdmin from "../../pages/shop/admin/ProductAdmin";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Helmet } from "react-helmet-async";
-import Loader from "@/components/Loader";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 const Shop = () => {
-  const user = useSelector((state) => state?.auth.user);
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
 
   return (
     <>

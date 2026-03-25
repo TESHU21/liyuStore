@@ -7,17 +7,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArrowUpRight } from "lucide-react";
-import { NavLink } from "react-router-dom";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 export function ProductCardHome({ product }) {
-  const user = useSelector((state) => state.auth.user);
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDetail = (product) => {
+    if (!product?._id) return;
     if (!user) {
       return navigate("/shop");
     }

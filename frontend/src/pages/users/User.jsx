@@ -1,18 +1,22 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { ChevronLeft } from "lucide-react";
 import { DataTable } from "@/components/data-table";
-import { getAllUsers, deleteUser, editUser } from "@/store/userSlice";
+import {
+  useDeleteUserMutation,
+  useFetchAllUsersQuery,
+  useUpdateUserMutation,
+} from "@/store/api/userApi";
 import { getColumns } from "./columns";
 
 const User = () => {
-  const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
-  const [editingRowId, setEditingRowId] = useState(null);
+  const { data: usersData } = useFetchAllUsersQuery();
+  const users = Array.isArray(usersData)
+    ? usersData
+    : usersData?.users || usersData?.data || [];
 
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
+  const [deleteUser] = useDeleteUserMutation();
+  const [updateUser] = useUpdateUserMutation();
+  const [editingRowId, setEditingRowId] = useState(null);
 
   // Format users for the table
   const formattedData = users.map((user) => ({
@@ -24,12 +28,12 @@ const User = () => {
 
   // Handle delete
   const handleDelete = (id) => {
-    dispatch(deleteUser(id));
+    deleteUser(id);
   };
 
   // Handle edit — this receives userId and the edited user data from columns
   const handleEdit = (id, userData) => {
-    dispatch(editUser({ id, userData }));
+    updateUser({ _id: id, ...userData });
     setEditingRowId(null);
   };
 
@@ -42,7 +46,7 @@ const User = () => {
         editingRowId,
         setEditingRowId,
       }),
-    [handleDelete, handleEdit, editingRowId]
+    [handleDelete, handleEdit, editingRowId],
   );
 
   return (

@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "@/store/uiSlice";
 import ProfileMenu from "@/pages/profile/ProfileMenu";
 import LiyuStore from "../../assets/Liyu Mart.webp";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 const NavBar = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,11 @@ const NavBar = () => {
   const favouriteItemCount = favourite.length;
 
   const [menuVisiblity, setMenuVisibility] = useState(false);
-  const user = useSelector((state) => state.auth.user);
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
   const menuRef = useRef(null);
   useEffect(() => {
     const handleOutsideClick = (event) => {

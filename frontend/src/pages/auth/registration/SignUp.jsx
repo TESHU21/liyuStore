@@ -11,23 +11,33 @@ import {
 import FormComp from "@/components/FormComp";
 import { SignUpSchema, fields, initialValues } from "./components/data";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "@/store/authSlice";
+import { useRegisterUserMutation } from "@/store/api/authApi";
+import { baseApi } from "@/store/api/baseApi";
 import { closeModal, openModal } from "@/store/uiSlice";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const { activeModal } = useSelector((state) => state.ui);
-  const { isLoading, error, user } = useSelector((state) => state.auth);
+  const [registerUser, { isLoading, error, isSuccess, data }] =
+    useRegisterUserMutation();
 
   const handleSignUp = (data) => {
-    dispatch(registerUser(data));
+    return registerUser(data);
   };
 
   useEffect(() => {
-    if (user) {
+    if (isSuccess) {
       dispatch(closeModal()); // Auto-close on success
+      dispatch(baseApi.util.resetApiState());
     }
-  }, [user, dispatch]);
+  }, [dispatch, isSuccess]);
+
+  useEffect(() => {
+    const token = data?.token;
+    if (token) {
+      localStorage.setItem("token", token);
+    }
+  }, [data]);
 
   return (
     <Dialog
@@ -51,7 +61,7 @@ const SignUp = () => {
           submitBtnText="Register"
           showForgotPassword={false}
           isLoading={isLoading}
-          errorMessage={error}
+          errorMessage={error?.data?.message || error?.message}
           onSubmit={handleSignUp}
         />
 

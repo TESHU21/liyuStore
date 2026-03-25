@@ -11,23 +11,30 @@ import {
 import FormComp from "@/components/FormComp";
 import { SignInSchema, fields, initialValues } from "./component/data";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "@/store/authSlice";
+import { useLoginUserMutation } from "@/store/api/authApi";
+import { baseApi } from "@/store/api/baseApi";
 import { closeModal, openModal } from "@/store/uiSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const { activeModal } = useSelector((state) => state.ui);
-  const { isLoading, error, user } = useSelector((state) => state.auth);
+  const [loginUser, { isLoading, error, isSuccess, data }] =
+    useLoginUserMutation();
 
   const handleLogin = (data) => {
-    dispatch(loginUser(data));
+    return loginUser(data);
   };
 
   useEffect(() => {
-    if (user) {
+    if (isSuccess) {
+      const token = data?.token;
+      if (token) {
+        localStorage.setItem("token", token);
+      }
       dispatch(closeModal()); // Auto-close on success
+      dispatch(baseApi.util.resetApiState());
     }
-  }, [user, dispatch]);
+  }, [data, dispatch, isSuccess]);
 
   return (
     <Dialog
@@ -52,7 +59,7 @@ const Login = () => {
           showForgotPassword={true}
           onSubmit={handleLogin}
           isLoading={isLoading}
-          errorMessage={error}
+          errorMessage={error?.data?.message || error?.message}
         />
 
         <DialogFooter className=" flex justify-center">

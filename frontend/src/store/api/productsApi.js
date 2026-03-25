@@ -7,16 +7,13 @@ const productsApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: (result) => {
-        const list = result?.data || [];
+        const list = result?.products || result?.data || result || [];
         return Array.isArray(list)
           ? [
-              {
-                type: "Products",
-                id: "LIST",
-                ...list
-                  .filter((product) => product._id)
-                  .map((product) => ({ type: "Products", id: product._id })),
-              },
+              { type: "Products", id: "LIST" },
+              ...list
+                .filter((product) => product?._id)
+                .map((product) => ({ type: "Products", id: product._id })),
             ]
           : [{ type: "Products", id: "LIST" }];
       },
@@ -108,5 +105,5 @@ export const {
   useUpdateProductMutation,
   useDeleteProductMutation,
   useCreateReviewMutation,
-  useFetchReviewQuery,
+  useFetchReviewMutation,
 } = productsApi;

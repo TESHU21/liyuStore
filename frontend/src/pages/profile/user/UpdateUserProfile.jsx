@@ -1,49 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { SignUpSchema, initialValues as defaultValues, fields } from "../../auth/registration/components/data";
-import FormComp from '@/components/FormComp';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentUserProfile, updateProfile } from "../../../store/authSlice";
-import { toast } from 'sonner';
-import { date } from 'zod';
+import React, { useEffect, useState } from "react";
+import {
+  SignUpSchema,
+  initialValues as defaultValues,
+  fields,
+} from "../../auth/registration/components/data";
+import FormComp from "@/components/FormComp";
+import {
+  useGetCurrentUserProfileQuery,
+  useUpdateProfileMutation,
+} from "@/store/api/authApi";
+import { toast } from "sonner";
 
 const UpdateUserProfile = () => {
-  const dispatch = useDispatch();
-
   // Local state to store user profile data
   const [profileValues, setProfileValues] = useState(defaultValues);
-  const [formKey,setFormKey]=useState(Date.now())
+  const [formKey, setFormKey] = useState(Date.now());
+
+  const token = localStorage.getItem("token");
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    error: profileError,
+  } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
+
+  const [updateProfileMutation, { isLoading: isUpdating, error: updateError }] =
+    useUpdateProfileMutation();
 
   // Fetch current user profile on mount
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await dispatch(getCurrentUserProfile()).unwrap();
-        setProfileValues({
-          fullName: response.fullName || '',
-          email: response.email || '',
-          password: '',            // Leave empty for security
-          confirmPassword: '',     // Leave empty for security
-        });
-        setFormKey(Date.now())
-      } catch (error) {
-        console.error("Failed to fetch profile:", error);
-      }
-    };
-
-    fetchProfile();
-  }, [dispatch]);
+    if (!user) return;
+    setProfileValues({
+      fullName: user.fullName || "",
+      email: user.email || "",
+      password: "", // Leave empty for security
+      confirmPassword: "", // Leave empty for security
+    });
+    setFormKey(Date.now());
+  }, [user]);
 
   // Handle profile update
   const handleUpdateProfile = async (data) => {
     try {
-      const response = await dispatch(updateProfile(data)).unwrap();
-      console.log("Profile updated:", response);
-      toast.success("Profile Updated Sucessfully!")
+      await updateProfileMutation(data).unwrap();
+      toast.success("Profile Updated Sucessfully!");
     } catch (error) {
       console.error("Failed to update profile:", error);
+      toast.error(
+        error?.data?.message || error?.message || "Failed to update profile",
+      );
     }
   };
-const { error, isLoading } = useSelector((state) => state.auth);
+
+  const errorMessage =
+    updateError?.data?.message ||
+    updateError?.message ||
+    profileError?.data?.message ||
+    profileError?.message;
 
   return (
     <div className="flex flex-col pt-10 items-center justify-center">
@@ -55,8 +70,9 @@ const { error, isLoading } = useSelector((state) => state.auth);
           fields={fields}
           submitBtnText="Update Profile"
           onSubmit={handleUpdateProfile}
-          error={error}
-          isLoading={isLoading}
+          error={errorMessage}
+          isLoading={isProfileLoading || isUpdating}
+          key={formKey}
         />
       </div>
     </div>

@@ -1,15 +1,26 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
-import { logout } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useLogoutUserMutation } from "@/store/api/authApi";
+import { baseApi } from "@/store/api/baseApi";
 
 const Logout = React.forwardRef((props, ref) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleLogOut = () => {
-    dispatch(logout());
-    navigate("/");
+
+  const [logoutUser] = useLogoutUserMutation();
+
+  const handleLogOut = async () => {
+    try {
+      await logoutUser().unwrap();
+    } catch {
+      // ignore server errors; still clear client auth
+    } finally {
+      localStorage.removeItem("token");
+      dispatch(baseApi.util.resetApiState());
+      navigate("/");
+    }
   };
   return (
     <Button

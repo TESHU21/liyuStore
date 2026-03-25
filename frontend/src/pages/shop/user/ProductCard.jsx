@@ -7,11 +7,11 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator"; // Assuming you have Separator
 import { ShoppingCart, Heart, Eye, Pencil, Trash2 } from "lucide-react"; // Import icons
-import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setSelectedProduct } from "@/store/selectedProductSlice";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 import {
   addProductToFavorite,
   removeProductFromFavorite,
@@ -23,7 +23,11 @@ import { trackCustomEvent } from "../../../lib/performance";
 const ProductCard = ({ product, onEdit }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state?.auth.user);
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
   const location = useLocation();
   const isFavouritePage = location.pathname === "/favourite";
 

@@ -10,10 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import Logout from "../../auth/logout/Logout";
-import { useSelector } from "react-redux";
 
-const UserProfileMenu = () => {
-  const user = useSelector((state) => state.auth.user);
+const UserProfileMenu = ({ user }) => {
   const fullName = user ? `${user.fullName} ` : "User";
 
   return (

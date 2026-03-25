@@ -1,17 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { DataTable } from "@/components/data-table";
 import { columns } from "./user/columns";
 import {
   useFetchAllOrderByUserQuery,
   useFetchAllOrdersQuery,
 } from "@/store/api/orderApi";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 const Orders = () => {
   const navigate = useNavigate();
 
-  const user = useSelector((state) => state.auth.user);
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
 
   const {
     data: ordersMineData,

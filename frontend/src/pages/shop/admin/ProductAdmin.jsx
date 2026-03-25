@@ -1,42 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft } from 'lucide-react';
-import ProductCard from '../user/ProductCard';
-import CreateProduct from './ProductFormPage';
-import { fetchProducts } from '@/store/productSlice';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { ChevronLeft } from "lucide-react";
+import ProductCard from "../user/ProductCard";
+import CreateProduct from "./ProductFormPage";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useGetProductsQuery } from "@/store/api/productsApi";
 
 const Product = () => {
   const [isEditingProducts, setIsEditingProducts] = useState(null);
   const [activeTab, setActiveTab] = useState("products");
-  const dispatch = useDispatch();
-  const prod = useSelector((state) => state.products);
 
-  const fetchProductsFun = async () => {
-    try {
-      await dispatch(fetchProducts()).unwrap();
-    } catch (err) {
-      console.error("Failed to fetch products:", err);
-    }
-  };
+  const {
+    data: productsData,
+    isLoading,
+    isFetching,
+    isError,
+    error,
+    refetch,
+  } = useGetProductsQuery();
 
-  useEffect(() => {
-    fetchProductsFun();
-  }, [dispatch]);
+  const productsRaw = Array.isArray(productsData)
+    ? productsData
+    : productsData?.products || productsData?.data || [];
 
   return (
-    <div className='flex flex-col py-6'>
-      <div className='flex md:pl-[148px] gap-2 md:my-[40px] my-6 px-4'>
-        <ChevronLeft onClick={() => setIsEditingProducts(null)} className="cursor-pointer" />
+    <div className="flex flex-col py-6">
+      <div className="flex md:pl-[148px] gap-2 md:my-[40px] my-6 px-4">
+        <ChevronLeft
+          onClick={() => setIsEditingProducts(null)}
+          className="cursor-pointer"
+        />
         <span>Back</span>
       </div>
 
-      <div className='flex-grow md:mx-[43px] bg-[#F9FBFC] md:pb-20 md:px-[170px] px-6'>
+      <div className="flex-grow md:mx-[43px] bg-[#F9FBFC] md:pb-20 md:px-[170px] px-6">
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
@@ -74,23 +70,40 @@ const Product = () => {
             </TabsList>
 
             {activeTab === "products" && (
-              <p className="text-end">Total: {prod.products.length}</p>
+              <p className="text-end">Total: {productsRaw.length}</p>
             )}
           </div>
 
           <TabsContent value="products">
-            <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 mt-[67px] gap-6 justify-items-center">
-              {prod.products.map((product) => (
-                <ProductCard
-                  key={product._id}
-                  product={product}
-                  onEdit={(p) => {
-                    setIsEditingProducts(p);
-                    setActiveTab("createProducts");
-                  }}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <p className="text-center text-gray-500 py-10">
+                Loading products...
+              </p>
+            ) : isError ? (
+              <p className="text-center text-red-500 py-10">
+                {error?.data?.message || "Failed to load products."}
+              </p>
+            ) : (
+              <>
+                {isFetching ? (
+                  <p className="text-center text-gray-400 py-2">
+                    Refreshing...
+                  </p>
+                ) : null}
+                <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-3 mt-[67px] gap-6 justify-items-center">
+                  {productsRaw.map((product) => (
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                      onEdit={(p) => {
+                        setIsEditingProducts(p);
+                        setActiveTab("createProducts");
+                      }}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </TabsContent>
 
           <TabsContent value="createProducts">
@@ -98,7 +111,7 @@ const Product = () => {
               productToEdit={isEditingProducts}
               setActiveTab={setActiveTab}
               setIsEditingProducts={setIsEditingProducts}
-              refreshProducts={fetchProductsFun}
+              refreshProducts={refetch}
             />
           </TabsContent>
         </Tabs>

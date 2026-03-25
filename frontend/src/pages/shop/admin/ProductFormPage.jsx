@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useMemo, useState, useEffect } from "react";
 import {
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} from "@/store/productSlice";
-import { fetchCategories } from "@/store/categorySlice";
+  useCreateProductMutation,
+  useDeleteProductMutation,
+  useUpdateProductMutation,
+} from "@/store/api/productsApi";
+import { useGetCategoriesQuery } from "@/store/api/catagoriesApi";
 import { uploadImage } from "../../../lib/uploadImage";
 import FormComp from "@/components/FormComp";
 import {
@@ -20,38 +19,36 @@ const ProductFormPage = ({
   setIsEditingProducts,
   refreshProducts,
 }) => {
-  const dispatch = useDispatch();
   const [fields, setFields] = useState(staticFields);
   const [initialValues, setInitialValues] = useState(baseInitialValues);
   const [formKey, setFormKey] = useState(0); // used to reset form after create
   const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const { loading, error, success } = useSelector((state) => state.products);
+
+  const { data: categoriesData } = useGetCategoriesQuery();
+  const categories = useMemo(() => {
+    if (Array.isArray(categoriesData)) return categoriesData;
+    return categoriesData?.categories || categoriesData?.data || [];
+  }, [categoriesData]);
+
+  const [createProductMutation, createState] = useCreateProductMutation();
+  const [updateProductMutation, updateState] = useUpdateProductMutation();
+  const [deleteProductMutation, deleteState] = useDeleteProductMutation();
 
   // 🔁 Fetch categories for the category select field
   useEffect(() => {
-    const loadCategories = async () => {
-      try {
-        const categories = await dispatch(fetchCategories()).unwrap();
+    const categoryOptions = categories.map((cat) => ({
+      value: cat._id,
+      label: cat.name,
+    }));
 
-        const categoryOptions = categories.map((cat) => ({
-          value: cat._id,
-          label: cat.name,
-        }));
+    const updatedFields = staticFields.map((field) =>
+      field.name === "category"
+        ? { ...field, options: categoryOptions }
+        : field,
+    );
 
-        const updatedFields = staticFields.map((field) =>
-          field.name === "category"
-            ? { ...field, options: categoryOptions }
-            : field,
-        );
-
-        setFields(updatedFields);
-      } catch (err) {
-        console.error("Failed to load categories:", err);
-      }
-    };
-
-    loadCategories();
-  }, [dispatch]);
+    setFields(updatedFields);
+  }, [categories]);
 
   // 🧠 Pre-fill form if editing a product
   useEffect(() => {
@@ -83,7 +80,7 @@ const ProductFormPage = ({
       try {
         setIsUploadingImage(true);
         imageUrl = await uploadImage(file);
-      } catch (uploadError) {
+      } catch {
         alert("Image upload failed. Please try again.");
         return;
       } finally {
@@ -104,15 +101,20 @@ const ProductFormPage = ({
 
     try {
       if (productToEdit) {
-        await dispatch(
-          updateProduct({ id: productToEdit._id, formData: payload }),
-        ).unwrap();
+        await updateProductMutation({
+          id: productToEdit._id,
+          formData: payload,
+        }).unwrap();
         alert("Product updated successfully!");
       } else {
-        await dispatch(createProduct(payload)).unwrap();
+        await createProductMutation(payload).unwrap();
         alert("Product created successfully!");
         setInitialValues(baseInitialValues);
         setFormKey((prev) => prev + 1); // reset form
+      }
+
+      if (refreshProducts) {
+        await refreshProducts();
       }
     } catch (error) {
       const errorMessage =
@@ -131,7 +133,7 @@ const ProductFormPage = ({
     if (!confirmDelete) return;
 
     try {
-      await dispatch(deleteProduct(productToEdit._id)).unwrap();
+      await deleteProductMutation(productToEdit._id).unwrap();
       await refreshProducts(); // refresh product list
       setIsEditingProducts(null);
       setActiveTab("products");
@@ -161,9 +163,19 @@ const ProductFormPage = ({
         initialValues={productToEdit ? initialValues : baseInitialValues}
         submitBtnText={productToEdit ? "Update" : "Create"}
         onSubmit={handleSubmit}
-        errorMessage={error}
-        isLoading={loading || isUploadingImage}
-        successMessage={success}
+        errorMessage={
+          createState?.error?.data?.message ||
+          createState?.error?.message ||
+          updateState?.error?.data?.message ||
+          updateState?.error?.message
+        }
+        isLoading={
+          createState.isLoading ||
+          updateState.isLoading ||
+          deleteState.isLoading ||
+          isUploadingImage
+        }
+        successMessage={createState?.data || updateState?.data}
       />
     </div>
   );

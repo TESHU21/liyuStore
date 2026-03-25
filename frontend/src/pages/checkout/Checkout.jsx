@@ -5,17 +5,31 @@ import { OrderSummaryCard } from "./components/OrderSummeryCard";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { createOrder, payOrder, verifyPayment } from "../../store/orderSlice";
 import { clearCart } from "@/store/cartSlice";
 import { useNavigate } from "react-router-dom";
+import {
+  useCreateOrderMutation,
+  usePayOrderMutation,
+  useVerifyPaymentMutation,
+} from "@/store/api/orderApi";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 const FormComp = React.lazy(() => import("@/components/FormComp"));
 const Checkout = () => {
   const cart = useSelector((state) => state.cart.items);
-  const user = useSelector((state) => state.auth.user);
   const formRef = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
+
+  const [createOrderMutation] = useCreateOrderMutation();
+  const [payOrderMutation] = usePayOrderMutation();
+  const [verifyPaymentMutation] = useVerifyPaymentMutation();
 
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -53,14 +67,14 @@ const Checkout = () => {
           paymentMethod: "paystack",
         };
 
-        const createdOrder = await dispatch(createOrder(orderPayload)).unwrap();
+        const createdOrder = await createOrderMutation(orderPayload).unwrap();
 
         const payPayload = {
           order: createdOrder._id,
           callback_url: `${window.location.origin}/payment-success`,
         };
 
-        const payInit = await dispatch(payOrder(payPayload)).unwrap();
+        const payInit = await payOrderMutation(payPayload).unwrap();
 
         if (!payInit || !payInit.transaction || !payInit.transaction.data) {
           throw new Error("Failed to initialize payment");
@@ -86,8 +100,8 @@ const Checkout = () => {
             toast.success("Payment successful!");
 
             try {
-              const verifyRes = await dispatch(
-                verifyPayment(transaction.reference),
+              const verifyRes = await verifyPaymentMutation(
+                transaction.reference,
               ).unwrap();
 
               if (!verifyRes || verifyRes.status !== "success") {
@@ -118,7 +132,17 @@ const Checkout = () => {
         setIsProcessing(false);
       }
     },
-    [cart, dispatch, navigate, orderItems, total, user.email],
+    [
+      cart,
+      createOrderMutation,
+      navigate,
+      orderItems,
+      payOrderMutation,
+      total,
+      user?.email,
+      verifyPaymentMutation,
+      dispatch,
+    ],
   );
 
   // Trigger form submission from external button
