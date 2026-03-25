@@ -80,18 +80,19 @@ const TopTrending = () => {
       <div
         className={
           isFew
-            ? "flex items-center justify-center gap-12 px-6 md:px-[38px]"
+            ? "flex w-full items-center justify-center gap-6 px-10 md:px-[38px]"
             : "grid grid-cols-1 md:grid-cols-4 gap-8 px-6 md:px-[38px]"
         }
       >
         {/* Adjust padding and gap as needed */}
         {top_products &&
           top_products?.map((product) => (
-            <ProductCardHome
+            <div
               key={product._id}
-              // Essential for list rendering in React
-              product={product}
-            />
+              className="w-[240px] md:w-[300px] lg:w-[340px]"
+            >
+              <ProductCardHome product={product} />
+            </div>
           ))}
       </div>
 
