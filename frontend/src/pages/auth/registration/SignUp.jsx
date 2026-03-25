@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,15 +8,15 @@ import {
   DialogFooter,
   DialogClose,
 } from "@/components/ui/dialog";
-import FormComp from '@/components/FormComp';
-import { SignUpSchema, fields, initialValues} from "./components/data";
-import { useDispatch, useSelector } from 'react-redux';
-import {registerUser } from '@/store/authSlice';
-import { closeSignup ,openLogin } from '@/store/uiSlice';
+import FormComp from "@/components/FormComp";
+import { SignUpSchema, fields, initialValues } from "./components/data";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "@/store/authSlice";
+import { closeModal, openModal } from "@/store/uiSlice";
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const {   isSignupOpen } = useSelector((state) => state.ui);
+  const { activeModal } = useSelector((state) => state.ui);
   const { isLoading, error, user } = useSelector((state) => state.auth);
 
   const handleSignUp = (data) => {
@@ -25,16 +25,23 @@ const SignUp = () => {
 
   useEffect(() => {
     if (user) {
-      dispatch(closeSignup());  // Auto-close on success
+      dispatch(closeModal()); // Auto-close on success
     }
   }, [user, dispatch]);
 
   return (
-    <Dialog open={isSignupOpen} onOpenChange={(open) => !open && dispatch(closeSignup())}>
+    <Dialog
+      open={activeModal === "signup"}
+      onOpenChange={(open) => !open && dispatch(closeModal())}
+    >
       <DialogContent className="">
         <DialogHeader>
-          <DialogTitle className="text-[24px]  font-normal  ">Register</DialogTitle>
-          <DialogDescription className="sr-only">Please enter your credentials.</DialogDescription>
+          <DialogTitle className="text-[24px]  font-normal  ">
+            Register
+          </DialogTitle>
+          <DialogDescription className="sr-only">
+            Please enter your credentials.
+          </DialogDescription>
         </DialogHeader>
 
         <FormComp
@@ -49,13 +56,14 @@ const SignUp = () => {
         />
 
         <DialogFooter className=" flex justify-center">
-          <p className='underline cursor-pointer text-center mt-[44px] mb-4' onClick={()=>
-
-          {
-            dispatch(closeSignup())
-            dispatch(openLogin())
-
-          }}>Already have an account? login in here</p>
+          <p
+            className="underline cursor-pointer text-center mt-[44px] mb-4"
+            onClick={() => {
+              dispatch(openModal("login"));
+            }}
+          >
+            Already have an account? login in here
+          </p>
         </DialogFooter>
       </DialogContent>
     </Dialog>

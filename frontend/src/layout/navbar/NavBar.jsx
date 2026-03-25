@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { openLogin, openSignup } from "@/store/uiSlice";
+import { openModal } from "@/store/uiSlice";
 import ProfileMenu from "@/pages/profile/ProfileMenu";
 import LiyuStore from "../../assets/Liyu Mart.webp";
 
@@ -125,7 +125,7 @@ const NavBar = () => {
           <div className=" flex ">
             <Button
               className="py-3 px-2  bg-white  hover:bg-white text-base leading-6 font-semibold text-black border-0 md:shadow-none rounded-md  cursor-pointer"
-              onClick={() => dispatch(openLogin())}
+              onClick={() => dispatch(openModal("login"))}
             >
               {" "}
               <span className="ml-3">
@@ -135,7 +135,7 @@ const NavBar = () => {
             </Button>
             <Button
               className="py-3 px-2 bg-white text-black text-base leading-6 font-semibold rounded-md border-0 cursor-pointer shadow-none hover:bg-white"
-              onClick={() => dispatch(openSignup())}
+              onClick={() => dispatch(openModal("signup"))}
             >
               <User size={24} /> <span className=""> Register</span>
             </Button>
@@ -178,14 +178,14 @@ p-4 border-b"
             <div className="flex items-center gap-2">
               <Button
                 className="py-2 px-3 bg-white hover:bg-white text-sm font-semibold text-black shadow-none border-0 rounded-md"
-                onClick={() => dispatch(openLogin())}
+                onClick={() => dispatch(openModal("login"))}
               >
                 <LogIn size={20} className="mr-1" />
                 Login
               </Button>
               <Button
                 className="py-2 px-3 bg-white text-black text-sm font-semibold rounded-md border-0 shadow-none hover:bg-white"
-                onClick={() => dispatch(openSignup())}
+                onClick={() => dispatch(openModal("signup"))}
               >
                 <User size={20} className="mr-1" />
                 Register

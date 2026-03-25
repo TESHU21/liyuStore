@@ -9,7 +9,7 @@ const Login = React.lazy(() => import("@/pages/auth/login/Login"));
 const SignUp = React.lazy(() => import("@/pages/auth/registration/SignUp"));
 
 const Layout = () => {
-  const { isLoginOpen, isSignupOpen } = useSelector((state) => state.ui);
+  const { activeModal } = useSelector((state) => state.ui);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -25,8 +25,8 @@ const Layout = () => {
       />
 
       <Suspense fallback={null}>
-        {isLoginOpen ? <Login /> : null}
-        {isSignupOpen ? <SignUp /> : null}
+        {activeModal === "login" ? <Login /> : null}
+        {activeModal === "signup" ? <SignUp /> : null}
       </Suspense>
 
       <Footer />
