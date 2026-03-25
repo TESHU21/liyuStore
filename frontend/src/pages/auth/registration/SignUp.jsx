@@ -29,6 +29,7 @@ const SignUp = () => {
     if (isSuccess) {
       dispatch(closeModal()); // Auto-close on success
       dispatch(baseApi.util.resetApiState());
+      window.dispatchEvent(new Event("auth:changed"));
     }
   }, [dispatch, isSuccess]);
 

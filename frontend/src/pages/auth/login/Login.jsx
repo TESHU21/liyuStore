@@ -33,6 +33,7 @@ const Login = () => {
       }
       dispatch(closeModal()); // Auto-close on success
       dispatch(baseApi.util.resetApiState());
+      window.dispatchEvent(new Event("auth:changed"));
     }
   }, [data, dispatch, isSuccess]);
 

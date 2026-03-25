@@ -24,7 +24,18 @@ const NavBar = () => {
   const favouriteItemCount = favourite.length;
 
   const [menuVisiblity, setMenuVisibility] = useState(false);
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
+
+  useEffect(() => {
+    const syncToken = () => setToken(localStorage.getItem("token"));
+    window.addEventListener("auth:changed", syncToken);
+    window.addEventListener("storage", syncToken);
+    return () => {
+      window.removeEventListener("auth:changed", syncToken);
+      window.removeEventListener("storage", syncToken);
+    };
+  }, []);
+
   const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
     skip: !token,
   });

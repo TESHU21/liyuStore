@@ -19,6 +19,7 @@ const Logout = React.forwardRef((props, ref) => {
     } finally {
       localStorage.removeItem("token");
       dispatch(baseApi.util.resetApiState());
+      window.dispatchEvent(new Event("auth:changed"));
       navigate("/");
     }
   };
