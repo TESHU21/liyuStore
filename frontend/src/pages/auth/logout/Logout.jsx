@@ -17,7 +17,7 @@ const Logout = React.forwardRef((props, ref) => {
     } catch {
       // ignore server errors; still clear client auth
     } finally {
-      localStorage.removeItem("token");
+      localStorage.clear();
       dispatch(baseApi.util.resetApiState());
       window.dispatchEvent(new Event("auth:changed"));
       navigate("/");

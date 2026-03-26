@@ -27,18 +27,21 @@ const SignUp = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      const token = data?.token;
+      if (token) {
+        localStorage.setItem("token", token);
+      }
+
+      const user = data?.user;
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+      }
+
       dispatch(closeModal()); // Auto-close on success
       dispatch(baseApi.util.resetApiState());
       window.dispatchEvent(new Event("auth:changed"));
     }
-  }, [dispatch, isSuccess]);
-
-  useEffect(() => {
-    const token = data?.token;
-    if (token) {
-      localStorage.setItem("token", token);
-    }
-  }, [data]);
+  }, [data, dispatch, isSuccess]);
 
   return (
     <Dialog

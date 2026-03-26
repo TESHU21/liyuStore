@@ -14,6 +14,7 @@ import { addProductToCart } from "@/store/cartSlice";
 import { toast } from "sonner";
 import Rating from "@/components/Rating";
 import { useNavigate } from "react-router-dom";
+import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 const ShopDetail = () => {
   const [quantity, setQuantity] = useState("");
@@ -21,35 +22,33 @@ const ShopDetail = () => {
   const quantityOptions = Array.from({ length: maxQuantity }, (_, i) => i + 1);
 
   const dispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const product = useSelector((state) => state.selectedProduct.product);
-const user=useSelector((state)=>state?.auth.user)
+
+  const token = localStorage.getItem("token");
+  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
+    skip: !token,
+  });
+  const user = profileData?.user || profileData;
+
   const handleAddToCart = () => {
     if (!product || !quantity) return;
-        if(!user){
-              navigate("/")
-           toast.info("Sign in to add products to favourite!", {
-    
-    });
-    
-    
-            }
-            else{
-                  dispatch(
-      addProductToCart({
-        _id: product._id,
-        name: product.name,
-        image: product.image,
-        brand: product.brand,
-        price: product.price,
-        quantity: parseInt(quantity, 10),
-      })
-    );
-    toast.success("You Added Items to cart sucessfully")
-                 
-            }
-
-
+    if (!user) {
+      navigate("/");
+      toast.info("Sign in to add products to favourite!", {});
+    } else {
+      dispatch(
+        addProductToCart({
+          _id: product._id,
+          name: product.name,
+          image: product.image,
+          brand: product.brand,
+          price: product.price,
+          quantity: parseInt(quantity, 10),
+        }),
+      );
+      toast.success("You Added Items to cart sucessfully");
+    }
   };
 
   return (
@@ -69,8 +68,8 @@ const user=useSelector((state)=>state?.auth.user)
           {/* Brand and Rating */}
           <div className="flex items-center mb-2 text-sm pt-8 text-gray-600">
             <span className="mr-4 text-base">{product?.brand}</span>
-          
-            <Rating rating={product.rating} totalReviews={product.numReviews}/>
+
+            <Rating rating={product.rating} totalReviews={product.numReviews} />
           </div>
 
           {/* Product Name */}
@@ -79,9 +78,7 @@ const user=useSelector((state)=>state?.auth.user)
           </h3>
 
           {/* Description */}
-          <p className="text-gray-700 mt-7 text-base">
-            {product?.description}
-          </p>
+          <p className="text-gray-700 mt-7 text-base">{product?.description}</p>
 
           {/* Price */}
           <p className="text-blue-primary text-3xl leading-6 my-7">
@@ -95,17 +92,20 @@ const user=useSelector((state)=>state?.auth.user)
           {/* Quantity Selector */}
           <div className="w-32 mb-6">
             <Select value={quantity} onValueChange={setQuantity}>
-  <SelectTrigger className="md:w-[151px] bg-[#E6EFF5] h-12">
-    <SelectValue className="text-black" placeholder="Select Quantity" />
-  </SelectTrigger>
-  <SelectContent className="max-h-60 overflow-auto">
-    {quantityOptions.map((num) => (
-      <SelectItem key={num} value={num.toString()}>
-        {num}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
+              <SelectTrigger className="md:w-[151px] bg-[#E6EFF5] h-12">
+                <SelectValue
+                  className="text-black"
+                  placeholder="Select Quantity"
+                />
+              </SelectTrigger>
+              <SelectContent className="max-h-60 overflow-auto">
+                {quantityOptions.map((num) => (
+                  <SelectItem key={num} value={num.toString()}>
+                    {num}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Add to Cart Button */}

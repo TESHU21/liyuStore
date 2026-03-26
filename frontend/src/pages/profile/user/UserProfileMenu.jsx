@@ -12,7 +12,13 @@ import { ChevronDown } from "lucide-react";
 import Logout from "../../auth/logout/Logout";
 
 const UserProfileMenu = ({ user }) => {
-  const fullName = user ? `${user.fullName} ` : "User";
+  const fullName = user?.fullName ? `${user.fullName} ` : "User";
+  const initials = fullName
+    .trim()
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join("");
 
   return (
     <DropdownMenu>
@@ -26,10 +32,7 @@ const UserProfileMenu = ({ user }) => {
               {/* Initials inside circle for mobile */}
               <span className="inline md:hidden">
                 <span className="inline-flex items-center justify-center w-8 h-8 p-2 rounded-full bg-purple-600 text-white font-semibold">
-                  {fullName
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
+                  {initials}
                 </span>
               </span>
             </p>

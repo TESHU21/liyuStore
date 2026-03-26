@@ -11,7 +11,8 @@ import {
 import { ChevronDown } from "lucide-react";
 import Logout from "../../auth/logout/Logout";
 
-const AdminProfileMenu = () => {
+const AdminProfileMenu = ({ user }) => {
+  const adminLabel = user?.fullName || "Admin";
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -20,7 +21,7 @@ const AdminProfileMenu = () => {
             {/* <p className=' flex w-[40px] h-[40px] bg-blue-primary rounded-full  items-center justify-center text-white leading-6 text-base'>
               {profileInitial}
             </p> */}
-            <p className=" font-inter text-base leading-6">Admin</p>
+            <p className=" font-inter text-base leading-6">{adminLabel}</p>
           </div>
           <ChevronDown size={24} />
         </button>
