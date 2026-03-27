@@ -5,11 +5,13 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NavLink } from "react-router-dom";
 import { ChevronRight, AlertCircle } from "lucide-react";
 import { Eye, EyeOff } from "lucide-react";
+import { closeModal } from "@/store/uiSlice";
 
 import Loader from "./Loader";
 import {
@@ -42,6 +44,7 @@ const FormComp = forwardRef(
     },
     ref,
   ) => {
+    const dispatch = useDispatch();
     const form = useForm({
       resolver: zodResolver(schema),
       defaultValues: initialValues,
@@ -318,6 +321,7 @@ const FormComp = forwardRef(
                 <NavLink
                   to="/forgotpassword"
                   className="text-sm text-[#177DDC] hover:underline"
+                  onClick={() => dispatch(closeModal())}
                 >
                   Forgot password?
                 </NavLink>

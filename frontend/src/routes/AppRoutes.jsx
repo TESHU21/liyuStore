@@ -12,6 +12,9 @@ const ShopDetail = React.lazy(
 const Cart = React.lazy(() => import("@/pages/cart/Cart"));
 const Favourite = React.lazy(() => import("@/pages/favourite/Favourite"));
 const Login = React.lazy(() => import("@/pages/auth/login/Login"));
+const ForgotPassword = React.lazy(
+  () => import("@/pages/auth/forgotpassword/ForgotPassword"),
+);
 const Checkout = React.lazy(() => import("@/pages/checkout/Checkout"));
 const CreateProduct = React.lazy(
   () => import("@/pages/shop/admin/ProductFormPage"),
@@ -94,6 +97,15 @@ const AppRoutes = () => {
           element={
             <Suspense fallback={<PageLoader />}>
               <Favourite />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="forgotpassword"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ForgotPassword />
             </Suspense>
           }
         />
