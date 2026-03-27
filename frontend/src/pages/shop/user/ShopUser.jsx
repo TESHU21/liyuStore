@@ -106,7 +106,7 @@ const ShopUser = () => {
   return (
     <div>
       <PageHeader header={headers} />
-      <div className="flex flex-col md:flex-row pb-12 md:pb-[154px]">
+      <div className="flex flex-col md:flex-row md:items-start pb-12 md:pb-[154px]">
         {/* Left Section - Filters */}
         <div className=" mt-6 md:pt-[55px] md:px-6">
           <h4 className="  text-2xs  md:text-lg font-bold text-center md:text-start">
@@ -199,7 +199,7 @@ const ShopUser = () => {
         </div>
 
         {/* Right Section - Products */}
-        <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 md:pr-[39px] mt-4  md:mt-[110px] gap-4 justify-items-center">
+        <div className="flex-grow self-start grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 md:pr-[39px] mt-4  md:mt-[110px] gap-4 justify-items-center">
           {loading ? (
             <div className="col-span-full flex items-center  py-12">
               <Loader />
