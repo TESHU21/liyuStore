@@ -32,7 +32,16 @@ const Footer = () => {
           className=" w-[64.5px] h-[43px]"
         />
       </div>
-      © {year} LiyuStore.All rights reserved.
+      <div className="text-center md:text-right text-sm text-gray-700">
+        <span className="font-medium">© {year} LiyuStore</span>
+        <span className="mx-2 text-gray-300">|</span>
+        <span>All rights reserved</span>
+        <span className="mx-2 text-gray-300">|</span>
+        <span className="text-gray-600">Crafted by</span>{" "}
+        <span className="font-semibold text-blue-700 hover:text-blue-800 underline underline-offset-4">
+          Teshome Mosneh
+        </span>
+      </div>
     </div>
   );
 };
