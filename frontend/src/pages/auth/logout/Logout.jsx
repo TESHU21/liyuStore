@@ -4,6 +4,9 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useLogoutUserMutation } from "@/store/api/authApi";
 import { baseApi } from "@/store/api/baseApi";
+import { clearCart } from "@/store/cartSlice";
+import { clearFavorites } from "@/store/favoriteSlice";
+import { closeModal } from "@/store/uiSlice";
 
 const Logout = React.forwardRef((props, ref) => {
   const navigate = useNavigate();
@@ -18,6 +21,9 @@ const Logout = React.forwardRef((props, ref) => {
       // ignore server errors; still clear client auth
     } finally {
       localStorage.clear();
+      dispatch(clearCart());
+      dispatch(clearFavorites());
+      dispatch(closeModal());
       dispatch(baseApi.util.resetApiState());
       window.dispatchEvent(new Event("auth:changed"));
       navigate("/");

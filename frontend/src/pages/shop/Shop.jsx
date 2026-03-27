@@ -2,14 +2,11 @@ import React from "react";
 import ShopUser from "./user/ShopUser";
 import ProductAdmin from "../../pages/shop/admin/ProductAdmin";
 import { Helmet } from "react-helmet-async";
-import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
 
 const Shop = () => {
-  const token = localStorage.getItem("token");
-  const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
-    skip: !token,
-  });
-  const user = profileData?.user || profileData;
+  const user = localStorage.getItem("user");
+  const userObj = user ? JSON.parse(user) : null;
+  console.log("User", userObj);
 
   return (
     <>
@@ -20,7 +17,7 @@ const Shop = () => {
           content="Browse a wide variety of quality products at Liyu Mart. Find deals on electronics, fashion, and more."
         />
       </Helmet>
-      <div>{user?.isAdmin ? <ProductAdmin /> : <ShopUser />}</div>
+      <div>{userObj?.isAdmin ? <ProductAdmin /> : <ShopUser />}</div>
     </>
   );
 };
