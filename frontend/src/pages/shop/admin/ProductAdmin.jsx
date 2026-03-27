@@ -95,6 +95,7 @@ const Product = () => {
                     <ProductCard
                       key={product._id}
                       product={product}
+                      forceAdminActions={true}
                       onEdit={(p) => {
                         setIsEditingProducts(p);
                         setActiveTab("createProducts");

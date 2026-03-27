@@ -7,6 +7,7 @@ import {
 import { useGetCategoriesQuery } from "@/store/api/catagoriesApi";
 import { uploadImage } from "../../../lib/uploadImage";
 import FormComp from "@/components/FormComp";
+import { toast } from "sonner";
 import {
   schema,
   fields as staticFields,
@@ -81,7 +82,7 @@ const ProductFormPage = ({
         setIsUploadingImage(true);
         imageUrl = await uploadImage(file);
       } catch {
-        alert("Image upload failed. Please try again.");
+        toast.error("Image upload failed. Please try again.");
         return;
       } finally {
         setIsUploadingImage(false);
@@ -105,10 +106,10 @@ const ProductFormPage = ({
           id: productToEdit._id,
           formData: payload,
         }).unwrap();
-        alert("Product updated successfully!");
+        toast.success("Product updated successfully!");
       } else {
         await createProductMutation(payload).unwrap();
-        alert("Product created successfully!");
+        toast.success("Product created successfully!");
         setInitialValues(baseInitialValues);
         setFormKey((prev) => prev + 1); // reset form
       }
@@ -119,7 +120,9 @@ const ProductFormPage = ({
     } catch (error) {
       const errorMessage =
         error?.error?.message || error?.message || "An unknown error occurred.";
-      alert(`${productToEdit ? "Update" : "Creation"} failed: ${errorMessage}`);
+      toast.error(
+        `${productToEdit ? "Update" : "Creation"} failed: ${errorMessage}`,
+      );
     }
   };
 
@@ -137,9 +140,11 @@ const ProductFormPage = ({
       await refreshProducts(); // refresh product list
       setIsEditingProducts(null);
       setActiveTab("products");
-      alert("Product deleted successfully!");
+      toast.success("Product deleted successfully!");
     } catch (error) {
-      alert(`Delete failed: ${error?.message || "An unknown error occurred."}`);
+      toast.error(
+        `Delete failed: ${error?.message || "An unknown error occurred."}`,
+      );
     }
   };
 
@@ -175,7 +180,6 @@ const ProductFormPage = ({
           deleteState.isLoading ||
           isUploadingImage
         }
-        successMessage={createState?.data || updateState?.data}
       />
     </div>
   );
