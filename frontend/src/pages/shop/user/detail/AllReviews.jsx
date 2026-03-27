@@ -1,13 +1,16 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { useGetProductReviewsQuery } from "@/store/api/productsApi";
 import ReviewCard from "./ReviewCard";
 
 const AllReviews = () => {
   const product = useSelector((state) => state.selectedProduct.product);
+  const { id: routeProductId } = useParams();
+  const productId = routeProductId || product?._id;
 
-  const { data, isLoading, isError } = useGetProductReviewsQuery(product?._id, {
-    skip: !product?._id,
+  const { data, isLoading, isError } = useGetProductReviewsQuery(productId, {
+    skip: !productId,
   });
 
   const reviews = Array.isArray(data)

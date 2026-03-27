@@ -20,7 +20,7 @@ import { addProductToCart } from "../../../store/cartSlice";
 import { toast } from "sonner";
 import { trackCustomEvent } from "../../../lib/performance";
 
-const ProductCard = ({ product, onEdit }) => {
+const ProductCard = ({ product, onEdit, forceAdminActions = false }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
@@ -30,6 +30,7 @@ const ProductCard = ({ product, onEdit }) => {
   const user = profileData?.user || profileData;
   const location = useLocation();
   const isFavouritePage = location.pathname === "/favourite";
+  const canShowAdminActions = forceAdminActions || user?.isAdmin;
 
   const handleDetail = (product) => {
     const startTime = performance.now();
@@ -115,14 +116,14 @@ const ProductCard = ({ product, onEdit }) => {
       </CardContent>
 
       <CardFooter className=" flex flex-col items-center pb-6">
-        {user?.isAdmin ? (
+        {canShowAdminActions ? (
           <div className="w-full">
             <Separator className="w-full mb-3" />
 
             <div className=" flex justify-between">
               <Button
                 className="text-lg font-bold  cursor-pointer bg-inherit text-blue-primary shadow-none border-0 hover:bg-inherit "
-                onClick={() => onEdit(product)}
+                onClick={() => onEdit?.(product)}
               >
                 <Pencil />
               </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -13,8 +13,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { addProductToCart } from "@/store/cartSlice";
 import { toast } from "sonner";
 import Rating from "@/components/Rating";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetCurrentUserProfileQuery } from "@/store/api/authApi";
+import { useGetProductByIdQuery } from "@/store/api/productsApi";
+import { setSelectedProduct } from "@/store/selectedProductSlice";
 
 const ShopDetail = () => {
   const [quantity, setQuantity] = useState("");
@@ -23,7 +25,21 @@ const ShopDetail = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const product = useSelector((state) => state.selectedProduct.product);
+  const { id: routeProductId } = useParams();
+  const selectedProduct = useSelector((state) => state.selectedProduct.product);
+
+  const { data: productData } = useGetProductByIdQuery(routeProductId, {
+    skip: !routeProductId,
+  });
+  const productFromApi =
+    productData?.product || productData?.data || productData || null;
+  const product = productFromApi || selectedProduct;
+
+  useEffect(() => {
+    if (productFromApi?._id) {
+      dispatch(setSelectedProduct(productFromApi));
+    }
+  }, [dispatch, productFromApi]);
 
   const token = localStorage.getItem("token");
   const { data: profileData } = useGetCurrentUserProfileQuery(undefined, {
@@ -69,7 +85,10 @@ const ShopDetail = () => {
           <div className="flex items-center mb-2 text-sm pt-8 text-gray-600">
             <span className="mr-4 text-base">{product?.brand}</span>
 
-            <Rating rating={product.rating} totalReviews={product.numReviews} />
+            <Rating
+              rating={Number(product?.rating) || 0}
+              totalReviews={Number(product?.numReviews) || 0}
+            />
           </div>
 
           {/* Product Name */}
